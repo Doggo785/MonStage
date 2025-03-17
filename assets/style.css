@@ -34,7 +34,7 @@ body
   font-weight: bold;
   padding: 10px 15px;
   margin: 5px 0;
-  border-radius: 4px;
+  border-radius: 20px;
   word-spacing: 10px;
   cursor: pointer;
   transition: 0.3s;
@@ -100,6 +100,26 @@ body
   background-color: #e0e0e0;
 }
 
+.submit-button {
+  padding: 10px 30px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #f0f0f0;
+  color: #333;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  margin: auto;
+  display: inline-block;
+  font-size: 20px;
+}
+/* Styling for the search button on hover */
+.submit-button:hover {
+  background-color: orangered; /* Green */
+  border: 2px solid orangered;
+  color: white;
+
+}
+
 .input-icons {
   width: 100%;
   margin-bottom: 10px;
@@ -118,3 +138,24 @@ body
   width: 100%;
   padding: 10px;
   text-align: center;}
+
+.login_form {
+    width: 100%;
+    max-width: 435px;
+    background: #f0f0f0;
+    border-radius: 6px;
+    padding: 41px 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto 
+    
+}
+
+.login_form .separator {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.petit-lien{
+  font-size: 10px;
+}
