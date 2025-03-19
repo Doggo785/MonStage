@@ -10,11 +10,12 @@
    </head> 
 
    <body>
+	<script src="assets/script.js"></script>
      <header>
 		<nav class = "navbar">
 			<div class="nav-left">
 			<img alt="Logo" src="logo.png">&nbsp;|&nbsp;
-			<span class="active"> Accueil</span> 
+			<a href="index.html"> Accueil</a>  
 			&nbsp;|&nbsp;<a href="Offres.html">Offres</a>
 			&nbsp;|&nbsp;<a href="Entreprises.html">Entreprise</a>
 			</div>
@@ -29,7 +30,7 @@
 			<center><h1>Connexion</h1></center>
 
 			<div class="login_form">
-				<form action="#">
+				<form id="loginForm" action="compte.html" method="POST">
 				<h3>Email:</h3>
 	
 				<input type="email" id="email" placeholder="Entrer votre addresse mail..." class="search-input" required>
@@ -41,14 +42,16 @@
 				<input type="password" id="password" name="password" class="search-input" placeholder="Entrer votre mot de passe..." required>
 				<p class="separator"></p>
 
+				
+				<center><div class="submit-button">
 
-				<center><button type="submit"class="submit-button">Connexion</button>
+				<button type="submit" class="btn" >Connexion</button>
+				</div>
 				<p class="petit-lien"><a href="#">Mot de passe oublié</a></p></center>
 
 					</form>
 				</div>
-			
-
+		
 	   </section>
        
 	 </main>

@@ -27,7 +27,7 @@ body
 }
 
 .nav-right .btn{
-  background-color: orangered; /* Green */
+  background-color: orangered; 
   border: 2px solid orangered;
   color: white;
   font-family: "Century Gothic", sans-serif;
@@ -61,19 +61,17 @@ body
     font-weight: bold;
 }
 
-
 .nav-left .active {
     font-weight: bold;
     color: rgb(0, 0, 0);
 }
-
-
 
 /* Styling for the search container */
 .search-container {
   text-align: center;
   margin-top: 20px;
 }
+
 /* Styling for the search input */
 .search-input {
   padding: 10px;
@@ -83,6 +81,7 @@ body
   margin: auto;
   display: inline-block;
 }
+
 /* Styling for the search button */
 .search-button {
   padding: 10px 20px;
@@ -95,30 +94,57 @@ body
   margin: auto;
   display: inline-block;
 }
+
 /* Styling for the search button on hover */
 .search-button:hover {
   background-color: #e0e0e0;
 }
 
-.submit-button {
+.submit-button .btn{
   padding: 10px 30px;
   border-radius: 20px;
   border: 2px solid #ccc;
   background-color: #f0f0f0;
-  color: #333;
+  color : #3b3b3b;
   cursor: pointer;
   transition-duration: 0.3s;
   margin: auto;
   display: inline-block;
   font-size: 20px;
 }
+
 /* Styling for the search button on hover */
-.submit-button:hover {
+.submit-button .btn:hover {
+  color: white;
   background-color: orangered; /* Green */
   border: 2px solid orangered;
-  color: white;
-
 }
+
+.submit-button a{
+  text-decoration: none;
+  color : #3b3b3b;
+}
+
+.submit-button .btn2{
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #f0f0f0;
+  color : #3b3b3b;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  margin: auto;
+  display: inline-block;
+  font-size: 15px;
+}
+
+/* Styling for the search button on hover */
+.submit-button .btn2:hover {
+  color: white;
+  background-color: orangered; /* Green */
+  border: 2px solid orangered;
+}
+
 
 .input-icons {
   width: 100%;
