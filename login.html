@@ -10,14 +10,14 @@
    </head> 
 
    <body>
-	<script src="assets/script.js"></script>
+
      <header>
 		<nav class = "navbar">
 			<div class="nav-left">
 			<img alt="Logo" src="logo.png">&nbsp;|&nbsp;
 			<a href="index.html"> Accueil</a>  
-			&nbsp;|&nbsp;<a href="Offres.html">Offres</a>
-			&nbsp;|&nbsp;<a href="Entreprises.html">Entreprise</a>
+			&nbsp;|&nbsp;<a href="offres.html">Offres</a>
+			&nbsp;|&nbsp;<a href="entreprises.html">Entreprises</a>
 			</div>
 			<div class="nav-right"><button class="btn">
 			<i class="fa-solid fa-circle-user"></i>  Connexion</button>
@@ -26,14 +26,16 @@
 	 </header>
 	 
 	 <main>
+		
 	   <section>
 			<center><h1>Connexion</h1></center>
 
 			<div class="login_form">
-				<form id="loginForm" action="compte.html" method="POST">
+				<form id="reply_form" action="compte.html" method="POST">
 				<h3>Email:</h3>
 	
-				<input type="email" id="email" placeholder="Entrer votre addresse mail..." class="search-input" required>
+				<input name="email" type="email" size="30" placeholder="monemail@wahou.com" class="search-input" value="" required>
+				<span class="field_result" id="email_result"></span>
 				<p class="separator"></p>
 				 
 
@@ -45,11 +47,11 @@
 				
 				<center><div class="submit-button">
 
-				<button type="submit" class="btn" >Connexion</button>
+				<button type="submit" id="submit_form" class="btn" >Connexion</button>
 				</div>
 				<p class="petit-lien"><a href="#">Mot de passe oublié</a></p></center>
 
-					</form>
+				</form>
 				</div>
 		
 	   </section>
@@ -60,6 +62,6 @@
 		<br>
 		<div class='text-center footer-new'>&copy;2025 - Tous droits réservés -	JGT</div>
 	 </footer>
-	 
+	 <script src="./assets/script.js" /></script>
    </body> 
 </html> 

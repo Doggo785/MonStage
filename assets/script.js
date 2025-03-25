@@ -1,80 +1,135 @@
 
-	//EMAIL
-    	document.getElementById('email').addEventListener('input', function () {
-		const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-		const emailField = this;
-		const errorMsg = document.getElementById('email-error');
-
-		if (!emailPattern.test(emailField.value)) {
-			errorMsg.style.display = 'inline';
-		} else {
-			errorMsg.style.display = 'none';
+/* Attendre la fin du chargement de la page pour dérouler les fonctions */
+document.addEventListener("DOMContentLoaded", () => {
+	//Récupération des champs
+	var form = document.querySelector("#login_form");
+	var lastname = document.getElementsByName("lastname")[0];
+	var firstname = document.getElementsByName("firstname")[0];
+	var phonenumber = document.getElementsByName("phonenumber")[0];
+	var email = document.getElementsByName("email")[0];
+	var file = document.getElementsByName("cv")[0];
+	let top_button = document.getElementById("top_button");
+	let submit_form = document.getElementById("submit_form");
+	
+  
+	// Création des événements pour les interactions
+	lastname.addEventListener("change", strtoupper, false);
+	firstname.addEventListener("change", check_value, false);
+	phonenumber.addEventListener("change", check_value, false);
+	email.addEventListener("change", check_value, false);
+	file.addEventListener("change", file_validation, false);
+	top_button.addEventListener("click", go_top, false);
+	submit_form.addEventListener("click", checkForm, false);
+	
+	
+	// 1. Fonction permettant de mettre en majuscule le contenu passé en paramètre
+	function strtoupper(evt)
+	{
+		evt.currentTarget.value = evt.currentTarget.value.toUpperCase();
+	}
+	
+	// 2. Fonction permettant de vérifier que le format saisie est conforme aux attentes
+	function check_value(evt)
+	{
+		var field = evt.currentTarget.name; // Nom du champs
+		var value = evt.currentTarget.value; // Valeur
+		var regex_pattern;
+		var target_field;
+		
+		switch (field)
+		{
+			case 'phonenumber':
+				regex_pattern = /^[0-9]{10}$/;
+				target_field = "phone_result";
+				break;
+				
+			case 'email':
+				regex_pattern = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/;
+				target_field = "email_result";
+				break;
 		}
-	});
+		
+		var regex = new RegExp(regex_pattern);	
+		document.getElementById(target_field).innerText  = regex.test(value) ? "" : "Mauvais format"; // Test de la validité du champs
 
-	// //CV
-	// document.getElementById('cv').addEventListener('change', function () {
-	// 	const file = this.files[0];
-	// 	const allowedExtensions = ['pdf', 'doc', 'docx', 'odt', 'rtf', 'jpg', 'png'];
-	// 	const maxSize = 2 * 1024 * 1024; // 2 Mo en octets
-	// 	const fileNameDisplay = document.getElementById('file-name');
-	// 	const errorDisplay = document.getElementById('file-error');
-
-	// 	if (file) {
-	// 		const fileExtension = file.name.split('.').pop().toLowerCase();
-	// 		if (!allowedExtensions.includes(fileExtension)) {
-	// 			errorDisplay.textContent = "Format de fichier non autorisé !";
-	// 			errorDisplay.style.display = "block";
-	// 			this.value = ""; // Réinitialise l'input
-	// 			return;
-	// 		}
-
-	// 		if (file.size > maxSize) {
-	// 			errorDisplay.textContent = "Le fichier dépasse 2 Mo !";
-	// 			errorDisplay.style.display = "block";
-	// 			this.value = ""; // Réinitialise l'input
-	// 			return;
-	// 		}
-
-	// 		errorDisplay.style.display = "none";
-	// 		fileNameDisplay.textContent = "Fichier sélectionné : " + file.name;
-	// 	}
-	// });
-
-	//POSTULER
-	document.getElementById('idForm').addEventListener('submit', function (event) {
-		const surname = document.getElementById('surname').value.trim();
-		const firstname = document.getElementById('firstname').value.trim();
-		const email = document.getElementById('email').value.trim();
-        const tel = document.getElementById('tel').value.trim();
-		const message = document.getElementById('message').value.trim();
-		const errorDisplay = document.getElementById('form-error');
-
-		if (!surname || !firstname || !email || !message || !tel) {
-			event.preventDefault(); // Empêche l'envoi du formulaire
-			errorDisplay.textContent = "Tous les champs doivent être remplis !";
-			errorDisplay.style.display = "block";
-		} else {
-			errorDisplay.style.display = "none"; // Cache le message d'erreur si tout est bon
+	}
+	
+	
+	// 3. Fonction permettant de vérifier que la taille du fichier respecte les attentes
+	function file_validation(evt)
+	{
+		var result = '';
+		var maxFileSizeMo = 2;	
+		var fileInput = evt.target;
+		var fileSize = (fileInput.files[0].size / 1024 / 1024).toFixed(2);
+		if(fileSize > maxFileSizeMo)
+		{
+			fileInput.value = '';
+			result = "Taille du fichier trop importante.";
 		}
-	});
 
-	//SCROLL TOP
-	window.addEventListener('scroll', function () {
-		const button = document.getElementById('backToTop');
-		if (window.scrollY > 300) { // Affiche le bouton après 300px de scroll
-			button.style.display = "block";
-		} else {
-			button.style.display = "none";
+		document.getElementById('file_result').innerText = result;
+		
+	}
+	
+	//4. Fonction permettant de vérifier avant l'avant du formulaire que tous les champs sont correctements remplis
+	function checkForm(e)
+	{ 
+		if( form.checkValidity() ) // Cette fonction est un standard HTML, elle permet de vérifier l'état des champs contrôlés par le navigateur (required, type...)
+		{
+			e.preventDefault(); // Permet de prendre le contrôle sur l'envoi du formulaire
+			
+			const t_fields = ["phone_result", "email_result"]; // Liste des id des champs de résultat
+			
+			for (i = 0; i < t_fields.length; i++) // Parcours du tableau (il est également possible d'utiliser la méthode forEach)
+			{
+				if( document.getElementById(t_fields[i]).innerText != '' ) // Champs vide = pas d'erreur
+				{
+					document.getElementById('submit_result').classList.remove("validate"); // Suppression de la classe de validation 
+					document.getElementById('submit_result').innerText  = "Un ou plusieurs champs sont incorrects."; // Message de retour
+					return;
+				}
+			} 
+			
+			document.getElementById('submit_result').classList.add("validate"); // Ajout de la classe de validation pour passer le texte en vert
+			document.getElementById('submit_result').innerText  = "Compte créer !"; // Message de retour
+			form.reset(); 
+			
 		}
-	});
-
-	function scrollToTop() {
-		window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll fluide vers le haut
+		
+	};
+	
+	
+	//5. Fonction permettant de revenir en haut de la page
+	function go_top()
+	{
+		document.body.scrollTop = 0;
+		document.documentElement.scrollTop = 0;
 	}
 
-	//MENU ON MOBILE
-	function toggleMenu() {
-    const menuLinks = document.querySelector('.display');
-    menuLinks.classList.toggle('active');
-}
+	window.onscroll = function()
+	{ 
+		// Afficher le bouton lorsque l'utilisateur scroll à plus de 150px en partant du haut de la page
+		top_button.style.display = (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) ? 'block' : 'none';
+	}
+	
+	//6. Affichage du menu mobile lors du click sur le burger
+	var sidenav = document.getElementById("sideNav");
+	var burgerNav = document.getElementById("burgerNav");
+	var closeBtn = document.getElementById("closeBtn");
+
+	burgerNav.onclick = openNav;
+	closeBtn.onclick = closeNav;
+
+	/* Affichage du menu latéral */
+	function openNav() {
+	  sidenav.classList.add("active");
+	}
+
+	/* Fermeture du menu latéral */
+	function closeNav() {
+	  sidenav.classList.remove("active");
+	}
+		
+	
+});
