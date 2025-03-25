@@ -1,0 +1,6 @@
+{
+    "require": {
+        "laravel/framework": "^12.3",
+        "cviebrock/eloquent-sluggable": "^12.0"
+    }
+}
