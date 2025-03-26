@@ -2,8 +2,6 @@
     "name": "doggo/monstage",
     "type": "project",
     "description": "Site web de recherche de stage pour les étudiants",
-    "keywords": ["laravel", "framework"],
-    "license": "MIT",
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.0",
