@@ -4,11 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
     "content-hash": "c3341577769c830c18e6c2451b9cc6c0",
-=======
-    "content-hash": "f11db9085d4712bfe58e5d314fd1c64f",
->>>>>>> 4cc8d05 (Add initial Laravel project structure with configuration files, routes, and basic setup)
     "packages": [
         {
             "name": "brick/math",
