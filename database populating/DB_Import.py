@@ -916,4 +916,8 @@ if __name__ == "__main__":
 # Fermer la connexion à la BDD
 if conn.is_connected():
     cursor.close()
+<<<<<<< HEAD
     conn.close()
+=======
+    conn.close()
+>>>>>>> 4cc8d05 (Add initial Laravel project structure with configuration files, routes, and basic setup)
