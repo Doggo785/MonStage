@@ -4,6 +4,22 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property int $ID_User
+ * @property int $ID_Offre
+ * @property string $Date_ajout
+ * @property-read \App\Models\Offre $offre
+ * @property-read \App\Models\Utilisateur $utilisateur
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist whereDateAjout($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist whereIDOffre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist whereIDUser($value)
+ * @mixin \Eloquent
+ */
 class Wishlist extends Model
 {
     protected $table = 'Wishlist';

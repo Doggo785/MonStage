@@ -4,6 +4,29 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property int $ID_Entreprise
+ * @property string $Nom
+ * @property string|null $Telephone
+ * @property string $Email
+ * @property string $Site
+ * @property string $Description
+ * @property int $ID_Ville
+ * @property-read \App\Models\Ville $ville
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereIDEntreprise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereIDVille($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereNom($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereSite($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Entreprise whereTelephone($value)
+ * @mixin \Eloquent
+ */
 class Entreprise extends Model
 {
     protected $table = 'Entreprise';

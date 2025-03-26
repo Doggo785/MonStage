@@ -4,6 +4,24 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property int $ID_Avis
+ * @property string $Note
+ * @property int $ID_Entreprise
+ * @property int $ID_User
+ * @property-read \App\Models\Entreprise $entreprise
+ * @property-read \App\Models\Utilisateur $utilisateur
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis whereIDAvis($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis whereIDEntreprise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis whereIDUser($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis whereNote($value)
+ * @mixin \Eloquent
+ */
 class Avis extends Model
 {
     protected $table = 'Avis';
