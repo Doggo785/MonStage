@@ -4,6 +4,37 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property int $ID_Offre
+ * @property string $Titre
+ * @property string|null $Description
+ * @property string|null $Remuneration
+ * @property int $Etat
+ * @property string $Date_publication
+ * @property string|null $Date_expiration
+ * @property int $ID_Secteur
+ * @property int $ID_Ville
+ * @property int $ID_Entreprise
+ * @property-read \App\Models\Entreprise $entreprise
+ * @property-read \App\Models\Secteur $secteur
+ * @property-read \App\Models\Ville $ville
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereDateExpiration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereDatePublication($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereEtat($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereIDEntreprise($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereIDOffre($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereIDSecteur($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereIDVille($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereRemuneration($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offre whereTitre($value)
+ * @mixin \Eloquent
+ */
 class Offre extends Model
 {
     protected $table = 'Offre';

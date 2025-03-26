@@ -4,6 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * 
+ *
+ * @property int $ID_Offre
+ * @property int $ID_Competence
+ * @property-read \App\Models\Competence $competence
+ * @property-read \App\Models\Offre $offre
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offres_Competences newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offres_Competences newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offres_Competences query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offres_Competences whereIDCompetence($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Offres_Competences whereIDOffre($value)
+ * @mixin \Eloquent
+ */
 class Offres_Competences extends Model
 {
     protected $table = 'Offres_Competences';
