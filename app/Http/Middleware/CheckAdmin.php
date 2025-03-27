@@ -21,7 +21,7 @@ class CheckAdmin
             $utilisateur = auth()->user();
 
             // Vérifie si le rôle de l'utilisateur est "Administrateur"
-            if ($utilisateur->role === 'Administrateur') {
+            if ($utilisateur->role->Libelle === 'Administrateur') {
                 return $next($request);
             }
         }

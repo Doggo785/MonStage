@@ -21,7 +21,7 @@ class CheckStudent
             $utilisateur = auth()->user();
 
             // Vérifie si le rôle de l'utilisateur est "Etudiant"
-            if ($utilisateur->role === 'Etudiant') {
+            if ($utilisateur->role->Libelle === 'Etudiant') {
                 return $next($request);
             }
         }
