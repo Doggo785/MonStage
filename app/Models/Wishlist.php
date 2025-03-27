@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID_Offre
  * @property string $Date_ajout
  * @property-read \App\Models\Offre $offre
- * @property-read \App\Models\Utilisateur $utilisateur
+ * @property-read \App\Models\User $utilisateur
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Wishlist query()
@@ -32,9 +32,9 @@ class Wishlist extends Model
     ];
 
     // Relation avec le modèle Utilisateur
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'ID_User', 'ID_User');
+        return $this->belongsTo(User::class, 'ID_User', 'ID_User');
     }
 
     // Relation avec le modèle Offre
