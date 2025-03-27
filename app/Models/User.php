@@ -23,15 +23,27 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
+    // Spécifie la table utilisée par le modèle
+    protected $table = 'Utilisateur';
+
+    // Spécifie la clé primaire
+    protected $primaryKey = 'ID_User';
+
+    // Désactive les timestamps automatiques (si non utilisés dans la table)
+    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'Nom',
+        'Prenom',
+        'Email',
+        'Telephone',
+        'Password',
+        'ID_Role',
     ];
 
     /**
@@ -40,8 +52,7 @@ class User extends Authenticatable
      * @var list<string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'Password',
     ];
 
     /**
@@ -55,5 +66,16 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    // Relations
+    public function etudiant()
+    {
+        return $this->hasOne(Etudiant::class, 'ID_User');
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'ID_Role');
     }
 }

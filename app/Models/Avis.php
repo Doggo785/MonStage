@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $ID_Entreprise
  * @property int $ID_User
  * @property-read \App\Models\Entreprise $entreprise
- * @property-read \App\Models\Utilisateur $utilisateur
+ * @property-read \App\Models\User $utilisateur
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Avis query()
@@ -41,8 +41,8 @@ class Avis extends Model
     }
 
     // Relation avec le modèle Utilisateur
-    public function utilisateur()
+    public function user()
     {
-        return $this->belongsTo(Utilisateur::class, 'ID_User', 'ID_User');
+        return $this->belongsTo(User::class, 'ID_User', 'ID_User');
     }
 }
