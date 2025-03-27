@@ -21,7 +21,7 @@ class CheckPilote
             $utilisateur = auth()->user();
 
             // Vérifie si le rôle de l'utilisateur est "Pilote"
-            if ($utilisateur->role === 'Pilote') {
+            if ($utilisateur->role->Libelle === 'Pilote') {
                 return $next($request);
             }
         }
