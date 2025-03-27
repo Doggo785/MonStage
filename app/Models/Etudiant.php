@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $ID_User
  * @property string|null $Statut_recherche
- * @property-read \App\Models\Utilisateur $utilisateur
+ * @property-read \App\Models\User $utilisateur
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Etudiant newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Etudiant newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Etudiant query()
@@ -22,7 +22,7 @@ class Etudiant extends Model {
     protected $primaryKey = 'ID_User';
     public $timestamps = false;
 
-    public function utilisateur() {
-        return $this->belongsTo(Utilisateur::class, 'ID_User');
+    public function user() {
+        return $this->belongsTo(User::class, 'ID_User');
     }
 }

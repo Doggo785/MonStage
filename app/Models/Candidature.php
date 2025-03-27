@@ -15,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string|null $CV_path
  * @property-read \App\Models\Offre $offre
  * @property-read \App\Models\Statuts_Candidature $statut
- * @property-read \App\Models\Utilisateur $utilisateur
+ * @property-read \App\Models\User $utilisateur
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Candidature newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Candidature newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Candidature query()
@@ -33,8 +33,8 @@ class Candidature extends Model {
     public $incrementing = false; // Désactive l'auto-incrément
 
     // Relations
-    public function utilisateur() {
-        return $this->belongsTo(Utilisateur::class, 'ID_User');
+    public function user() {
+        return $this->belongsTo(User::class, 'ID_User');
     }
 
     public function offre() {
