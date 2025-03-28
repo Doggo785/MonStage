@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'ID_Role');
     }
+
+    public function getAuthPassword()
+    {
+        return $this->attributes['Password'];
+    }
 }

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\CheckAdmin;
+use App\Http\Middleware\CheckAdminOrPilote;
+use App\Http\Middleware\CheckPilote;
+use App\Http\Middleware\CheckStudent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -41,4 +45,63 @@ Route::get('/db-tables', function () {
             'message' => $e->getMessage(),
         ]);
     }
+});
+
+Route::get('/login', function () {
+    return view('login');
+})->name('login');
+
+Route::post('/login', function (\Illuminate\Http\Request $request) {
+    $credentials = $request->only('email', 'password');
+
+    if (Auth::attempt($credentials)) {
+        $request->session()->regenerate();
+        return redirect()->intended('/dashboard'); // Redirige vers le tableau de bord
+    }
+
+    return back()->withErrors([
+        'email' => 'Les informations d’identification fournies sont incorrectes.',
+    ]);
+});
+
+Route::post('/logout', function (\Illuminate\Http\Request $request) {
+    Auth::logout(); // Déconnecte l'utilisateur
+    $request->session()->invalidate(); // Invalide la session
+    $request->session()->regenerateToken(); // Regénère le token CSRF
+
+    return redirect('/login'); // Redirige vers la page de connexion
+})->name('logout');
+
+Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
+    Route::get('/', function () {
+        return view('dashboard');
+    });
+
+    Route::get('applications', function () {
+        return view('applications');
+    })->middleware(CheckStudent::class);
+
+    Route::get('create-company', function () {
+        return view('create-company');
+    })->middleware(CheckAdminOrPilote::class);
+
+    Route::get('create-account', function () {
+        return view('create-account');
+    })->middleware(CheckAdminOrPilote::class);
+
+    Route::get('accounts', function () {
+        return view('accounts');
+    })->middleware(CheckAdminOrPilote::class);
+
+    Route::get('accounts/{id}', function ($id) {
+        return view('account-details', ['id' => $id]);
+    })->middleware(CheckAdminOrPilote::class);
+
+    Route::get('accounts/{id}/edit', function ($id) {
+        return view('edit-account', ['id' => $id]);
+    })->middleware(CheckAdminOrPilote::class);
+
+    Route::get('wishlist', function () {
+        return view('wishlist');
+    })->middleware(CheckStudent::class);
 });
