@@ -5,6 +5,7 @@ use App\Http\Middleware\CheckAdminOrPilote;
 use App\Http\Middleware\CheckPilote;
 use App\Http\Middleware\CheckStudent;
 use Illuminate\Support\Facades\Route;
+use App\Models\Offre; // Assurez-vous d'importer le modèle Offre
 
 Route::get('/', function () {
     return view('index');
@@ -100,4 +101,36 @@ Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
     Route::get('wishlist', function () {
         return view('wishlist');
     })->middleware(CheckStudent::class);
+});
+
+// Routes pour les offres
+Route::group(['prefix' => '/offres'], function () {
+    // Liste de toutes les offres avec tous leurs attributs
+    Route::get('/', function () {
+        $offres = Offre::with('Entreprise')->get(); 
+        $offres = Offre::with('Ville')->get(); 
+        return view('index', ['offres' => $offres]);
+    })->name('offres.index');
+
+    // Détails d'une offre
+    Route::get('{id}', function ($id) {
+        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Recherche l'offre par ID_Offre
+        return view('offres.show', ['offre' => $offre]); // Passe l'offre à la vue
+    })->name('offres.show');
+
+    // Postuler à une offre
+    Route::post('/{id}/apply', function ($id) {
+        // Logique pour postuler à une offre
+        return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée.');
+    })->name('offres.apply')->middleware('can:apply-offer');
+
+    // Modifier une offre
+    Route::get('/{id}/edit', function ($id) {
+        return view('offres.edit', ['id' => $id]); // Vue pour modifier une offre
+    })->name('offres.edit')->middleware('can:edit-offer');
+
+    // Créer une nouvelle offre
+    Route::get('/create', function () {
+        return view('offres.create'); // Vue pour créer une nouvelle offre
+    })->name('offres.create')->middleware('can:create-offer');
 });

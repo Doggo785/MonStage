@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Accueil')
+@section('title', 'Liste des Offres')
 
 @section('content')
 <section>
@@ -14,29 +14,17 @@
    </div>
 
    <div class="container_offre">
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
+      @foreach ($offres as $offre)
+         <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">
+            <div class="card">
+               <div class="title">{{ $offre->Titre }}
+                  <div class="subtitle">
+                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | {{ $offre->Ville->Nom ?? 'Ville inconnue' }} | Publiée le {{ $offre->Date_publication }}
+                  </div>
+               </div>
             </div>
-         </div>
-      </a>
-
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
-            </div>
-         </div>
-      </a>
-
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
-            </div>
-         </div>
-      </a>
+         </a>
+      @endforeach
    </div>
 </section>
 @endsection
