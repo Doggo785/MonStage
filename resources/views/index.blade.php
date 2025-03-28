@@ -1,66 +1,42 @@
-<!doctype html> 
-<html lang="fr"> 
-   <head> 
-      <meta charset="utf-8">
-	  <meta name="author" content="Lucas TOUJAS - Raphaël TOLANDAL - Stéphane PLATHEY--BADIN">
-	  <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
-      <title>MonStage</title> 
-	  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-	  <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
-   </head> 
-   <body>
-     <header>
-		<nav class = "navbar">
-			<div class="nav-left">
-			<img alt="Logo" src="{{ asset('assets/logo.jpg') }}">
-			&nbsp;|&nbsp;<span class="active">Accueil</span> 
-			&nbsp;|&nbsp;<a href="offres.html">Offres</a>
-			&nbsp;|&nbsp;<a href="entreprises.html">Entreprises</a>
-			</div>
-			<div class="nav-right"><a href="login.html"><button class="btn">
-			<i class="fa-solid fa-circle-user"></i>  Connexion</button></a>
-			</div>
-		</nav>
+@extends('layout')
 
-	 </header>
-	 
-	 <main>
-	   <section>
-			<center><h1>Ton stage, à portée de main !</h1></center>
-			<div class="input-icons">
-				<form class="search-container" action="#">
-					<i class="fa-solid fa-magnifying-glass"></i>
-					<input type="text" class="search-input" placeholder="Mots clés...">
-					<button type="submit" class="search-button"> Rechercher</button>
-				</form>
-			</div>
+@section('title', 'Accueil')
 
-			<div class="container_offre">
-				<a href="offre_ex.html"><div class="card">
-					<div class="title">Stage - Developer
-						<div class="subtitle">TOTAL | PAU 64000</div>
-					</div>
-				</div></a>
+@section('content')
+<section>
+   <center><h1>Ton stage, à portée de main !</h1></center>
+   <div class="input-icons">
+      <form class="search-container" action="#">
+         <i class="fa-solid fa-magnifying-glass"></i>
+         <input type="text" class="search-input" placeholder="Mots clés...">
+         <button type="submit" class="search-button">Rechercher</button>
+      </form>
+   </div>
 
-				<a href="offre_ex.html"><div class="card">
-					<div class="title">Stage - Developer
-						<div class="subtitle">TOTAL | PAU 64000</div>
-					</div>
-				</div></a>
+   <div class="container_offre">
+      <a href="{{ url('offre_ex') }}">
+         <div class="card">
+            <div class="title">Stage - Developer
+               <div class="subtitle">TOTAL | PAU 64000</div>
+            </div>
+         </div>
+      </a>
 
-				<a href="offre_ex.html"><div class="card">
-					<div class="title">Stage - Developer
-						<div class="subtitle">TOTAL | PAU 64000</div>
-					</div>
-					</div></a>
-				</div>
-	   </section>
-	 </main>
-	 
-	 <footer>
-		<br>
-		<div class='footer_fixe'>&copy;2025 - Tous droits réservés - JGT</div>
-	 </footer>
-	 
-   </body> 
-</html>
+      <a href="{{ url('offre_ex') }}">
+         <div class="card">
+            <div class="title">Stage - Developer
+               <div class="subtitle">TOTAL | PAU 64000</div>
+            </div>
+         </div>
+      </a>
+
+      <a href="{{ url('offre_ex') }}">
+         <div class="card">
+            <div class="title">Stage - Developer
+               <div class="subtitle">TOTAL | PAU 64000</div>
+            </div>
+         </div>
+      </a>
+   </div>
+</section>
+@endsection
