@@ -10,8 +10,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/coucou', function () {
-    return 'Bonjour';
+
+Route::get('/dashboard', function () {
+    return view('dashboard.dashboard');
+
 });
 
 Route::get('/db-test', function () {

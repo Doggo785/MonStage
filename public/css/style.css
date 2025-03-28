@@ -1,0 +1,424 @@
+body
+{
+  background-color: #f9f9f9;
+  height:100%;
+  font-family:"Century Gothic", sans-serif;
+  margin: 0;
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+
+}
+
+h1,h2,h3,h4{
+  font-family: "Oswald", sans-serif;
+  font-weight: bold;
+}
+
+.text-center
+{
+    text-align: center;
+}
+
+.navbar {
+    padding : 10px 15px;
+    background-color: #F1F1F1;
+    position: sticky;
+    color: rgb(0, 0, 0);
+    font-family: "Oswald", sans-serif;
+    filter: drop-shadow(0 0 0.50rem rgb(145, 145, 145));
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  
+    letter-spacing: 1px;
+}
+
+
+.nav-right .btn{
+  background-color: orangered; 
+  border: 2px solid orangered;
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-weight: bold;
+  padding: 8px 10px;
+  margin: 5px 0;
+  border-radius: 20px;
+  word-spacing: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.nav-right .btn:hover {
+  border: 2px solid orangered;
+  color : orangered;
+  background-color: white;
+}
+
+.nav-left a{
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+  }
+
+.nav-right a{
+    color: white;
+    text-decoration: none;
+  }
+
+.nav-left a:hover {
+    text-decoration: underline;
+    font-weight: bold;
+}
+
+.nav-left .active {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+}
+
+/* Styling for the search container */
+.search-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+/* Styling for the search input */
+.search-input {
+  padding: 5px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  width: 400px;
+  margin: auto;
+  display: inline-block;
+  font-family: "Century Gothic", sans-serif;
+}
+
+/* Styling for the search button */
+.search-button {
+  padding: 5px 10px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #F1F1F1;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: auto;
+  display: inline-block;
+  font-family: "Century Gothic", sans-serif;
+}
+
+/* Styling for the search button on hover */
+.search-button:hover {
+  background-color: #e0e0e0;
+}
+
+.submit-button .btn{
+  padding: 10px 30px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #F1F1F1;
+  color : #3b3b3b;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  margin: auto;
+  display: inline-block;
+  font-size: 20px;
+  font-family: "Century Gothic", sans-serif;
+}
+
+/* Styling for the search button on hover */
+.submit-button .btn:hover {
+  color: white;
+  background-color: orangered; /* Green */
+  border: 2px solid orangered;
+}
+
+.submit-button a{
+  text-decoration: none;
+  color : #3b3b3b;
+}
+
+.submit-button .btn2{
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #F1F1F1;
+  color : #3b3b3b;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  margin: auto;
+  display: inline-block;
+  font-size: 15px;
+  font-family: "Century Gothic", sans-serif;
+}
+
+/* Styling for the search button on hover */
+.submit-button .btn2:hover {
+  color: white;
+  background-color: orangered; /* Green */
+  border: 2px solid orangered;
+}
+
+
+.input-icons {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.input-icons i {
+  position: left;
+}
+
+.icon {
+  padding: 10px;
+  min-width: 40px;
+}
+
+.input-field {
+  width: 100%;
+  padding: 10px;
+  text-align: center;}
+
+.login_form {
+    width: 100%;
+    max-width: 435px;
+    background: #F1F1F1;
+    border-radius: 6px;
+    padding: 41px 30px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    margin-left: auto;
+    margin-right: auto 
+    
+}
+.field_result
+{
+	color: rgb(158, 47, 47);
+	font-weight: bold;
+	font-size: 0.9rem;
+	padding: 0 10px;
+}
+
+.field_result.validate
+{
+	color: rgb(57, 97, 57);
+}
+
+.login_form .separator {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.separator {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.petit-lien{
+  font-size: 10px;
+}
+
+.bloc-texte{
+  color: rgb(0, 0, 0);
+  background-color: white;
+  display: inline-block;
+  border: 2px solid #ccc;
+  padding: 5px 8px;
+  border-radius: 4px;
+  font-size: 0.8em;
+  box-sizing: border-box;
+}
+
+select {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #F1F1F1;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin: auto;
+  display: inline-block;
+
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+
+  /* reset */
+
+  margin: 0;      
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+
+/* arrows */
+select.round {
+  background-image:
+    linear-gradient(45deg, transparent 50%, #333 50%),
+    linear-gradient(135deg, #333 50%, transparent 50%);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - .5em) .5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1.5em 1.5em;
+  background-repeat: no-repeat;
+}
+
+input[type=file]::file-selector-button {
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 2px solid #ccc;
+  background-color: #F1F1F1;
+  color : #3b3b3b;
+  cursor: pointer;
+  transition-duration: 0.3s;
+  margin-bottom: 10px;
+  display: inline-block;
+  font-size: 15px;
+}
+
+input[type=file] {
+  width: 350px;
+  max-width: 100%;
+}
+
+input[type=file]::file-selector-button:hover {
+  color: white;
+  background-color: orangered; /* Green */
+  border: 2px solid orangered;
+}
+
+.container_compte {
+  display: grid;
+  grid-template-areas:
+    "vide compte whishlist "
+    "vide compte offre ";
+  grid-template-columns: 0.5fr 1fr 2fr 0.5fr ;
+  gap: 10px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.container_compte > div {
+  border-radius: 6px;
+  padding: 10px;
+}
+.container_compte > div.compte {
+  grid-area: compte;
+  text-align: center;
+  background-color: #F1F1F1;
+  padding: 20px;
+}
+.container_compte > div.whishlist {
+  grid-area: whishlist;
+}
+.container_compte > div.offre {
+  grid-area: offre;
+}
+.container_compte > div.vide {
+  grid-area: vide;
+}
+
+
+.photo_compte {
+  border-radius: 50%;
+  width: 50%;
+}
+
+.card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #F1F1F1;
+  /* border: 1px solid #a0a0a0; */
+  border-radius: 6px;
+  padding: 10px;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+}
+.title {
+  font-weight: bold;
+  font-size: 16px;
+}
+.subtitle {
+  font-size: 12px;
+  color: #666;
+}
+.icon_bloc {
+  font-size: 20px;
+  color: #333;
+  cursor: pointer;
+}
+
+
+.container_offre {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  padding: 5px;
+  margin-left: 40px;
+  margin-right: 40px; 
+  
+}
+
+.container_offre a{
+  text-decoration: none;
+  color : black;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  margin: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: grid;
+  grid-template-columns: 1fr repeat(1, auto) 1fr;
+} 
+
+.card:hover {
+text-decoration: none;
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 5px;
+  margin-right: auto;
+}
+
+.subtitle {
+  font-size: 12px;
+  color: #666;
+  margin-right: auto;
+}
+
+.subtitle-right {
+  font-size: 12px;
+  color: #666;
+  margin-left: auto;
+}
+
+.title:hover {
+  text-decoration: none;
+  }
+  
+
+.background_image{
+  background-image: url("stage_image.jpg");
+  width: 100%;
+  height: 50%;
+
+}
+
+.footer_fixe {
+  text-align:center;
+  background-color: #fff;
+  position: fixed;
+  bottom:0;
+  width:100%;
+  display:inline-block;
+  vertical-align:top;
+  font-size:13px;}

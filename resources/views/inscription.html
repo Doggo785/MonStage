@@ -1,0 +1,71 @@
+<!doctype html> 
+<html lang="fr"> 
+   <head> 
+      <meta charset="utf-8">
+	  <meta name="author" content="Lucas TOUJAS - Raphaël TOLANDAL - Stéphane PLATHEY--BADIN">
+	  <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
+      <title>MonStage</title> 
+	  <link rel="stylesheet" href="assets/style.css">
+	  <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
+   </head> 
+   <body>
+     <header>
+		<nav class = "navbar">
+			<div class="nav-left">
+			<img alt="Logo" src="logo.png">
+			&nbsp;|&nbsp;<span class="active"> Accueil</span> 
+			&nbsp;|&nbsp;<a href="offres.html">Offres</a>
+			&nbsp;|&nbsp;<a href="entreprises.html">Entreprises</a>
+			</div>
+			<div class="nav-right"><a href="login.html"><button class="btn">
+			<i class="fa-solid fa-circle-user"></i>  Connexion</button></a>
+			</div>
+		</nav>
+
+	 </header>
+	 
+	 <main>
+	   <section>
+
+        <center><h1>Formulaire d'inscription d'un étudiant</h1></center>
+
+        <article>
+
+          <div class="login_form">
+            <form id="reply_form">
+                <label>Nom<br></label>
+                <input name="lastname" type="text" class="search-input" required >
+                <p class="separator"></p>
+
+                <label>Prénom<br></label>
+                <input name="firstname" type="text" class="search-input" required >
+                <p class="separator"></p>
+
+                <label>Email<br></label>
+                <input name="email" type="email" size="30" placeholder="monemail@wahou.com" class="search-input" value="" required >
+                <span class="field_result" id="email_result"></span>
+                <p class="separator"></p>
+                
+
+                <label>Téléphone<br></label>
+                <input name="phonenumber" type="text" size="10" value="" placeholder="0612345678" class="search-input" value="" required >
+                <span class="field_result" id="phone_result"></span>
+                <p class="separator"></p>
+
+                <div class="submit-button">
+                <button type="submit" id="submit_form" class="btn2">Confirmer</button>&nbsp;<input type="reset" value="Réinitialiser" class="btn2" >
+                
+              </div><span class="field_result" id="submit_result"></span>
+        </form></div>
+        </article>
+	   </section>
+       
+	 </main>
+	 
+	 <footer>
+		<br>
+		<div class='footer_fixe'>&copy;2025 - Tous droits réservés -	JGT</div>
+	 </footer>
+   <script src="./assets/script.js" /></script>
+   </body> 
+</html> 
