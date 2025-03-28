@@ -19,7 +19,7 @@
             <div class="card">
                <div class="title">{{ $offre->Titre }}
                   <div class="subtitle">
-                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | {{ $offre->Ville->Nom ?? 'Ville inconnue' }} | Publiée le {{ $offre->Date_publication }}
+                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }} | Publiée le {{ $offre->Date_publication }}
                   </div>
                </div>
             </div>

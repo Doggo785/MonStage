@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Offre; // Assurez-vous d'importer le modèle Offre
 
 Route::get('/', function () {
-    return view('index');
-});
+    $offres = Offre::with('Entreprise')->get(); 
+    $offres = Offre::with('Ville')->get(); 
+    return view('index', ['offres' => $offres]);
+})->name('offres.index');
 
 Route::get('/db-test', function () {
     try {
@@ -118,11 +120,23 @@ Route::group(['prefix' => '/offres'], function () {
         return view('offres.show', ['offre' => $offre]); // Passe l'offre à la vue
     })->name('offres.show');
 
-    // Postuler à une offre
-    Route::post('/{id}/apply', function ($id) {
-        // Logique pour postuler à une offre
-        return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée.');
-    })->name('offres.apply')->middleware('can:apply-offer');
+    Route::get('{id}/apply', function ($id) {
+        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
+        return view('offres.apply', ['offre' => $offre]); // Passe l'offre à la vue
+    })->name('offres.apply')->middleware('auth'); // Ajout du middleware auth pour sécuriser l'accès
+
+    Route::post('/{id}/apply', function (\Illuminate\Http\Request $request, $id) {
+        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
+
+        // Validation des données
+        $validated = $request->validate([
+            'cv' => 'required|file|mimes:pdf,doc,docx|max:2048', // Max 2 Mo
+            'motivation' => 'required|string|max:1000',
+        ]);
+
+        // Logique pour enregistrer la candidature ou envoyer un email
+        return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée avec succès.');
+    })->name('offres.apply.submit')->middleware('auth');
 
     // Modifier une offre
     Route::get('/{id}/edit', function ($id) {
