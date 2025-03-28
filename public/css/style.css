@@ -34,11 +34,6 @@ h1,h2,h3,h4{
 
 
 .nav-right .btn{
-  background-color: orangered; 
-  border: 2px solid orangered;
-  color: white;
-  font-family: "Oswald", sans-serif;
-  font-weight: bold;
   padding: 8px 10px;
   margin: 5px 0;
   border-radius: 20px;
@@ -51,6 +46,46 @@ h1,h2,h3,h4{
   border: 2px solid orangered;
   color : orangered;
   background-color: white;
+}
+
+/* Style pour le conteneur dropdown */
+.nav-right .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style pour les boutons */
+.nav-right .btn {
+  background-color: #ff4500; 
+  border: 2px solid orangered;
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-weight: bold;
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Assurez-vous que le menu déroulant est bien positionné */
+.nav-right .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Aligne le menu sur le côté droit du bouton */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 10px 0;
+    border-radius: 4px;
+}
+
+/* Affiche le menu déroulant au survol */
+.nav-right .dropdown:hover .dropdown-menu {
+    display: block;
 }
 
 .nav-left a{
@@ -422,3 +457,35 @@ text-decoration: none;
   display:inline-block;
   vertical-align:top;
   font-size:13px;}
+
+/* Style pour le menu déroulant */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 10px 0;
+    border-radius: 4px;
+}
+
+.dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}

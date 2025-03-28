@@ -7,7 +7,7 @@ use App\Http\Middleware\CheckStudent;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 });
 
 Route::get('/db-test', function () {

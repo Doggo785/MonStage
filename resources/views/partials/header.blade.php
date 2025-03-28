@@ -8,19 +8,30 @@
        </div>
        <div class="nav-right">
           @auth
-             <!-- Bouton de déconnexion -->
-             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <button type="submit" class="btn">
-                   <i class="fa-solid fa-sign-out-alt"></i> Déconnexion
+             <!-- Bouton Compte avec menu déroulant -->
+             <div class="dropdown">
+                <button class="btn dropdown-toggle">
+                   <i class="fa-solid fa-circle-user"></i> Compte
                 </button>
-             </form>
+                <div class="dropdown-menu">
+                   <a href="{{ url('/dashboard') }}" class="dropdown-item">Dashboard</a>
+                   <a href="{{ route('logout') }}" class="dropdown-item"
+                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                      Déconnexion
+                   </a>
+                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                   </form>
+                </div>
+             </div>
           @else
-             <!-- Bouton pour accéder au compte -->
-             <button class="btn">
-                <i class="fa-solid fa-circle-user"></i> Compte
-             </button>
+             <!-- Bouton Connexion avec conteneur -->
+             <div class="dropdown">
+                <a href="{{ route('login') }}" class="btn">
+                   <i class="fa-solid fa-circle-user"></i> Connexion
+                </a>
+             </div>
           @endauth
        </div>
     </nav>
- </header>
+</header>
