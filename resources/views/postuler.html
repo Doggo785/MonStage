@@ -1,0 +1,109 @@
+<!doctype html> 
+<html lang="fr"> 
+   <head> 
+      <meta charset="utf-8">
+	  <meta name="author" content="Lucas TOUJAS - Raphaël TOLANDAL - Stéphane PLATHEY--BADIN">
+	  <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
+      <title>MonStage</title> 
+	  <link rel="stylesheet" href="assets/style.css">
+	  <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
+   </head> 
+   <body>
+     <header>
+		<nav class = "navbar">
+			<div class="nav-left">
+			<img alt="Logo" src="logo.png">
+			&nbsp;|&nbsp;<a href="index.html"> Accueil</a> 
+			&nbsp;|&nbsp;<span class="active">Offres</span> 
+			&nbsp;|&nbsp;<a href="entreprises.html">Entreprises</a>
+			</div>
+			<div class="nav-right"><a href="login.html"><button class="btn">
+			<i class="fa-solid fa-circle-user"></i>  Connexion</button></a>
+			</div>
+		</nav>
+
+	 </header>
+	 
+	 <main>
+	 
+	   <section style="margin-left: 10px;">
+	   
+			<center><h1>Postuler à une offre de stage</h1></center>
+			
+			<p>Vous pouvez ici répondre directement à l'offre de stage qui a été déposé par l'entreprise. Soyez le plus précis possible dans vos réponses !</p>
+			<h2>Stage - Exemple</h2>
+			<p class="ptit-texte">Entreprise | lieu | Publiée le date | Ref. id_offre</p>
+			<h3 class="page-header">Résumé de l'offre</h3>
+			<p class="bloc-texte">Exemple</p>&nbsp;
+			<p class="bloc-texte">Exemple</p>&nbsp;
+			<p class="bloc-texte">Exemple</p>&nbsp;
+			<p class="bloc-texte">Exemple</p>&nbsp;
+
+			<article>
+				<h2>Envoyer votre candidature dès maintenant !</h2>
+				
+                <form id="myForm">
+					<label>Civilité<br>
+						<select name="title" class="round" style="background-color: white;">
+							<option value="ms">Madame</option>
+							<option value="mr">Monsieur</option>
+							<option value="other">Autre</option>	  
+						</select>
+					</label>
+					<p class="separator"></p>
+
+					<label>NOM<br>
+					<input name="lastname" type="text" size="50" class="search-input" required ></label>
+					<span class="error" id="lastnameError"></span>
+					<p class="separator"></p>
+
+					<label>PRENOM<br>
+					<input name="surname" type="text" size="50" class="search-input" required ></label>
+					<span class="error" id="surnameError"></span>
+					<p class="separator"></p>
+
+					<label>COURRIEL<br>
+					<input name="email" type="email" size="30" class="search-input" required ></label>
+					<span class="error" id="emailError"></span>
+					<p class="separator"></p>
+					      
+					<label>A PROPOS DE VOUS</label><br>
+					<input type="checkbox" name="category" value="permi">Permis B<br>      
+					<input type="checkbox" name="category" value="cars">Véhiculé<br>      
+					<input type="checkbox" name="category" value="certif">Certification.s (Microsoft, Cisco...)<br>      			
+					<p class="separator"></p>
+
+					<label>JE SUIS MAJEUR</label>
+					&nbsp;<input type="radio" name="satisfaction" value="yes" checked="checked">Oui&nbsp;
+					<input type="radio" name="satisfaction" value="no" checked="checked">Non
+					<p class="separator"></p>
+
+					<label>VOTRE MESSAGE AU RECRUTEUR<br><textarea name="message" rows="5" cols="100" class="search-input" required></textarea></label>
+					<p class="separator"></p>
+
+					<label>CV
+                        <p class="separator"></p>
+						<input type="file" accept="image/jpeg,image/png,.pdf, .doc, .docx, .odt, .rtf" class="btn2" required></label>
+                        <br><em><small>Poids max. 2Mo</small></em>
+						<br><em><small>Formats .pdf, .doc, .docx, .odt, .rtf, .jpg ou .png</small></em>
+                        <p class="separator"></p>
+					
+					<div class="submit-button">
+					<button type="submit" class="btn2">Postuler</button>&nbsp;<input type="reset" value="Réinitialiser" class="btn2">
+				</div></form>
+				
+				<br><em><small>En cliquant sur 'Postuler', vous accepter les <a href="#">CGU</a> er déclarez avoir pris connaissance de la <a href="#">politique de protection des données</a> de notre site.</small></em>
+			</article>					
+			
+	   </section>
+	   
+	 </main>
+	 
+	 <footer>
+		<br>
+		<div class='footer_fixe'>&copy;2025 - Tous droits réservés -	JGT</div>
+	 </footer>
+	 
+   </body> 
+   <!-- <script src="script.js"></script> -->
+</html> 

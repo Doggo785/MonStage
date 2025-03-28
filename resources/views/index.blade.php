@@ -5,14 +5,14 @@
 	  <meta name="author" content="Lucas TOUJAS - Raphaël TOLANDAL - Stéphane PLATHEY--BADIN">
 	  <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
       <title>MonStage</title> 
-	  <link rel="stylesheet" href="assets/style.css">
+	  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 	  <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
    </head> 
    <body>
      <header>
 		<nav class = "navbar">
 			<div class="nav-left">
-			<img alt="Logo" src="logo.png">
+			<img alt="Logo" src="{{ asset('assets/logo.jpg') }}">
 			&nbsp;|&nbsp;<span class="active">Accueil</span> 
 			&nbsp;|&nbsp;<a href="offres.html">Offres</a>
 			&nbsp;|&nbsp;<a href="entreprises.html">Entreprises</a>
@@ -63,4 +63,4 @@
 	 </footer>
 	 
    </body> 
-</html> 
+</html>

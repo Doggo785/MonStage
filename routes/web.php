@@ -6,8 +6,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/coucou', function () {
-    return 'Bonjour';
+Route::get('/test-index', function () {
+    return view('index');
 });
 
 Route::get('/db-test', function () {
