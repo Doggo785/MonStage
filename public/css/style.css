@@ -362,84 +362,75 @@ input[type=file]::file-selector-button:hover {
   width: 50%;
 }
 
-.card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #F1F1F1;
-  /* border: 1px solid #a0a0a0; */
-  border-radius: 6px;
-  padding: 10px;
-}
-.content {
-  display: flex;
-  flex-direction: column;
-}
-.title {
-  font-weight: bold;
-  font-size: 16px;
-}
-.subtitle {
-  font-size: 12px;
-  color: #666;
-}
-.icon_bloc {
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
-}
-
-
+/* Ajuster la grille pour des box plus larges */
 .container_offre {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-  padding: 5px;
+  grid-template-columns: 1fr 1fr; /* Réduire à 2 colonnes pour des box plus larges */
+  gap: 20px; /* Augmenter l'espace entre les box */
+  padding: 10px;
   margin-left: 40px;
-  margin-right: 40px; 
-  
+  margin-right: 40px;
+}
+
+/* Style des cartes */
+.card {
+  position: relative; /* Nécessaire pour positionner le point vert ou d'autres éléments relatifs */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Effet au survol */
+.card:hover {
+  transform: scale(1.05); /* Agrandir légèrement la carte */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Accentuer l'ombre */
+}
+
+/* Style pour les cartes expirées */
+.card.expired {
+  background-color: #f5f5f5; /* Couleur grisée */
+  color: #aaa; /* Texte grisé */
+  pointer-events: none; /* Désactive les interactions */
+  border: 1px solid #ddd;
+}
+
+/* Indicateur de statut (point vert) */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #28a745; /* Couleur verte */
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+/* Empêche le point vert d'apparaître ailleurs */
+.container_offre .status-indicator {
+  position: absolute;
+}
+
+/* Titre de la carte */
+.title {
+  font-weight: bold;
+  font-size: 18px; /* Augmenter la taille du titre */
+  margin-bottom: 10px;
+}
+
+/* Sous-titre de la carte */
+.subtitle {
+  font-size: 14px; /* Augmenter légèrement la taille du sous-titre */
+  color: #666;
+  margin-bottom: 10px;
 }
 
 .container_offre a{
   text-decoration: none;
   color : black;
 }
-
-.card {
-  background-color: #fff;
-  border-radius: 12px;
-  margin: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: grid;
-  grid-template-columns: 1fr repeat(1, auto) 1fr;
-} 
-
-.card:hover {
-text-decoration: none;
-}
-
-.title {
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-right: auto;
-}
-
-.subtitle {
-  font-size: 12px;
-  color: #666;
-  margin-right: auto;
-}
-
-.subtitle-right {
-  font-size: 12px;
-  color: #666;
-  margin-left: auto;
-}
-
-.title:hover {
-  text-decoration: none;
-  }
-  
 
 .background_image{
   background-image: url("stage_image.jpg");
@@ -488,4 +479,65 @@ text-decoration: none;
 
 .dropdown:hover .dropdown-menu {
     display: block;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 8px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Style pour les cartes expirées */
+.card.expired {
+  background-color: #f5f5f5; /* Couleur grisée */
+  color: #aaa; /* Texte grisé */
+  pointer-events: none; /* Désactive les interactions */
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+/* Indicateur de statut (point vert) */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #28a745; /* Couleur verte */
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+/* Empêche le point vert d'apparaître ailleurs */
+.container_offre .status-indicator {
+  position: absolute;
 }

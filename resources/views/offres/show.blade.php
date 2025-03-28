@@ -13,8 +13,6 @@
             Publiée le {{ $offre->Date_publication }} | 
             Ref. {{ $offre->ID_Offre }}
         </p>
-        <h3 class="page-header">Résumé de l'offre</h3>
-        <p class="bloc-texte">{{ $offre->Description }}</p>&nbsp;
 
         <article>
             <h3>Description du poste</h3>
@@ -79,43 +77,4 @@
         document.getElementById('postulerModal').style.display = 'none';
     }
 </script>
-
-<!-- Styles pour la modale -->
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-    }
-
-    .modal-content {
-        background-color: #fefefe;
-        margin: 15% auto;
-        padding: 20px;
-        border: 1px solid #888;
-        width: 50%;
-        border-radius: 8px;
-    }
-
-    .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .close:hover,
-    .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-    }
-</style>
 @endsection
