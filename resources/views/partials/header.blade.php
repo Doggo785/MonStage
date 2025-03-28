@@ -7,9 +7,20 @@
           &nbsp;|&nbsp;<a href="{{ url('entreprises') }}">Entreprises</a>
        </div>
        <div class="nav-right">
-          <button class="btn">
-             <i class="fa-solid fa-circle-user"></i> Compte
-          </button>
+          @auth
+             <!-- Bouton de déconnexion -->
+             <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                @csrf
+                <button type="submit" class="btn">
+                   <i class="fa-solid fa-sign-out-alt"></i> Déconnexion
+                </button>
+             </form>
+          @else
+             <!-- Bouton pour accéder au compte -->
+             <button class="btn">
+                <i class="fa-solid fa-circle-user"></i> Compte
+             </button>
+          @endauth
        </div>
     </nav>
  </header>

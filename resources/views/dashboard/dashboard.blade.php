@@ -1,4 +1,3 @@
-<!-- filepath: /srv/http/MonStage/resources/views/dashboard/compte.blade.php -->
 @extends('layout')
 
 @section('title', 'Espace Utilisateur')

@@ -10,12 +10,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('/dashboard', function () {
-    return view('dashboard.dashboard');
-
-});
-
 Route::get('/db-test', function () {
     try {
         DB::connection()->getPdo();
@@ -76,7 +70,7 @@ Route::post('/logout', function (\Illuminate\Http\Request $request) {
 
 Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
     Route::get('/', function () {
-        return view('dashboard');
+        return view('dashboard.dashboard');
     });
 
     Route::get('applications', function () {
