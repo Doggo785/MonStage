@@ -9,7 +9,7 @@
         <h1>{{ $offre->Titre }}</h1>
         <p class="ptit-texte">
             {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
-            {{ $offre->ville->Nom ?? 'Ville inconnue' }} | 
+            {{ ucfirst($offre->ville->Nom) ?? 'Ville inconnue' }} | 
             Publiée le {{ $offre->Date_publication }} | 
             Ref. {{ $offre->ID_Offre }}
         </p>
