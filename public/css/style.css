@@ -32,13 +32,56 @@ h1,h2,h3,h4{
     letter-spacing: 1px;
 }
 
+/* Centrer les liens dans la barre de navigation */
+.nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Permet de centrer les liens entre les sections gauche et droite */
+}
 
-.nav-right .btn{
-  background-color: orangered; 
+/* Style des liens de navigation */
+.nav-link {
+    font-family: "Oswald", sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin: 0 10px; /* Espacement entre les liens */
+}
+
+/* Effet au survol */
+.nav-link:hover {
+    background-color: orangered;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn1 {
+  background-color: #ff4500; 
   border: 2px solid orangered;
   color: white;
   font-family: "Oswald", sans-serif;
   font-weight: bold;
+  display: inline-block;
+  border-radius: 20px;
+  padding: 10px 15px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.btn1:hover {
+  border: 2px solid orangered;
+  color : orangered;
+  background-color: white;
+}
+
+.nav-right .btn{
   padding: 8px 10px;
   margin: 5px 0;
   border-radius: 20px;
@@ -51,6 +94,46 @@ h1,h2,h3,h4{
   border: 2px solid orangered;
   color : orangered;
   background-color: white;
+}
+
+/* Style pour le conteneur dropdown */
+.nav-right .dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Style pour les boutons */
+.nav-right .btn {
+  background-color: #ff4500; 
+  border: 2px solid orangered;
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-weight: bold;
+  display: inline-block;
+  padding: 10px 15px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+/* Assurez-vous que le menu déroulant est bien positionné */
+.nav-right .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0; /* Aligne le menu sur le côté droit du bouton */
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 10px 0;
+    border-radius: 4px;
+}
+
+/* Affiche le menu déroulant au survol */
+.nav-right .dropdown:hover .dropdown-menu {
+    display: block;
 }
 
 .nav-left a{
@@ -126,7 +209,7 @@ h1,h2,h3,h4{
 /* Styling for the search button on hover */
 .submit-button .btn:hover {
   color: white;
-  background-color: orangered; /* Green */
+  background-color: orangered;
   border: 2px solid orangered;
 }
 
@@ -247,6 +330,7 @@ select {
   box-sizing: border-box;
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none;
 }
 
 
@@ -327,84 +411,75 @@ input[type=file]::file-selector-button:hover {
   width: 50%;
 }
 
-.card {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #F1F1F1;
-  /* border: 1px solid #a0a0a0; */
-  border-radius: 6px;
-  padding: 10px;
-}
-.content {
-  display: flex;
-  flex-direction: column;
-}
-.title {
-  font-weight: bold;
-  font-size: 16px;
-}
-.subtitle {
-  font-size: 12px;
-  color: #666;
-}
-.icon_bloc {
-  font-size: 20px;
-  color: #333;
-  cursor: pointer;
-}
-
-
+/* Ajuster la grille pour des box plus larges */
 .container_offre {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 10px;
-  padding: 5px;
+  grid-template-columns: 1fr 1fr; /* Réduire à 2 colonnes pour des box plus larges */
+  gap: 20px; /* Augmenter l'espace entre les box */
+  padding: 10px;
   margin-left: 40px;
-  margin-right: 40px; 
-  
+  margin-right: 40px;
+}
+
+/* Style des cartes */
+.card {
+  position: relative; /* Nécessaire pour positionner le point vert ou d'autres éléments relatifs */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Effet au survol */
+.card:hover {
+  transform: scale(1.05); /* Agrandir légèrement la carte */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Accentuer l'ombre */
+}
+
+/* Style pour les cartes expirées */
+.card.expired {
+  background-color: #f5f5f5; /* Couleur grisée */
+  color: #aaa; /* Texte grisé */
+  pointer-events: none; /* Désactive les interactions */
+  border: 1px solid #ddd;
+}
+
+/* Indicateur de statut (point vert) */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #28a745; /* Couleur verte */
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+/* Empêche le point vert d'apparaître ailleurs */
+.container_offre .status-indicator {
+  position: absolute;
+}
+
+/* Titre de la carte */
+.title {
+  font-weight: bold;
+  font-size: 18px; /* Augmenter la taille du titre */
+  margin-bottom: 10px;
+}
+
+/* Sous-titre de la carte */
+.subtitle {
+  font-size: 14px; /* Augmenter légèrement la taille du sous-titre */
+  color: #666;
+  margin-bottom: 10px;
 }
 
 .container_offre a{
   text-decoration: none;
   color : black;
 }
-
-.card {
-  background-color: #fff;
-  border-radius: 12px;
-  margin: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  display: grid;
-  grid-template-columns: 1fr repeat(1, auto) 1fr;
-} 
-
-.card:hover {
-text-decoration: none;
-}
-
-.title {
-  font-weight: bold;
-  margin-bottom: 5px;
-  margin-right: auto;
-}
-
-.subtitle {
-  font-size: 12px;
-  color: #666;
-  margin-right: auto;
-}
-
-.subtitle-right {
-  font-size: 12px;
-  color: #666;
-  margin-left: auto;
-}
-
-.title:hover {
-  text-decoration: none;
-  }
-  
 
 .background_image{
   background-image: url("stage_image.jpg");
@@ -422,3 +497,150 @@ text-decoration: none;
   display:inline-block;
   vertical-align:top;
   font-size:13px;}
+
+/* Style pour le menu déroulant */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    min-width: 150px;
+    padding: 10px 0;
+    border-radius: 4px;
+}
+
+.dropdown-menu .dropdown-item {
+    padding: 10px 20px;
+    text-decoration: none;
+    color: black;
+    display: block;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 50%;
+  border-radius: 8px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Style pour les cartes expirées */
+.card.expired {
+  background-color: #f5f5f5; /* Couleur grisée */
+  color: #aaa; /* Texte grisé */
+  pointer-events: none; /* Désactive les interactions */
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+/* Indicateur de statut (point vert) */
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  background-color: #28a745; /* Couleur verte */
+  border-radius: 50%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+/* Empêche le point vert d'apparaître ailleurs */
+.container_offre .status-indicator {
+  position: absolute;
+}
+
+/* Style pour la liste déroulante des résultats */
+#ville-results {
+  list-style: none; /* Supprime les puces */
+  margin: 0;
+  padding: 0;
+  max-height: 200px; /* Limite la hauteur de la liste */
+  overflow-y: auto; /* Ajoute un défilement si nécessaire */
+  background-color: #fff; /* Fond blanc */
+  border: 1px solid #ccc; /* Bordure grise */
+  border-radius: 4px; /* Coins arrondis */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  position: absolute; /* Position absolue pour apparaître sous le champ */
+  z-index: 1000; /* Assure que la liste est au-dessus des autres éléments */
+  width: auto; /* Ajuste automatiquement la largeur au contenu */
+  min-width: 200px; /* Définit une largeur minimale */
+  max-width: 400px; /* Définit une largeur maximale */
+  left: 0; /* Aligne la liste avec le champ */
+  box-sizing: border-box; /* Inclut la bordure dans la largeur totale */
+}
+
+/* Style pour chaque élément de la liste */
+#ville-results li {
+  padding: 10px;
+  cursor: pointer; 
+  transition: background-color 0.2s; 
+}
+
+/* Couleur de fond au survol */
+#ville-results li:hover {
+  background-color: #f0f0f0; 
+}
+
+.ckeditor-container {
+  max-width: 800px; /* Limite la largeur à 800px */
+}
+
+/* Réduire la taille des boutons de filtre */
+.filter-button {
+    font-size: 12px; /* Réduit la taille du texte */
+    padding: 5px 10px; /* Réduit l'espacement interne */
+    height: auto; /* Ajuste automatiquement la hauteur */
+    width: auto; /* Ajuste automatiquement la largeur */
+    border-radius: 5px; /* Ajoute des coins légèrement arrondis */
+    border: 1px solid #ccc; /* Ajoute une bordure fine */
+    background-color: #f9f9f9; /* Couleur de fond légère */
+    transition: all 0.3s ease; /* Ajoute une transition pour un effet fluide */
+}
+
+/* Effet au survol */
+.filter-button:hover {
+    background-color: #e0e0e0; /* Change la couleur de fond au survol */
+    border-color: #aaa; /* Change la couleur de la bordure au survol */
+}

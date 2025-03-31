@@ -1,42 +1,68 @@
 @extends('layout')
 
-@section('title', 'Accueil')
+@section('title', 'Liste des Offres')
 
 @section('content')
 <section>
    <center><h1>Ton stage, à portée de main !</h1></center>
    <div class="input-icons">
-      <form class="search-container" action="#">
+      <form class="search-container" action="{{ route('offres.index') }}" method="GET">
          <i class="fa-solid fa-magnifying-glass"></i>
-         <input type="text" class="search-input" placeholder="Mots clés...">
+         <input type="text" name="search" class="search-input" placeholder="Rechercher par entreprise, ville ou titre..." value="{{ request('search') }}">
+         
+         <!-- Filtre par entreprise -->
+         <select name="entreprise" class="search-input filter-button">
+            <option value="">Toutes les entreprises</option>
+            @foreach ($entreprises as $entreprise)
+                <option value="{{ $entreprise->ID_Entreprise }}" {{ request('entreprise') == $entreprise->ID_Entreprise ? 'selected' : '' }}>
+                    {{ $entreprise->Nom }}
+                </option>
+            @endforeach
+         </select>
+
+         <!-- Filtre par région -->
+         <select name="region" class="search-input filter-button">
+            <option value="">Toutes les régions</option>
+            @foreach ($regions as $region)
+                <option value="{{ $region->ID_Region }}" {{ request('region') == $region->ID_Region ? 'selected' : '' }}>
+                    {{ $region->Nom }}
+                </option>
+            @endforeach
+         </select>
+
          <button type="submit" class="search-button">Rechercher</button>
       </form>
    </div>
 
+   @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
+      <div style="text-align: right; margin: 20px;">
+         <a href="{{ route('offres.create') }}" class="btn1 btn-primary">Créer une Offre</a>
+      </div>
+   @endif
+
    <div class="container_offre">
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
-            </div>
-         </div>
-      </a>
-
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
-            </div>
-         </div>
-      </a>
-
-      <a href="{{ url('offre_ex') }}">
-         <div class="card">
-            <div class="title">Stage - Developer
-               <div class="subtitle">TOTAL | PAU 64000</div>
-            </div>
-         </div>
-      </a>
+      @foreach ($offres as $offre)
+         @if ($offre->Etat == 1 || (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
+            <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">
+               <div class="card {{ $offre->Etat == 0 ? 'expired' : '' }}">
+                  @if ($offre->Etat == 0)
+                     <div title="Offre désactivée"></div>
+                  @else
+                     <div class="status-indicator" style="background-color: green;" title="Offre active"></div>
+                  @endif
+                  <div class="title">{{ $offre->Titre }}</div>
+                  <div class="subtitle">
+                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
+                     {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }} | 
+                     Publiée le {{ $offre->Date_publication }}
+                  </div>
+                  <div class="description">
+                     {!! Str::limit(strip_tags($offre->Description), 100, '...') !!}
+                  </div>
+               </div>
+            </a>
+         @endif
+      @endforeach
    </div>
 </section>
 @endsection

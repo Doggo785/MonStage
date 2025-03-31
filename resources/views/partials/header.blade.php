@@ -1,15 +1,36 @@
 <header>
     <nav class="navbar">
        <div class="nav-left">
-          <img alt="Logo" src="{{ asset('logo.png') }}">
-          &nbsp;|&nbsp;<a href="{{ url('/') }}">Accueil</a>
-          &nbsp;|&nbsp;<a href="{{ url('offres') }}">Offres</a>
-          &nbsp;|&nbsp;<a href="{{ url('entreprises') }}">Entreprises</a>
+          <img alt="Logo" src="{{ asset('assets/logo.png') }}" style="width: auto; height: 50px;">
+       </div>
+       <div class="nav-center">
+          <a href="{{ url('/') }}" class="nav-link">Accueil</a>
+          <a href="{{ url('entreprises') }}" class="nav-link">Entreprises</a>
        </div>
        <div class="nav-right">
-          <button class="btn">
-             <i class="fa-solid fa-circle-user"></i> Compte
-          </button>
+          @auth
+             <div class="dropdown">
+                <button class="btn dropdown-toggle">
+                   <i class="fa-solid fa-circle-user"></i> Compte
+                </button>
+                <div class="dropdown-menu">
+                   <a href="{{ url('/dashboard') }}" class="dropdown-item">Dashboard</a>
+                   <a href="{{ route('logout') }}" class="dropdown-item"
+                      onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                      Déconnexion
+                   </a>
+                   <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                   </form>
+                </div>
+             </div>
+          @else
+             <div class="dropdown">
+                <a href="{{ route('login') }}" class="btn">
+                   <i class="fa-solid fa-circle-user"></i> Connexion
+                </a>
+             </div>
+          @endauth
        </div>
     </nav>
- </header>
+</header>
