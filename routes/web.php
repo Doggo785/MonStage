@@ -12,11 +12,47 @@ use App\Models\Secteur;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
+// Liste de toutes les offres avec tous leurs attributs
+Route::get('/', function (Request $request) {
+    $query = Offre::query();
 
-Route::get('/', function () {
-    $offres = Offre::with('Entreprise')->get(); 
-    $offres = Offre::with('Ville')->get(); 
-    return view('index', ['offres' => $offres]);
+    // Si l'utilisateur est connecté et est un administrateur ou pilote
+    if (auth()->check() && (auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur')) {
+        $query->where(function ($q) {
+            $q->where('Etat', 1)->orWhere('Etat', 0); // Inclut toutes les offres
+        });
+    } else {
+        // Sinon, afficher uniquement les offres actives (Etat = 1)
+        $query->where('Etat', 1);
+    }
+
+    if ($search = $request->input('search')) {
+        $query->where('Titre', 'LIKE', "%{$search}%")
+              ->orWhereHas('entreprise', function ($q) use ($search) {
+                  $q->where('Nom', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('ville', function ($q) use ($search) {
+                  $q->where('Nom', 'LIKE', "%{$search}%");
+              });
+    }
+
+    // Filtrer par entreprise
+    if ($entreprise = $request->input('entreprise')) {
+        $query->where('ID_Entreprise', $entreprise);
+    }
+
+    // Filtrer par région
+    if ($region = $request->input('region')) {
+        $query->whereHas('ville', function ($q) use ($region) {
+            $q->where('ID_Region', $region);
+        });
+    }
+
+    $offres = $query->with(['entreprise', 'ville'])->get();
+    $entreprises = Entreprise::all();
+    $regions = Region::all();
+
+    return view('index', compact('offres', 'entreprises', 'regions'));
 })->name('home');
 
 Route::get('/db-test', function () {
