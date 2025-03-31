@@ -27,7 +27,7 @@
                   Publiée le {{ $offre->Date_publication }}
                </div>
                <div class="description">
-                  {{ Str::limit($offre->Description, 100, '...') }}
+                  {!! Str::limit(strip_tags($offre->Description), 100, '...') !!}
                </div>
             </div>
          </a>

@@ -16,7 +16,7 @@
 
         <article>
             <h3>Description du poste</h3>
-            <p>{{ $offre->Description }}</p>
+            <p>{!! $offre->Description !!}</p>
             
             <h3>Missions principales</h3>  
             <p>

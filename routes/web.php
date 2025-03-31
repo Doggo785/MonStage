@@ -4,14 +4,18 @@ use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckAdminOrPilote;
 use App\Http\Middleware\CheckPilote;
 use App\Http\Middleware\CheckStudent;
+use App\Models\Ville;
 use Illuminate\Support\Facades\Route;
 use App\Models\Offre; // Assurez-vous d'importer le modèle Offre
+use App\Models\Entreprise;
+use App\Models\Secteur;
+use Illuminate\Http\Request;
 
 Route::get('/', function () {
     $offres = Offre::with('Entreprise')->get(); 
     $offres = Offre::with('Ville')->get(); 
     return view('index', ['offres' => $offres]);
-})->name('offres.index');
+})->name('home');
 
 Route::get('/db-test', function () {
     try {
@@ -50,7 +54,7 @@ Route::get('/login', function () {
     return view('login');
 })->name('login');
 
-Route::post('/login', function (\Illuminate\Http\Request $request) {
+Route::post('/login', function (Request $request) {
     $credentials = $request->only('email', 'password');
 
     if (Auth::attempt($credentials)) {
@@ -63,7 +67,7 @@ Route::post('/login', function (\Illuminate\Http\Request $request) {
     ]);
 });
 
-Route::post('/logout', function (\Illuminate\Http\Request $request) {
+Route::post('/logout', function (Request $request) {
     Auth::logout(); // Déconnecte l'utilisateur
     $request->session()->invalidate(); // Invalide la session
     $request->session()->regenerateToken(); // Regénère le token CSRF
@@ -114,6 +118,52 @@ Route::group(['prefix' => '/offres'], function () {
         return view('index', ['offres' => $offres]);
     })->name('offres.index');
 
+    // Créer une nouvelle offre
+    Route::get('/create', function () {
+        $entreprises = Entreprise::all(); // Récupère toutes les entreprises
+        $secteurs = Secteur::all(); // Récupère tous les secteurs
+        $villes = Ville::all();
+        return view('offres.create', compact('entreprises', 'secteurs', 'villes'));
+    })->name('offres.create');    
+
+    Route::post('/store', function (Request $request) {
+        //dd($request->all());
+        try {
+            // Validation des données
+            $validated = $request->validate([
+                'titre' => 'required|string|max:255',
+                'description' => 'required|string',
+                'remuneration' => 'required|numeric|min:600',
+                'date_publication' => 'required|date',
+                'date_expiration' => 'required|date|after:date_publication',
+                'entreprise' => 'required|integer',
+                'secteur' => 'required|integer',
+                'ville' => 'required|integer',
+            ]);
+
+            // Création de l'offre
+            Offre::create([
+                'Titre' => $validated['titre'],
+                'Description' => $validated['description'],
+                'Remuneration' => $validated['remuneration'],
+                'Date_publication' => $validated['date_publication'],
+                'Etat' => true,
+                'Date_expiration' => $validated['date_expiration'],
+                'ID_Entreprise' => $validated['entreprise'],
+                'ID_Secteur' => $validated['secteur'],
+                'ID_Ville' => $validated['ville'],
+            ]);
+
+            return redirect()->route('offres.index')->with('success', 'Offre créée avec succès !');
+        } catch (\Exception $e) {
+            // Enregistre l'erreur dans les logs
+            \Log::error('Erreur lors de la création de l\'offre : ' . $e->getMessage());
+
+            // Retourne une réponse avec l'erreur
+            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()])->withInput();
+        }
+    })->name('offres.store');
+
     // Détails d'une offre
     Route::get('{id}', function ($id) {
         $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Recherche l'offre par ID_Offre
@@ -125,7 +175,7 @@ Route::group(['prefix' => '/offres'], function () {
         return view('offres.apply', ['offre' => $offre]); // Passe l'offre à la vue
     })->name('offres.apply')->middleware('auth'); // Ajout du middleware auth pour sécuriser l'accès
 
-    Route::post('/{id}/apply', function (\Illuminate\Http\Request $request, $id) {
+    Route::post('/{id}/apply', function (Request $request, $id) {
         $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
 
         // Validation des données
@@ -137,14 +187,15 @@ Route::group(['prefix' => '/offres'], function () {
         // Logique pour enregistrer la candidature ou envoyer un email
         return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée avec succès.');
     })->name('offres.apply.submit')->middleware('auth');
-
+    
     // Modifier une offre
     Route::get('/{id}/edit', function ($id) {
         return view('offres.edit', ['id' => $id]); // Vue pour modifier une offre
     })->name('offres.edit')->middleware('can:edit-offer');
+});
 
-    // Créer une nouvelle offre
-    Route::get('/create', function () {
-        return view('offres.create'); // Vue pour créer une nouvelle offre
-    })->name('offres.create')->middleware('can:create-offer');
+Route::get('/villes/search', function (Request $request) {
+    $query = $request->input('query');
+    $villes = Ville::where('Nom', 'LIKE', "%{$query}%")->limit(10)->get(); // Limite à 10 résultats
+    return response()->json($villes);
 });
