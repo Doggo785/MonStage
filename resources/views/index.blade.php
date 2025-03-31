@@ -6,14 +6,13 @@
 <section>
    <center><h1>Ton stage, à portée de main !</h1></center>
    <div class="input-icons">
-      <form class="search-container" action="#">
+      <form class="search-container" action="{{ route('offres.index') }}" method="GET">
          <i class="fa-solid fa-magnifying-glass"></i>
-         <input type="text" class="search-input" placeholder="Mots clés...">
+         <input type="text" name="search" class="search-input" placeholder="Rechercher par entreprise, ville ou titre..." value="{{ request('search') }}">
          <button type="submit" class="search-button">Rechercher</button>
       </form>
    </div>
 
-   
    @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
       <div style="text-align: right; margin: 20px;">
          <a href="{{ route('offres.create') }}" class="btn1 btn-primary">Créer une Offre</a>

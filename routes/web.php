@@ -112,10 +112,22 @@ Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
 // Routes pour les offres
 Route::group(['prefix' => '/offres'], function () {
     // Liste de toutes les offres avec tous leurs attributs
-    Route::get('/', function () {
-        $offres = Offre::with('Entreprise')->get(); 
-        $offres = Offre::with('Ville')->get(); 
-        return view('index', ['offres' => $offres]);
+    Route::get('/', function (Request $request) {
+        $query = Offre::query();
+
+        if ($search = $request->input('search')) {
+            $query->where('Titre', 'LIKE', "%{$search}%")
+                  ->orWhereHas('entreprise', function ($q) use ($search) {
+                      $q->where('Nom', 'LIKE', "%{$search}%");
+                  })
+                  ->orWhereHas('ville', function ($q) use ($search) {
+                      $q->where('Nom', 'LIKE', "%{$search}%");
+                  });
+        }
+
+        $offres = $query->with(['entreprise', 'ville'])->get();
+
+        return view('index', compact('offres'));
     })->name('offres.index');
 
     // Créer une nouvelle offre
