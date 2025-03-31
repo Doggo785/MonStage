@@ -115,7 +115,15 @@ Route::group(['prefix' => '/offres'], function () {
     Route::get('/', function (Request $request) {
         $query = Offre::query();
 
-        if ($search = $request->input('search')) {
+        // Si l'utilisateur est connecté et est un administrateur ou pilote
+        if (auth()->check() && (auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur')) {
+            $query->where('Etat', 1)->orWhere('Etat', 0); // Affiche toutes les offres
+        } else {
+            // Sinon, afficher uniquement les offres actives (Etat = 1)
+            $query->where('Etat', 1);
+        }
+
+                if ($search = $request->input('search')) {
             $query->where('Titre', 'LIKE', "%{$search}%")
                   ->orWhereHas('entreprise', function ($q) use ($search) {
                       $q->where('Nom', 'LIKE', "%{$search}%");
@@ -204,6 +212,15 @@ Route::group(['prefix' => '/offres'], function () {
     Route::get('/{id}/edit', function ($id) {
         return view('offres.edit', ['id' => $id]); // Vue pour modifier une offre
     })->name('offres.edit')->middleware('can:edit-offer');
+
+    // Modifier l'état d'une offre pour la marquer comme supprimée
+    Route::delete('/{id}', function ($id) {
+        $offre = Offre::findOrFail($id); 
+        $offre->Etat = 0; 
+        $offre->save(); 
+
+        return redirect()->route('offres.index')->with('success', 'Offre supprimée avec succès.');
+    })->name('offres.destroy')->middleware(CheckAdminOrPilote::class); // Middleware pour vérifier les autorisations
 });
 
 Route::get('/villes/search', function (Request $request) {

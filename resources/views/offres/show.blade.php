@@ -41,6 +41,16 @@
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
                 <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+
+                <!-- Boutons Éditer et Supprimer (affichés uniquement pour les administrateurs ou pilotes) -->
+                @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
+                    <a href="{{ route('offres.edit', ['id' => $offre->ID_Offre]) }}" class="btn2" style="background-color: #007bff; color: white; margin-left: 10px;">Éditer</a>
+                    <form action="{{ route('offres.destroy', ['id' => $offre->ID_Offre]) }}" method="POST" style="display: inline;">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn2" style="background-color: #dc3545; color: white; margin-left: 10px;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')">Supprimer</button>
+                    </form>
+                @endif
             </div>
         </article>					
         <br>
