@@ -10,6 +10,7 @@ use App\Models\Offre; // Assurez-vous d'importer le modèle Offre
 use App\Models\Entreprise;
 use App\Models\Secteur;
 use Illuminate\Http\Request;
+use App\Http\Controllers\OffreController;
 
 Route::get('/', function () {
     $offres = Offre::with('Entreprise')->get(); 
@@ -216,8 +217,15 @@ Route::group(['prefix' => '/offres'], function () {
     
     // Modifier une offre
     Route::get('/{id}/edit', function ($id) {
-        return view('offres.edit', ['id' => $id]); // Vue pour modifier une offre
-    })->name('offres.edit')->middleware('can:edit-offer');
+        $offre = Offre::findOrFail($id); // Récupère l'offre par ID
+        $entreprises = Entreprise::all(); // Récupère toutes les entreprises
+        $secteurs = Secteur::all(); // Récupère tous les secteurs
+        $villes = Ville::all(); // Récupère toutes les villes
+
+        return view('offres.edit', compact('offre', 'entreprises', 'secteurs', 'villes')); // Passe les données à la vue
+    })->name('offres.edit')->middleware(CheckAdminOrPilote::class);
+
+    Route::put('/offres/{id}', [OffreController::class, 'update'])->name('offres.update');
 
     // Modifier l'état d'une offre pour la marquer comme supprimée
     Route::delete('/{id}', function ($id) {
