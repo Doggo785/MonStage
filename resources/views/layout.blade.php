@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="fr">
    <head>
-      <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}">
+      <link rel="icon" type="image/png" href="{{ asset('favicon.ico') }}">
       <meta charset="utf-8">
       <meta name="author" content="Lucas TOUJAS - Raphaël TOLANDAL - Stéphane PLATHEY--BADIN">
       <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
