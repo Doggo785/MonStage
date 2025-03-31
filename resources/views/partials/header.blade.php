@@ -1,14 +1,14 @@
 <header>
     <nav class="navbar">
        <div class="nav-left">
-          <img alt="Logo" src="{{ asset('logo.png') }}">
-          &nbsp;|&nbsp;<a href="{{ url('/') }}">Accueil</a>
-          &nbsp;|&nbsp;<a href="{{ url('offres') }}">Offres</a>
-          &nbsp;|&nbsp;<a href="{{ url('entreprises') }}">Entreprises</a>
+          <img alt="Logo" src="{{ asset('assets/logo.png') }}" style="width: auto; height: 50px;">
+       </div>
+       <div class="nav-center">
+          <a href="{{ url('/') }}" class="nav-link">Accueil</a>
+          <a href="{{ url('entreprises') }}" class="nav-link">Entreprises</a>
        </div>
        <div class="nav-right">
           @auth
-             <!-- Bouton Compte avec menu déroulant -->
              <div class="dropdown">
                 <button class="btn dropdown-toggle">
                    <i class="fa-solid fa-circle-user"></i> Compte
@@ -25,7 +25,6 @@
                 </div>
              </div>
           @else
-             <!-- Bouton Connexion avec conteneur -->
              <div class="dropdown">
                 <a href="{{ route('login') }}" class="btn">
                    <i class="fa-solid fa-circle-user"></i> Connexion

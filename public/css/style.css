@@ -32,6 +32,34 @@ h1,h2,h3,h4{
     letter-spacing: 1px;
 }
 
+/* Centrer les liens dans la barre de navigation */
+.nav-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1; /* Permet de centrer les liens entre les sections gauche et droite */
+}
+
+/* Style des liens de navigation */
+.nav-link {
+    font-family: "Oswald", sans-serif;
+    font-weight: bold;
+    font-size: 16px;
+    color: black;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    margin: 0 10px; /* Espacement entre les liens */
+}
+
+/* Effet au survol */
+.nav-link:hover {
+    background-color: orangered;
+    color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .btn1 {
   background-color: #ff4500; 
   border: 2px solid orangered;
