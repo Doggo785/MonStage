@@ -187,6 +187,12 @@ Route::group(['prefix' => '/offres'], function () {
     // Détails d'une offre
     Route::get('{id}', function ($id) {
         $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Recherche l'offre par ID_Offre
+
+        // Vérifie si l'offre est désactivée et si l'utilisateur n'est pas autorisé
+        if ($offre->Etat == 0 && (!auth()->check() || !(auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur'))) {
+            return redirect()->route('login'); // Redirige vers la page de connexion
+        }
+
         return view('offres.show', ['offre' => $offre]); // Passe l'offre à la vue
     })->name('offres.show');
 
