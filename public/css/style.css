@@ -626,3 +626,21 @@ input[type=file]::file-selector-button:hover {
 .ckeditor-container {
   max-width: 800px; /* Limite la largeur à 800px */
 }
+
+/* Réduire la taille des boutons de filtre */
+.filter-button {
+    font-size: 12px; /* Réduit la taille du texte */
+    padding: 5px 10px; /* Réduit l'espacement interne */
+    height: auto; /* Ajuste automatiquement la hauteur */
+    width: auto; /* Ajuste automatiquement la largeur */
+    border-radius: 5px; /* Ajoute des coins légèrement arrondis */
+    border: 1px solid #ccc; /* Ajoute une bordure fine */
+    background-color: #f9f9f9; /* Couleur de fond légère */
+    transition: all 0.3s ease; /* Ajoute une transition pour un effet fluide */
+}
+
+/* Effet au survol */
+.filter-button:hover {
+    background-color: #e0e0e0; /* Change la couleur de fond au survol */
+    border-color: #aaa; /* Change la couleur de la bordure au survol */
+}

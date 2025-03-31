@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Offre; // Assurez-vous d'importer le modèle Offre
 use App\Models\Entreprise;
 use App\Models\Secteur;
+use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
 
@@ -118,7 +119,9 @@ Route::group(['prefix' => '/offres'], function () {
 
         // Si l'utilisateur est connecté et est un administrateur ou pilote
         if (auth()->check() && (auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur')) {
-            $query->where('Etat', 1)->orWhere('Etat', 0); // Affiche toutes les offres
+            $query->where(function ($q) {
+                $q->where('Etat', 1)->orWhere('Etat', 0); // Inclut toutes les offres
+            });
         } else {
             // Sinon, afficher uniquement les offres actives (Etat = 1)
             $query->where('Etat', 1);
@@ -134,9 +137,23 @@ Route::group(['prefix' => '/offres'], function () {
                   });
         }
 
-        $offres = $query->with(['entreprise', 'ville'])->get();
+        // Filtrer par entreprise
+        if ($entreprise = $request->input('entreprise')) {
+            $query->where('ID_Entreprise', $entreprise);
+        }
 
-        return view('index', compact('offres'));
+        // Filtrer par région
+        if ($region = $request->input('region')) {
+            $query->whereHas('ville', function ($q) use ($region) {
+                $q->where('ID_Region', $region);
+            });
+        }
+
+        $offres = $query->with(['entreprise', 'ville'])->get();
+        $entreprises = Entreprise::all();
+        $regions = Region::all();
+
+        return view('index', compact('offres', 'entreprises', 'regions'));
     })->name('offres.index');
 
     // Créer une nouvelle offre

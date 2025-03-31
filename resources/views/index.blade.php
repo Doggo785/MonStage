@@ -9,6 +9,27 @@
       <form class="search-container" action="{{ route('offres.index') }}" method="GET">
          <i class="fa-solid fa-magnifying-glass"></i>
          <input type="text" name="search" class="search-input" placeholder="Rechercher par entreprise, ville ou titre..." value="{{ request('search') }}">
+         
+         <!-- Filtre par entreprise -->
+         <select name="entreprise" class="search-input filter-button">
+            <option value="">Toutes les entreprises</option>
+            @foreach ($entreprises as $entreprise)
+                <option value="{{ $entreprise->ID_Entreprise }}" {{ request('entreprise') == $entreprise->ID_Entreprise ? 'selected' : '' }}>
+                    {{ $entreprise->Nom }}
+                </option>
+            @endforeach
+         </select>
+
+         <!-- Filtre par région -->
+         <select name="region" class="search-input filter-button">
+            <option value="">Toutes les régions</option>
+            @foreach ($regions as $region)
+                <option value="{{ $region->ID_Region }}" {{ request('region') == $region->ID_Region ? 'selected' : '' }}>
+                    {{ $region->Nom }}
+                </option>
+            @endforeach
+         </select>
+
          <button type="submit" class="search-button">Rechercher</button>
       </form>
    </div>
