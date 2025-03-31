@@ -32,6 +32,26 @@ h1,h2,h3,h4{
     letter-spacing: 1px;
 }
 
+.btn1 {
+  background-color: #ff4500; 
+  border: 2px solid orangered;
+  color: white;
+  font-family: "Oswald", sans-serif;
+  font-weight: bold;
+  display: inline-block;
+  border-radius: 20px;
+  padding: 10px 15px;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: center;
+}
+
+.btn1:hover {
+  border: 2px solid orangered;
+  color : orangered;
+  background-color: white;
+}
 
 .nav-right .btn{
   padding: 8px 10px;
@@ -161,7 +181,7 @@ h1,h2,h3,h4{
 /* Styling for the search button on hover */
 .submit-button .btn:hover {
   color: white;
-  background-color: orangered; /* Green */
+  background-color: orangered;
   border: 2px solid orangered;
 }
 

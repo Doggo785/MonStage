@@ -1,6 +1,6 @@
 @extends('layout')
 
-@section('title', 'Espace Utilisateur')
+@section('title', 'Dashboard')
 
 @section('content')
 <section>

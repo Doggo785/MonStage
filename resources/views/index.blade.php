@@ -13,6 +13,13 @@
       </form>
    </div>
 
+   
+   @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
+      <div style="text-align: right; margin: 20px;">
+         <a href="{{ route('offres.create') }}" class="btn1 btn-primary">Créer une Offre</a>
+      </div>
+   @endif
+
    <div class="container_offre">
       @foreach ($offres as $offre)
          <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">

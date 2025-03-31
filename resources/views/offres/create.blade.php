@@ -22,24 +22,25 @@
                 <div class="ckeditor-container">
                     <textarea id="description" name="description" rows="5" class="ckeditor search-input" placeholder="Décrivez le poste..." required>
                         <h3>📌 Mission</h3>
-                        <p>Développement d'une application web de gestion de contenu</p>
+
+                        <p>Exemple de mission</p>
                         
                         <h3>🔧 Technologies</h3>
+                        
                         <ul>
-                            <li>React.js/TypeScript</li>
-                            <li>Intégration Figma</li>
-                            <li>Collaboration API REST</li>
+                            <li>&nbsp;</li>
                         </ul>
                         
                         <h3>🎯 Profil</h3>
+                        
                         <ul>
-                            <li>Étudiant informatique BAC+3/4</li>
-                            <li>Connaissances HTML/CSS/JS</li>
+                            <li>&nbsp;</li>
                         </ul>
                         
                         <h3>📩 Contact</h3>
-                        <p><a href="mailto:rh@xyztech.com">rh@xyztech.com</a><br>
-                        Tél : 01 23 45 67 89</p>
+                        
+                        <p><a href="mailto:rh@xyztech.com">rh@xyztech.com</a><br />
+                        T&eacute;l : 01 23 45 67 89</p>
                     </textarea>
                 </div><br><br>
                 
