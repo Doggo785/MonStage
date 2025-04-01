@@ -7,6 +7,7 @@
       <meta name="description" content="Venez rechercher un stage ou une opportunité pour la vie.">
       <title>@yield('title', 'MonStage')</title>
       <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/cards.css') }}">
       <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
       <script src="{{ asset('js/loader.js') }}" defer></script>
    </head>

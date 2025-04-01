@@ -13,6 +13,7 @@ use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EntrepriseController;
 
 // Liste de toutes les offres avec tous leurs attributs
 Route::get('/', function (Request $request) {
@@ -174,3 +175,8 @@ Route::get('/competences/search', function (Request $request) {
 });
 
 Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update_picture')->middleware('auth');
+
+Route::group(['prefix'=> 'entreprises'], function () {
+    Route::get('/', [EntrepriseController::class, 'index'])->name('entreprises.index');
+    Route::put('/{id}/update-picture', [EntrepriseController::class, 'updatePicture'])->name('entreprises.update_picture');
+});
