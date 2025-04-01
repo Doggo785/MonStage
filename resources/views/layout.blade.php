@@ -8,14 +8,20 @@
       <title>@yield('title', 'MonStage')</title>
       <link rel="stylesheet" href="{{ asset('css/style.css') }}">
       <script src="https://kit.fontawesome.com/1eff8d6f21.js" crossorigin="anonymous"></script>
+      <script src="{{ asset('js/loader.js') }}" defer></script>
    </head>
    <body>
-      @include('partials.header')
+      <div id="loader-container">
+         <span class="loader"></span>
+      </div>
+      <div id="content" style="display: none;">
+         @include('partials.header')
 
-      <main>
-         @yield('content')
-      </main>
+         <main>
+            @yield('content')
+         </main>
 
-      @include('partials.footer')
+         @include('partials.footer')
+      </div>
    </body>
 </html>
