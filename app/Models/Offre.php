@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -37,7 +38,9 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Offre extends Model
 {
-    protected $table = 'Offre';
+    use HasFactory;
+
+    protected $table = 'Offre'; // Nom correct de la table
     protected $primaryKey = 'ID_Offre';
     public $timestamps = false;
 
@@ -67,5 +70,15 @@ class Offre extends Model
     public function entreprise()
     {
         return $this->belongsTo(Entreprise::class, 'ID_Entreprise', 'ID_Entreprise');
+    }
+
+    public function competences()
+    {
+        return $this->belongsToMany(
+            Competence::class,
+            'Offres_Competences',
+            'ID_Offre',
+            'ID_Competence'
+        );
     }
 }

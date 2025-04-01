@@ -689,3 +689,23 @@ input[type=file]::file-selector-button:hover {
   align-items: center;
 }
 
+/* Conteneur des compétences */
+.competences-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
+    gap: 10px; /* Espacement entre les badges */
+    margin-top: 10px;
+}
+
+/* Style des badges de compétences */
+.competence-badge {
+    background-color: #f0f0f0; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    border: 1px solid #ddd; /* Bordure légère */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 5px 10px; /* Espacement interne */
+    font-size: 14px; /* Taille du texte */
+    white-space: nowrap; /* Empêche le texte de se couper */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
