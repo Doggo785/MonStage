@@ -159,12 +159,13 @@ h1,h2,h3,h4{
 /* Styling for the search container */
 .search-container {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 20px; /* Augmente l'espace supérieur */
 }
 
 /* Styling for the search input */
 .search-input {
-  padding: 5px;
+  padding: 12px;
+  font-size: 1em; /* Augmente la taille du texte */
   border-radius: 20px;
   border: 2px solid #ccc;
   width: 400px;
@@ -177,6 +178,7 @@ h1,h2,h3,h4{
 .search-button {
   padding: 5px 10px;
   border-radius: 20px;
+  font-size: 1em;
   border: 2px solid #ccc;
   background-color: #F1F1F1;
   color: #333;
@@ -430,6 +432,8 @@ input[type=file]::file-selector-button:hover {
   padding: 20px;
   margin: 10px;
   transition: transform 0.3s, box-shadow 0.3s;
+  height: auto; /* Ajuste automatiquement la hauteur */
+  min-height: 150px; /* Définit une hauteur minimale */
 }
 
 /* Effet au survol */
@@ -471,8 +475,8 @@ input[type=file]::file-selector-button:hover {
 
 /* Sous-titre de la carte */
 .subtitle {
-  font-size: 14px; /* Augmenter légèrement la taille du sous-titre */
-  color: #666;
+  font-size: 16px; /* Augmenter légèrement la taille du sous-titre */
+  color: #4f4f4f;
   margin-bottom: 10px;
 }
 
@@ -629,7 +633,7 @@ input[type=file]::file-selector-button:hover {
 
 /* Réduire la taille des boutons de filtre */
 .filter-button {
-    font-size: 12px; /* Réduit la taille du texte */
+    font-size: 1em; /* Réduit la taille du texte */
     padding: 5px 10px; /* Réduit l'espacement interne */
     height: auto; /* Ajuste automatiquement la hauteur */
     width: auto; /* Ajuste automatiquement la largeur */
@@ -684,3 +688,4 @@ input[type=file]::file-selector-button:hover {
   justify-content: center;
   align-items: center;
 }
+

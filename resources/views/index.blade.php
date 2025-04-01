@@ -52,12 +52,10 @@
                   @endif
                   <div class="title">{{ $offre->Titre }}</div>
                   <div class="subtitle">
-                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
-                     {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }} | 
+                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }}<br>
+                     {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }},
+                     {{ $offre->Ville->region->Nom ?? 'Région inconnue' }}, France<br>
                      Publiée le {{ $offre->Date_publication }}
-                  </div>
-                  <div class="description">
-                     {!! Str::limit(strip_tags($offre->Description), 100, '...') !!}
                   </div>
                </div>
             </a>
