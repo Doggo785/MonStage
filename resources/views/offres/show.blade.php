@@ -18,12 +18,18 @@
             <h3>Description du poste</h3>
             <p>{!! $offre->Description !!}</p>
             
-            <h3>Missions principales</h3>  
-            <p>
-                - Collaborer avec l'équipe pour atteindre les objectifs du projet.              
-                <br>- Participer activement aux tâches assignées.                  
-                <br>- Apporter des idées innovantes pour améliorer les processus.                  
-            </p>
+
+            <h3>Compétences requises</h3>
+            @if ($offre->competences && $offre->competences->isNotEmpty())
+                <div class="competences-container">
+                    @foreach ($offre->competences as $competence)
+                        <div class="competence-badge">{{ $competence->Libelle }}</div>
+                    @endforeach
+                </div>
+            @else
+                <p>Aucune compétence spécifiée.</p>
+            @endif
+            
             
             <h3>Profil recherché</h3>
             <p>
@@ -37,7 +43,6 @@
             <p>
                 - {{ $offre->entreprise->Description ?? 'Aucun avantage spécifié.' }}
             </p>
-            
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
                 @if (Auth::check() && Auth::user()->role->Libelle === 'Etudiant')
