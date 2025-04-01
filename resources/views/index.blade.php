@@ -52,12 +52,20 @@
                   @endif
                   <div class="title">{{ $offre->Titre }}</div>
                   <div class="subtitle">
-                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
-                     {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }} | 
-                     Publiée le {{ $offre->Date_publication }}
-                  </div>
-                  <div class="description">
-                     {!! Str::limit(strip_tags($offre->Description), 100, '...') !!}
+                     {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }}<br>
+                     {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }},
+                     {{ $offre->Ville->region->Nom ?? 'Région inconnue' }}, France<br>
+                     Publiée le {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }}<br>
+                     <strong>Compétences requises :</strong>
+                     @if ($offre->competences && $offre->competences->isNotEmpty())
+                        <div class="competences-container">
+                           @foreach ($offre->competences as $competence)
+                              <div class="competence-badge">{{ $competence->Libelle }}</div>
+                           @endforeach
+                        </div>
+                     @else
+                        <p>Aucune compétence spécifiée.</p>
+                     @endif
                   </div>
                </div>
             </a>

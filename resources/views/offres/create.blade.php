@@ -77,6 +77,17 @@
                 <input type="hidden" id="ville" name="ville"> <!-- Champ caché pour l'ID de la ville -->
                 <ul id="ville-results" class="dropdown-menu" style="display: none;"></ul><br><br>
 
+                <h3>Compétences Requises</h3>
+                <div id="competences-container" class="competences-container">
+                    <!-- Les compétences sélectionnées seront affichées ici -->
+                </div>
+                <br>
+                <label for="competence-search">Ajouter une compétence :</label><br>
+                <input type="text" id="competence-search" class="search-input" placeholder="Recherchez une compétence..." autocomplete="off">
+                <ul id="competence-results" class="dropdown-menu" style="display: none;"></ul>
+                <input type="hidden" id="competences" name="competences"> <!-- Champ caché pour stocker les IDs des compétences -->
+                <br><br>
+
                 <div class="submit-button">
                     <button type="submit" class="btn2">Créer l'Offre</button>
                 </div>
@@ -132,6 +143,89 @@
                     });
             } else {
                 results.style.display = 'none';
+            }
+        });
+
+        // Gestion de la recherche de compétences
+        document.addEventListener('DOMContentLoaded', function () {
+            const competenceSearch = document.getElementById('competence-search');
+            const competenceResults = document.getElementById('competence-results');
+            const competencesContainer = document.getElementById('competences-container');
+            const competencesInput = document.getElementById('competences');
+            let selectedCompetences = []; // Tableau pour stocker les IDs des compétences sélectionnées
+
+            // Gestion de la recherche de compétences
+            competenceSearch.addEventListener('input', function () {
+                const query = this.value.trim();
+                if (query.length > 0) { // Ne lance la recherche que si l'utilisateur tape au moins 3 caractères
+                    fetch(`/competences/search?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            competenceResults.innerHTML = ''; // Vide les résultats précédents
+                            competenceResults.style.display = 'block';
+
+                            if (data.length === 0) {
+                                const li = document.createElement('li');
+                                li.textContent = 'Aucun résultat trouvé';
+                                li.style.color = 'gray';
+                                competenceResults.appendChild(li);
+                            } else {
+                                data.forEach(competence => {
+                                    const li = document.createElement('li');
+                                    li.textContent = competence.Libelle;
+                                    li.dataset.id = competence.ID_Competence;
+                                    li.addEventListener('click', function () {
+                                        addCompetence(competence.ID_Competence, competence.Libelle);
+                                        competenceResults.style.display = 'none';
+                                        competenceSearch.value = '';
+                                    });
+                                    competenceResults.appendChild(li);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            competenceResults.innerHTML = '<li style="color: red;">Erreur lors de la recherche</li>';
+                            competenceResults.style.display = 'block';
+                        });
+                } else {
+                    competenceResults.style.display = 'none';
+                }
+            });
+
+            // Ajouter une compétence sélectionnée
+            function addCompetence(id, libelle) {
+                if (!selectedCompetences.includes(id)) {
+                    selectedCompetences.push(id);
+
+                    // Créer une box pour la compétence
+                    const badge = document.createElement('div');
+                    badge.className = 'competence-badge';
+                    badge.innerHTML = `
+                        ${libelle}
+                        <button class="remove-competence" data-id="${id}">&times;</button>
+                    `;
+
+                    // Ajouter un événement pour supprimer la compétence
+                    badge.querySelector('.remove-competence').addEventListener('click', function () {
+                        removeCompetence(id, badge);
+                    });
+
+                    competencesContainer.appendChild(badge);
+                    updateCompetencesInput();
+                }
+            }
+
+            // Supprimer une compétence sélectionnée
+            function removeCompetence(id, badge) {
+                selectedCompetences = selectedCompetences.filter(compId => compId !== id);
+                badge.remove();
+                updateCompetencesInput();
+            }
+
+            // Mettre à jour le champ caché avec les IDs des compétences
+            function updateCompetencesInput() {
+                competencesInput.value = selectedCompetences.join(',');
             }
         });
     </script>

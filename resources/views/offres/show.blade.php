@@ -10,7 +10,7 @@
         <p class="ptit-texte">
             {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
             {{ ucfirst($offre->ville->Nom) ?? 'Ville inconnue' }} | 
-            Publiée le {{ $offre->Date_publication }} | 
+            Publiée le {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }} | 
             Ref. {{ $offre->ID_Offre }}
         </p>
 
@@ -18,12 +18,18 @@
             <h3>Description du poste</h3>
             <p>{!! $offre->Description !!}</p>
             
-            <h3>Missions principales</h3>  
-            <p>
-                - Collaborer avec l'équipe pour atteindre les objectifs du projet.              
-                <br>- Participer activement aux tâches assignées.                  
-                <br>- Apporter des idées innovantes pour améliorer les processus.                  
-            </p>
+
+            <h3>Compétences requises</h3>
+            @if ($offre->competences && $offre->competences->isNotEmpty())
+                <div class="competences-container">
+                    @foreach ($offre->competences as $competence)
+                        <div class="competence-badge">{{ $competence->Libelle }}</div>
+                    @endforeach
+                </div>
+            @else
+                <p>Aucune compétence spécifiée.</p>
+            @endif
+            
             
             <h3>Profil recherché</h3>
             <p>
@@ -31,16 +37,28 @@
                 <br>- Localisation : {{ $offre->ville->Nom ?? 'Ville inconnue' }} ({{ $offre->ville->CP ?? 'Code postal inconnu' }})                 
                 <br>- Entreprise : {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }}            
                 <br>- Rémunération : {{ $offre->Remuneration ?? 'Non précisée' }} €
+                <br>- Date de publication : {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }}
+                <br>- Date d'expiration : {{ \Carbon\Carbon::parse($offre->Date_expiration)->format('d/m/Y') }}
             </p>
             
             <h3>Avantages</h3>
             <p>
                 - {{ $offre->entreprise->Description ?? 'Aucun avantage spécifié.' }}
             </p>
-            
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
-                <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                @if (Auth::check() && Auth::user()->role->Libelle === 'Etudiant')
+                    <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                @elseif (Auth::check() && (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote'))
+                    <div style="position: relative; display: inline-block;">
+                        <button type="button" class="btn2" style="cursor: not-allowed; opacity: 0.6;" disabled>Je postule</button>
+                        <div style="position: absolute; top: -55px; left: 0; background-color: #dc3545; color: white; padding: 5px; border-radius: 5px; font-size: 12px; display: none;" class="tooltip">
+                            Accessible uniquement aux étudiants
+                        </div>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" class="btn2">Je postule</a>
+                @endif
 
                 <!-- Boutons Éditer et Supprimer (affichés uniquement pour les administrateurs ou pilotes) -->
                 @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
@@ -86,5 +104,18 @@
     function closeModal() {
         document.getElementById('postulerModal').style.display = 'none';
     }
+
+    // Afficher/Masquer la fenêtre rouge au survol du bouton désactivé
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.btn2[disabled]').forEach(button => {
+            const tooltip = button.nextElementSibling;
+            button.addEventListener('mouseenter', () => {
+                tooltip.style.display = 'block';
+            });
+            button.addEventListener('mouseleave', () => {
+                tooltip.style.display = 'none';
+            });
+        });
+    });
 </script>
 @endsection
