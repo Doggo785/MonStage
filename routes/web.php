@@ -198,7 +198,7 @@ Route::group(['prefix' => '/offres'], function () {
         $secteurs = Secteur::all(); // Récupère tous les secteurs
         $villes = Ville::all();
         return view('offres.create', compact('entreprises', 'secteurs', 'villes'));
-    })->name('offres.create');    
+    })->name('offres.create')->middleware(CheckAdminOrPilote::class);    
 
     Route::post('/store', function (Request $request) {
         //dd($request->all());
@@ -253,7 +253,7 @@ Route::group(['prefix' => '/offres'], function () {
     Route::get('{id}/apply', function ($id) {
         $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
         return view('offres.apply', ['offre' => $offre]); // Passe l'offre à la vue
-    })->name('offres.apply')->middleware('auth'); // Ajout du middleware auth pour sécuriser l'accès
+    })->name('offres.apply')->middleware(CheckStudent::class); // Ajout du middleware auth pour sécuriser l'accès
 
     Route::post('/{id}/apply', function (Request $request, $id) {
         $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
@@ -266,7 +266,7 @@ Route::group(['prefix' => '/offres'], function () {
 
         // Logique pour enregistrer la candidature ou envoyer un email
         return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée avec succès.');
-    })->name('offres.apply.submit')->middleware('auth');
+    })->name('offres.apply.submit')->middleware(CheckStudent::class);
     
     // Modifier une offre
     Route::get('/{id}/edit', function ($id) {
@@ -278,7 +278,7 @@ Route::group(['prefix' => '/offres'], function () {
         return view('offres.edit', compact('offre', 'entreprises', 'secteurs', 'villes')); // Passe les données à la vue
     })->name('offres.edit')->middleware(CheckAdminOrPilote::class);
 
-    Route::put('/offres/{id}', [OffreController::class, 'update'])->name('offres.update');
+    Route::put('/offres/{id}', [OffreController::class, 'update'])->name('offres.update')->middleware(CheckAdminOrPilote::class);
 
     // Modifier l'état d'une offre pour la marquer comme supprimée
     Route::delete('/{id}', function ($id) {
