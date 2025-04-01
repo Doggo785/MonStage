@@ -30,7 +30,7 @@ conn = mysql.connector.connect(
 cursor = conn.cursor()
 
 def create_tables():
-    """Crée les tables si elles n'existent pas et annonce les modifications dans le terminal"""
+    """Crée les tables si elles n'existent pas et insère des données par défaut."""
     queries = [
         ("Role", """
         CREATE TABLE IF NOT EXISTS Role (
@@ -165,12 +165,37 @@ def create_tables():
     ]
     
     try:
+        # Création des tables
         for table_name, query in queries:
             cursor.execute(query)
             console.print(f"Table '{table_name}' vérifiée ou créée avec succès.", style="bold green")
         conn.commit()
+
+        # Insertion des offres par défaut
+        offres_query = """
+        INSERT IGNORE INTO Offre (
+            Titre, Description, Remuneration, Etat, Date_publication, Date_expiration, ID_Entreprise, ID_Secteur, ID_Ville
+        ) VALUES 
+        ('Développeur Backend', '<h3>📌 Mission</h3><p>Développement d\\'API sécurisées</p><h3>🔧 Technologies</h3><ul><li>Python, Django, PostgreSQL</li></ul><h3>🎯 Profil</h3><ul><li>Connaissance en bases de données</li></ul><h3>📩 Contact</h3><p><a href="mailto:recrutement@devtech.com">recrutement@devtech.com</a></p>', 800.00, 1, '2025-03-31', '2025-07-31', 5, 2, 1200),
+        ('Analyste Cybersécurité', '<h3>📌 Mission</h3><p>Audit et sécurisation des systèmes</p><h3>🔧 Technologies</h3><ul><li>SIEM, IDS/IPS, Firewall</li></ul><h3>🎯 Profil</h3><ul><li>Connaissances en pentesting</li></ul><h3>📩 Contact</h3><p><a href="mailto:jobs@securecorp.com">jobs@securecorp.com</a></p>', 950.00, 1, '2025-03-31', '2025-08-20', 6, 4, 9876),
+        ('Technicien Réseau', '<h3>📌 Mission</h3><p>Maintenance et configuration des réseaux</p><h3>🔧 Technologies</h3><ul><li>Cisco, VLAN, VPN</li></ul><h3>🎯 Profil</h3><ul><li>Compétences en routage et switching</li></ul><h3>📩 Contact</h3><p><a href="mailto:tech@networking.com">tech@networking.com</a></p>', 700.00, 1, '2025-03-31', '2025-06-30', 3, 3, 25678)
+        """
+        cursor.execute(offres_query)
+        console.print("Offres par défaut insérées avec succès.", style="bold green")
+
+        # Insertion des compétences associées
+        competences_query = """
+        INSERT IGNORE INTO Offres_Competences (ID_Offre, ID_Competence) VALUES 
+        (1, 2), (1, 5), (1, 12), 
+        (2, 1), (2, 4), (2, 18), 
+        (3, 6), (3, 9), (3, 22)
+        """
+        cursor.execute(competences_query)
+        console.print("Compétences associées aux offres insérées avec succès.", style="bold green")
+
+        conn.commit()
     except Error as e:
-        console.print(f"Erreur création tables: {e}", style="bold red")
+        console.print(f"Erreur lors de la création des tables ou de l'insertion des données : {e}", style="bold red")
 
 def import_data(table):
     """Importe les données du CSV vers la BDD"""
