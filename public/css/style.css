@@ -839,3 +839,52 @@ input[type=file]::file-selector-button:hover {
 .profile-picture-wrapper:hover .edit-overlay {
     opacity: 1;
 }
+
+.user-info {
+    text-align: center;
+    margin-top: 15px;
+    font-family: Arial, sans-serif;
+}
+
+/* Nom de l'utilisateur */
+.user-name h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Email de l'utilisateur */
+.user-email h4,
+.user-phone h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icônes */
+.user-email h4 i,
+.user-phone h4 i {
+    margin-right: 8px;
+    color: #ff4500;
+}
+
+/* Espacement entre les sections */
+.user-info div {
+    margin-bottom: 10px;
+}
+
+.user-info h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.user-info h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 3px 0;
+}

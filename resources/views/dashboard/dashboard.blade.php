@@ -31,8 +31,19 @@
                         Enregistrer les modifications
                     </button>
                 </div>
-                <h3>{{ Auth::user()->name }}</h3>
-                <h4>{{ Auth::user()->email }}</h4>
+
+                <!-- Informations utilisateur -->
+                <div class="user-info">
+                    <div class="user-name">
+                        <h3>{{ strtoupper(Auth::user()->Nom) }} {{ ucfirst(strtolower(Auth::user()->Prenom)) }}</h3>
+                    </div>
+                    <div class="user-email">
+                        <h4><i class="fa-solid fa-envelope"></i> {{ Auth::user()->Email }}</h4>
+                    </div>
+                    <div class="user-phone">
+                        <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
+                    </div>
+                </div>
             </div>
             <div class="whishlist">
                 <h2>Élèves</h2>
@@ -79,8 +90,19 @@
                         Enregistrer les modifications
                     </button>
                 </div>
-                <h3>{{ Auth::user()->name }}</h3>
-                <h4>{{ Auth::user()->email }}</h4>
+
+                <!-- Informations utilisateur -->
+                <div class="user-info">
+                    <div class="user-name">
+                        <h3>{{ strtoupper(Auth::user()->Nom) }} {{ ucfirst(strtolower(Auth::user()->Prenom)) }}</h3>
+                    </div>
+                    <div class="user-email">
+                        <h4><i class="fa-solid fa-envelope"></i> {{ Auth::user()->Email }}</h4>
+                    </div>
+                    <div class="user-phone">
+                        <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
+                    </div>
+                </div>
                 <h4>Statut : En attente</h4>
             </div>
             <div class="whishlist">
@@ -138,8 +160,19 @@
                         Enregistrer les modifications
                     </button>
                 </div>
-                <h3>{{ Auth::user()->name }}</h3>
-                <h4>{{ Auth::user()->email }}</h4>
+
+                <!-- Informations utilisateur -->
+                <div class="user-info">
+                    <div class="user-name">
+                        <h3>{{ strtoupper(Auth::user()->Nom) }} {{ ucfirst(strtolower(Auth::user()->Prenom)) }}</h3>
+                    </div>
+                    <div class="user-email">
+                        <h4><i class="fa-solid fa-envelope"></i> {{ Auth::user()->Email }}</h4>
+                    </div>
+                    <div class="user-phone">
+                        <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
+                    </div>
+                </div>
             </div>
             <div class="admin-actions">
                 <h2>Actions Administrateur</h2>
