@@ -9,8 +9,8 @@
         <div class="container_compte">
             <div class="compte">
                 <!-- Display the profile picture -->
-                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
-                     alt="Avatar" class="photo_compte">
+                <img src="{{ Auth::user()->pfp_path ? asset('storage/' . Auth::user()->pfp_path) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte profile-picture">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
 
@@ -45,8 +45,8 @@
         <center><h1>Espace Étudiant</h1></center>
         <div class="container_compte">
             <div class="compte">
-                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
-                     alt="Avatar" class="photo_compte">
+                <img src="{{ Auth::user()->pfp_path ? asset('storage/' . Auth::user()->pfp_path) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte profile-picture">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
                 <h4>Statut : En attente</h4>
@@ -92,8 +92,8 @@
         <center><h1>Espace Administrateur</h1></center>
         <div class="container_compte">
             <div class="compte">
-                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
-                     alt="Avatar" class="photo_compte">
+                <img src="{{ Auth::user()->pfp_path ? asset('storage/' . Auth::user()->pfp_path) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte profile-picture">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
 

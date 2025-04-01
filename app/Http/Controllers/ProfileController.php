@@ -15,15 +15,18 @@ class ProfileController extends Controller
 
         $user = Auth::user();
 
-        // Delete the old profile picture if it exists
+        // Supprimer l'ancienne photo de profil si elle existe
         if ($user->pfp_path) {
             Storage::delete('public/' . $user->pfp_path);
         }
 
-        // Store the new profile picture
-        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+        // Générer un nom unique pour le fichier
+        $filename = 'profile_' . $user->ID_User . '_' . time() . '.' . $request->file('profile_picture')->getClientOriginalExtension();
 
-        // Update the user's profile picture path
+        // Stocker la nouvelle photo de profil
+        $path = $request->file('profile_picture')->storeAs('profile_pictures', $filename, 'public');
+
+        // Mettre à jour le chemin de la photo de profil dans la base de données
         $user->pfp_path = $path;
         $user->save();
 
