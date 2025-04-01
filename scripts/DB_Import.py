@@ -178,17 +178,23 @@ def create_tables():
         ) VALUES 
         ('Développeur Backend', '<h3>📌 Mission</h3><p>Développement d\\'API sécurisées</p><h3>🔧 Technologies</h3><ul><li>Python, Django, PostgreSQL</li></ul><h3>🎯 Profil</h3><ul><li>Connaissance en bases de données</li></ul><h3>📩 Contact</h3><p><a href="mailto:recrutement@devtech.com">recrutement@devtech.com</a></p>', 800.00, 1, '2025-03-31', '2025-07-31', 5, 2, 1200),
         ('Analyste Cybersécurité', '<h3>📌 Mission</h3><p>Audit et sécurisation des systèmes</p><h3>🔧 Technologies</h3><ul><li>SIEM, IDS/IPS, Firewall</li></ul><h3>🎯 Profil</h3><ul><li>Connaissances en pentesting</li></ul><h3>📩 Contact</h3><p><a href="mailto:jobs@securecorp.com">jobs@securecorp.com</a></p>', 950.00, 1, '2025-03-31', '2025-08-20', 6, 4, 9876),
-        ('Technicien Réseau', '<h3>📌 Mission</h3><p>Maintenance et configuration des réseaux</p><h3>🔧 Technologies</h3><ul><li>Cisco, VLAN, VPN</li></ul><h3>🎯 Profil</h3><ul><li>Compétences en routage et switching</li></ul><h3>📩 Contact</h3><p><a href="mailto:tech@networking.com">tech@networking.com</a></p>', 700.00, 1, '2025-03-31', '2025-06-30', 3, 3, 25678)
+        ('Technicien Réseau', '<h3>📌 Mission</h3><p>Maintenance et configuration des réseaux</p><h3>🔧 Technologies</h3><ul><li>Cisco, VLAN, VPN</li></ul><h3>🎯 Profil</h3><ul><li>Compétences en routage et switching</li></ul><h3>📩 Contact</h3><p><a href="mailto:tech@networking.com">tech@networking.com</a></p>', 700.00, 1, '2025-03-31', '2025-06-30', 3, 3, 25678),
+        ('Développeur Front-End', '<h3>:pushpin: Mission</h3><p>Développement d\\'interfaces web modernes</p><h3>:wrench: Technologies</h3><ul><li>React, Tailwind CSS</li></ul><h3>:dart: Profil</h3><ul><li>Bonne maîtrise du JavaScript</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:contact@webcorp.com">contact@webcorp.com</a><br />Tél : 01 45 78 90 12</p>', 750.00, 1, '2025-03-31', '2025-06-30', 2, 1, 4),
+        ('Administrateur Systèmes & Réseaux', '<h3>:pushpin: Mission</h3><p>Gestion des infrastructures réseau et serveurs</p><h3>:wrench: Technologies</h3><ul><li>Linux, Docker, Ansible</li></ul><h3>:dart: Profil</h3><ul><li>Compétences en administration système</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:jobs@infra-tech.com">jobs@infra-tech.com</a><br />Tél : 02 98 76 54 32</p>', 850.00, 1, '2025-03-31', '2025-08-01', 3, 3, 5),
+        ('Développeur Full-Stack', '<h3>:pushpin: Mission</h3><p>Conception et développement d\\'applications web</p><h3>:wrench: Technologies</h3><ul><li>Node.js, Vue.js, PostgreSQL</li></ul><h3>:dart: Profil</h3><ul><li>Expérience en développement backend et frontend</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:recrutement@startup-dev.com">recrutement@startup-dev.com</a><br />Tél : 03 21 65 87 45</p>', 900.00, 1, '2025-03-31', '2025-09-15', 4, 2, 2)
         """
         cursor.execute(offres_query)
-        console.print("Offres par défaut insérées avec succès.", style="bold green")
+        console.print("Toutes les offres par défaut ont été insérées avec succès.", style="bold green")
 
         # Insertion des compétences associées
         competences_query = """
         INSERT IGNORE INTO Offres_Competences (ID_Offre, ID_Competence) VALUES 
         (1, 2), (1, 5), (1, 12), 
         (2, 1), (2, 4), (2, 18), 
-        (3, 6), (3, 9), (3, 22)
+        (3, 6), (3, 9), (3, 22), 
+        (4, 7), (4, 10), (4, 15), 
+        (5, 8), (5, 11), (5, 20), 
+        (6, 3), (6, 14), (6, 19)
         """
         cursor.execute(competences_query)
         console.print("Compétences associées aux offres insérées avec succès.", style="bold green")
