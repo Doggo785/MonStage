@@ -164,3 +164,9 @@ Route::get('/villes/search', function (Request $request) {
     $villes = Ville::where('Nom', 'LIKE', "%{$query}%")->limit(10)->get(); // Limite à 10 résultats
     return response()->json($villes);
 });
+
+Route::get('/competences/search', function (Request $request) {
+    $query = $request->input('query');
+    $competences = App\Models\Competence::where('Libelle', 'LIKE', "%{$query}%")->get();
+    return response()->json($competences);
+});

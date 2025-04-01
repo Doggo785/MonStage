@@ -78,9 +78,10 @@ class OffreController extends Controller
             'entreprise' => 'required|integer',
             'secteur' => 'required|integer',
             'ville' => 'required|integer',
+            'competences' => 'nullable|string', // Les compétences sont optionnelles
         ]);
 
-        Offre::create([
+        $offre = Offre::create([
             'Titre' => $validated['titre'],
             'Description' => $validated['description'],
             'Remuneration' => $validated['remuneration'],
@@ -91,6 +92,12 @@ class OffreController extends Controller
             'ID_Secteur' => $validated['secteur'],
             'ID_Ville' => $validated['ville'],
         ]);
+
+        // Associer les compétences à l'offre
+        if (!empty($validated['competences'])) {
+            $competenceIds = explode(',', $validated['competences']);
+            $offre->competences()->sync($competenceIds);
+        }
 
         return redirect()->route('offres.index')->with('success', 'Offre créée avec succès !');
     }
@@ -128,9 +135,10 @@ class OffreController extends Controller
             'remuneration' => 'required|numeric|min:600',
             'date_publication' => 'required|date',
             'date_expiration' => 'required|date|after:date_publication',
-            'entreprise' => 'required|integer|exists:Entreprise,ID_Entreprise',
-            'secteur' => 'required|integer|exists:Secteur,ID_Secteur',
-            'ville' => 'required|integer|exists:Ville,ID_Ville',
+            'entreprise' => 'required|integer',
+            'secteur' => 'required|integer',
+            'ville' => 'required|integer',
+            'competences' => 'nullable|string', // Les compétences sont optionnelles
         ]);
 
         $offre = Offre::findOrFail($id);
@@ -146,7 +154,15 @@ class OffreController extends Controller
             'ID_Ville' => $validated['ville'],
         ]);
 
-        return redirect()->route('offres.index')->with('success', 'Offre mise à jour avec succès.');
+        // Mettre à jour les compétences associées
+        if (!empty($validated['competences'])) {
+            $competenceIds = explode(',', $validated['competences']);
+            $offre->competences()->sync($competenceIds);
+        } else {
+            $offre->competences()->detach(); // Supprime toutes les compétences si aucune n'est sélectionnée
+        }
+
+        return redirect()->route('offres.index')->with('success', 'Offre mise à jour avec succès !');
     }
 
     // Supprimer une offre (changer son état)
