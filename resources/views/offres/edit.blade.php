@@ -149,7 +149,7 @@
             // Gestion de la recherche de compétences
             competenceSearch.addEventListener('input', function () {
                 const query = this.value.trim();
-                if (query.length > 2) {
+                if (query.length > 0) {
                     fetch(`/competences/search?query=${encodeURIComponent(query)}`)
                         .then(response => response.json())
                         .then(data => {
