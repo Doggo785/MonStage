@@ -55,7 +55,7 @@
                      {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }}<br>
                      {{ $offre->Ville->Nom ? ucfirst($offre->Ville->Nom) : 'Ville inconnue' }},
                      {{ $offre->Ville->region->Nom ?? 'Région inconnue' }}, France<br>
-                     Publiée le {{ $offre->Date_publication }}<br>
+                     Publiée le {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }}<br>
                      <strong>Compétences requises :</strong>
                      @if ($offre->competences && $offre->competences->isNotEmpty())
                         <div class="competences-container">

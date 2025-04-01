@@ -10,7 +10,7 @@
         <p class="ptit-texte">
             {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
             {{ ucfirst($offre->ville->Nom) ?? 'Ville inconnue' }} | 
-            Publiée le {{ $offre->Date_publication }} | 
+            Publiée le {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }} | 
             Ref. {{ $offre->ID_Offre }}
         </p>
 
@@ -37,6 +37,8 @@
                 <br>- Localisation : {{ $offre->ville->Nom ?? 'Ville inconnue' }} ({{ $offre->ville->CP ?? 'Code postal inconnu' }})                 
                 <br>- Entreprise : {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }}            
                 <br>- Rémunération : {{ $offre->Remuneration ?? 'Non précisée' }} €
+                <br>- Date de publication : {{ \Carbon\Carbon::parse($offre->Date_publication)->format('d/m/Y') }}
+                <br>- Date d'expiration : {{ \Carbon\Carbon::parse($offre->Date_expiration)->format('d/m/Y') }}
             </p>
             
             <h3>Avantages</h3>
