@@ -793,11 +793,49 @@ input[type=file]::file-selector-button:hover {
     line-height: 1;
 }
 
+.profile-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.profile-picture-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
 .profile-picture {
-  width: 150px; 
-  height: 150px; 
-  object-fit: cover; 
-  border-radius: 50%; 
-  display: block;
-  margin: 0 auto; 
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: 0.3s ease-in-out;
+}
+
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.profile-picture-wrapper:hover .profile-picture {
+    filter: grayscale(50%);
+}
+
+.profile-picture-wrapper:hover .edit-overlay {
+    opacity: 1;
 }
