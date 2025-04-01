@@ -159,12 +159,13 @@ h1,h2,h3,h4{
 /* Styling for the search container */
 .search-container {
   text-align: center;
-  margin-top: 20px;
+  margin-top: 20px; /* Augmente l'espace supérieur */
 }
 
 /* Styling for the search input */
 .search-input {
-  padding: 5px;
+  padding: 12px;
+  font-size: 1em; /* Augmente la taille du texte */
   border-radius: 20px;
   border: 2px solid #ccc;
   width: 400px;
@@ -177,6 +178,7 @@ h1,h2,h3,h4{
 .search-button {
   padding: 5px 10px;
   border-radius: 20px;
+  font-size: 1em;
   border: 2px solid #ccc;
   background-color: #F1F1F1;
   color: #333;
@@ -430,6 +432,8 @@ input[type=file]::file-selector-button:hover {
   padding: 20px;
   margin: 10px;
   transition: transform 0.3s, box-shadow 0.3s;
+  height: auto; /* Ajuste automatiquement la hauteur */
+  min-height: 150px; /* Définit une hauteur minimale */
 }
 
 /* Effet au survol */
@@ -471,8 +475,8 @@ input[type=file]::file-selector-button:hover {
 
 /* Sous-titre de la carte */
 .subtitle {
-  font-size: 14px; /* Augmenter légèrement la taille du sous-titre */
-  color: #666;
+  font-size: 16px; /* Augmenter légèrement la taille du sous-titre */
+  color: #4f4f4f;
   margin-bottom: 10px;
 }
 
@@ -528,6 +532,39 @@ input[type=file]::file-selector-button:hover {
 
 .dropdown:hover .dropdown-menu {
     display: block;
+}
+
+/* Liste déroulante pour les résultats */
+.dropdown-menu {
+    list-style: none; /* Supprime les puces */
+    margin: 0;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 200px;
+    overflow-y: auto;
+    position: absolute;
+    z-index: 1000;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Élément de la liste */
+.dropdown-menu li {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+/* Survol des éléments */
+.dropdown-menu li:hover {
+    background-color: #f0f0f0;
+}
+
+/* Texte grisé pour les résultats vides */
+.dropdown-menu li[style*="color: gray"] {
+    cursor: default;
 }
 
 .modal {
@@ -623,13 +660,45 @@ input[type=file]::file-selector-button:hover {
   background-color: #f0f0f0; 
 }
 
+/* Style pour la liste déroulante des résultats de compétences */
+#competence-results {
+  list-style: none; /* Supprime les puces */
+  margin: 0;
+  padding: 0;
+  max-height: 200px; /* Limite la hauteur de la liste */
+  overflow-y: auto; /* Ajoute un défilement si nécessaire */
+  background-color: #fff; /* Fond blanc */
+  border: 1px solid #ccc; /* Bordure grise */
+  border-radius: 4px; /* Coins arrondis */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Ombre légère */
+  position: absolute; /* Position absolue pour apparaître sous le champ */
+  z-index: 1000; /* Assure que la liste est au-dessus des autres éléments */
+  width: auto; /* Ajuste automatiquement la largeur au contenu */
+  min-width: 200px; /* Définit une largeur minimale */
+  max-width: 400px; /* Définit une largeur maximale */
+  left: 0; /* Aligne la liste avec le champ */
+  box-sizing: border-box; /* Inclut la bordure dans la largeur totale */
+}
+
+/* Style pour chaque élément de la liste */
+#competence-results li {
+  padding: 10px;
+  cursor: pointer; 
+  transition: background-color 0.2s; 
+}
+
+/* Couleur de fond au survol */
+#competence-results li:hover {
+  background-color: #f0f0f0; 
+}
+
 .ckeditor-container {
   max-width: 800px; /* Limite la largeur à 800px */
 }
 
 /* Réduire la taille des boutons de filtre */
 .filter-button {
-    font-size: 12px; /* Réduit la taille du texte */
+    font-size: 1em; /* Réduit la taille du texte */
     padding: 5px 10px; /* Réduit l'espacement interne */
     height: auto; /* Ajuste automatiquement la hauteur */
     width: auto; /* Ajuste automatiquement la largeur */
@@ -643,4 +712,83 @@ input[type=file]::file-selector-button:hover {
 .filter-button:hover {
     background-color: #e0e0e0; /* Change la couleur de fond au survol */
     border-color: #aaa; /* Change la couleur de la bordure au survol */
+}
+
+.loader {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  background: linear-gradient(0deg, rgba(255, 61, 0, 0.2) 33%, #ff3d00 100%);
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+}
+.loader::after {
+  content: '';  
+  box-sizing: border-box;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+}
+@keyframes rotation {
+  0% { transform: rotate(0deg) }
+  100% { transform: rotate(360deg)}
+} 
+
+#loader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.8); /* Fond sombre */
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Conteneur des compétences */
+.competences-container {
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à la ligne si nécessaire */
+    gap: 10px; /* Espacement entre les badges */
+    margin-top: 10px;
+}
+
+/* Style des badges de compétences */
+.competence-badge {
+    background-color: #f0f0f0; /* Couleur de fond */
+    color: #333; /* Couleur du texte */
+    border: 1px solid #ddd; /* Bordure légère */
+    border-radius: 5px; /* Coins arrondis */
+    padding: 5px 10px; /* Espacement interne */
+    font-size: 14px; /* Taille du texte */
+    white-space: nowrap; /* Empêche le texte de se couper */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Légère ombre */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Bouton pour supprimer une compétence */
+.competence-badge .remove-competence {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    line-height: 1;
 }

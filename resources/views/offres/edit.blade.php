@@ -64,6 +64,23 @@
                 <input type="hidden" id="ville" name="ville" value="{{ $offre->ID_Ville }}"> <!-- Champ caché pour l'ID de la ville -->
                 <ul id="ville-results" class="dropdown-menu" style="display: none;"></ul><br><br>
 
+                <h3>Compétences Requises</h3>
+                <div id="competences-container" class="competences-container">
+                    <!-- Les compétences déjà associées à l'offre seront affichées ici -->
+                    @foreach ($offre->competences as $competence)
+                        <div class="competence-badge">
+                            {{ $competence->Libelle }}
+                            <button type="button" class="remove-competence" data-id="{{ $competence->ID_Competence }}">&times;</button>
+                        </div>
+                    @endforeach
+                </div>
+                <br>
+                <label for="competence-search">Ajouter une compétence :</label><br>
+                <input type="text" id="competence-search" class="search-input" placeholder="Recherchez une compétence..." autocomplete="off">
+                <ul id="competence-results" class="dropdown-menu" style="display: none;"></ul>
+                <input type="hidden" id="competences" name="competences" value="{{ $offre->competences->pluck('ID_Competence')->implode(',') }}"> <!-- Champ caché pour stocker les IDs des compétences -->
+                <br><br>
+
                 <div class="submit-button">
                     <button type="submit" class="btn2">Mettre à jour l'Offre</button>
                 </div>
@@ -120,6 +137,102 @@
             } else {
                 results.style.display = 'none';
             }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const competenceSearch = document.getElementById('competence-search');
+            const competenceResults = document.getElementById('competence-results');
+            const competencesContainer = document.getElementById('competences-container');
+            const competencesInput = document.getElementById('competences');
+            let selectedCompetences = competencesInput.value ? competencesInput.value.split(',').map(Number) : []; // IDs des compétences déjà associées
+
+            // Gestion de la recherche de compétences
+            competenceSearch.addEventListener('input', function () {
+                const query = this.value.trim();
+                if (query.length > 0) {
+                    fetch(`/competences/search?query=${encodeURIComponent(query)}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            competenceResults.innerHTML = '';
+                            competenceResults.style.display = 'block';
+
+                            if (data.length === 0) {
+                                const li = document.createElement('li');
+                                li.textContent = 'Aucun résultat trouvé';
+                                li.style.color = 'gray';
+                                competenceResults.appendChild(li);
+                            } else {
+                                data.forEach(competence => {
+                                    const li = document.createElement('li');
+                                    li.textContent = competence.Libelle;
+                                    li.dataset.id = competence.ID_Competence;
+                                    li.addEventListener('click', function () {
+                                        addCompetence(competence.ID_Competence, competence.Libelle);
+                                        competenceResults.style.display = 'none';
+                                        competenceSearch.value = '';
+                                    });
+                                    competenceResults.appendChild(li);
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur:', error);
+                            competenceResults.innerHTML = '<li style="color: red;">Erreur lors de la recherche</li>';
+                            competenceResults.style.display = 'block';
+                        });
+                } else {
+                    competenceResults.style.display = 'none';
+                }
+            });
+
+            // Ajouter une compétence sélectionnée
+            function addCompetence(id, libelle) {
+                if (!selectedCompetences.includes(id)) {
+                    selectedCompetences.push(id);
+
+                    // Créer une box pour la compétence
+                    const badge = document.createElement('div');
+                    badge.className = 'competence-badge';
+                    badge.innerHTML = `
+                        ${libelle}
+                        <button type="button" class="remove-competence" data-id="${id}">&times;</button>
+                    `;
+
+                    // Ajouter un événement pour supprimer la compétence
+                    badge.querySelector('.remove-competence').addEventListener('click', function () {
+                        removeCompetence(id, badge);
+                    });
+
+                    competencesContainer.appendChild(badge);
+                    updateCompetencesInput();
+                }
+            }
+
+            // Supprimer une compétence sélectionnée
+            function removeCompetence(id, badge) {
+                // Supprime l'ID de la compétence du tableau
+                selectedCompetences = selectedCompetences.filter(compId => compId !== id);
+
+                // Supprime la box de la compétence
+                badge.remove();
+
+                // Met à jour le champ caché avec les IDs restants
+                updateCompetencesInput();
+            }
+
+            // Mettre à jour le champ caché avec les IDs des compétences
+            function updateCompetencesInput() {
+                competencesInput.value = selectedCompetences.join(',');
+            }
+
+            // Ajoutez des gestionnaires d'événements pour les compétences déjà affichées
+            document.querySelectorAll('.remove-competence').forEach(button => {
+                button.addEventListener('click', function () {
+                    const id = parseInt(this.dataset.id);
+                    const badge = this.parentElement;
+                    removeCompetence(id, badge);
+                });
+            });
         });
     </script>
 </main>

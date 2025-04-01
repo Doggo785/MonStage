@@ -12,11 +12,47 @@ use App\Models\Secteur;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
+// Liste de toutes les offres avec tous leurs attributs
+Route::get('/', function (Request $request) {
+    $query = Offre::query();
 
-Route::get('/', function () {
-    $offres = Offre::with('Entreprise')->get(); 
-    $offres = Offre::with('Ville')->get(); 
-    return view('index', ['offres' => $offres]);
+    // Si l'utilisateur est connecté et est un administrateur ou pilote
+    if (auth()->check() && (auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur')) {
+        $query->where(function ($q) {
+            $q->where('Etat', 1)->orWhere('Etat', 0); // Inclut toutes les offres
+        });
+    } else {
+        // Sinon, afficher uniquement les offres actives (Etat = 1)
+        $query->where('Etat', 1);
+    }
+
+    if ($search = $request->input('search')) {
+        $query->where('Titre', 'LIKE', "%{$search}%")
+              ->orWhereHas('entreprise', function ($q) use ($search) {
+                  $q->where('Nom', 'LIKE', "%{$search}%");
+              })
+              ->orWhereHas('ville', function ($q) use ($search) {
+                  $q->where('Nom', 'LIKE', "%{$search}%");
+              });
+    }
+
+    // Filtrer par entreprise
+    if ($entreprise = $request->input('entreprise')) {
+        $query->where('ID_Entreprise', $entreprise);
+    }
+
+    // Filtrer par région
+    if ($region = $request->input('region')) {
+        $query->whereHas('ville', function ($q) use ($region) {
+            $q->where('ID_Region', $region);
+        });
+    }
+
+    $offres = $query->with(['entreprise', 'ville'])->get();
+    $entreprises = Entreprise::all();
+    $regions = Region::all();
+
+    return view('index', compact('offres', 'entreprises', 'regions'));
 })->name('home');
 
 Route::get('/db-test', function () {
@@ -112,150 +148,25 @@ Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
 });
 
 // Routes pour les offres
-Route::group(['prefix' => '/offres'], function () {
-    // Liste de toutes les offres avec tous leurs attributs
-    Route::get('/', function (Request $request) {
-        $query = Offre::query();
-
-        // Si l'utilisateur est connecté et est un administrateur ou pilote
-        if (auth()->check() && (auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur')) {
-            $query->where(function ($q) {
-                $q->where('Etat', 1)->orWhere('Etat', 0); // Inclut toutes les offres
-            });
-        } else {
-            // Sinon, afficher uniquement les offres actives (Etat = 1)
-            $query->where('Etat', 1);
-        }
-
-                if ($search = $request->input('search')) {
-            $query->where('Titre', 'LIKE', "%{$search}%")
-                  ->orWhereHas('entreprise', function ($q) use ($search) {
-                      $q->where('Nom', 'LIKE', "%{$search}%");
-                  })
-                  ->orWhereHas('ville', function ($q) use ($search) {
-                      $q->where('Nom', 'LIKE', "%{$search}%");
-                  });
-        }
-
-        // Filtrer par entreprise
-        if ($entreprise = $request->input('entreprise')) {
-            $query->where('ID_Entreprise', $entreprise);
-        }
-
-        // Filtrer par région
-        if ($region = $request->input('region')) {
-            $query->whereHas('ville', function ($q) use ($region) {
-                $q->where('ID_Region', $region);
-            });
-        }
-
-        $offres = $query->with(['entreprise', 'ville'])->get();
-        $entreprises = Entreprise::all();
-        $regions = Region::all();
-
-        return view('index', compact('offres', 'entreprises', 'regions'));
-    })->name('offres.index');
-
-    // Créer une nouvelle offre
-    Route::get('/create', function () {
-        $entreprises = Entreprise::all(); // Récupère toutes les entreprises
-        $secteurs = Secteur::all(); // Récupère tous les secteurs
-        $villes = Ville::all();
-        return view('offres.create', compact('entreprises', 'secteurs', 'villes'));
-    })->name('offres.create');    
-
-    Route::post('/store', function (Request $request) {
-        //dd($request->all());
-        try {
-            // Validation des données
-            $validated = $request->validate([
-                'titre' => 'required|string|max:255',
-                'description' => 'required|string',
-                'remuneration' => 'required|numeric|min:600',
-                'date_publication' => 'required|date',
-                'date_expiration' => 'required|date|after:date_publication',
-                'entreprise' => 'required|integer',
-                'secteur' => 'required|integer',
-                'ville' => 'required|integer',
-            ]);
-
-            // Création de l'offre
-            Offre::create([
-                'Titre' => $validated['titre'],
-                'Description' => $validated['description'],
-                'Remuneration' => $validated['remuneration'],
-                'Date_publication' => $validated['date_publication'],
-                'Etat' => true,
-                'Date_expiration' => $validated['date_expiration'],
-                'ID_Entreprise' => $validated['entreprise'],
-                'ID_Secteur' => $validated['secteur'],
-                'ID_Ville' => $validated['ville'],
-            ]);
-
-            return redirect()->route('offres.index')->with('success', 'Offre créée avec succès !');
-        } catch (\Exception $e) {
-            // Enregistre l'erreur dans les logs
-            \Log::error('Erreur lors de la création de l\'offre : ' . $e->getMessage());
-
-            // Retourne une réponse avec l'erreur
-            return redirect()->back()->withErrors(['error' => 'Une erreur est survenue : ' . $e->getMessage()])->withInput();
-        }
-    })->name('offres.store');
-
-    // Détails d'une offre
-    Route::get('{id}', function ($id) {
-        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Recherche l'offre par ID_Offre
-
-        // Vérifie si l'offre est désactivée et si l'utilisateur n'est pas autorisé
-        if ($offre->Etat == 0 && (!auth()->check() || !(auth()->user()->role->Libelle === 'Pilote' || auth()->user()->role->Libelle === 'Administrateur'))) {
-            return redirect()->route('login'); // Redirige vers la page de connexion
-        }
-
-        return view('offres.show', ['offre' => $offre]); // Passe l'offre à la vue
-    })->name('offres.show');
-
-    Route::get('{id}/apply', function ($id) {
-        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
-        return view('offres.apply', ['offre' => $offre]); // Passe l'offre à la vue
-    })->name('offres.apply')->middleware('auth'); // Ajout du middleware auth pour sécuriser l'accès
-
-    Route::post('/{id}/apply', function (Request $request, $id) {
-        $offre = Offre::where('ID_Offre', $id)->firstOrFail(); // Vérifie que l'offre existe
-
-        // Validation des données
-        $validated = $request->validate([
-            'cv' => 'required|file|mimes:pdf,doc,docx|max:2048', // Max 2 Mo
-            'motivation' => 'required|string|max:1000',
-        ]);
-
-        // Logique pour enregistrer la candidature ou envoyer un email
-        return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée avec succès.');
-    })->name('offres.apply.submit')->middleware('auth');
-    
-    // Modifier une offre
-    Route::get('/{id}/edit', function ($id) {
-        $offre = Offre::findOrFail($id); // Récupère l'offre par ID
-        $entreprises = Entreprise::all(); // Récupère toutes les entreprises
-        $secteurs = Secteur::all(); // Récupère tous les secteurs
-        $villes = Ville::all(); // Récupère toutes les villes
-
-        return view('offres.edit', compact('offre', 'entreprises', 'secteurs', 'villes')); // Passe les données à la vue
-    })->name('offres.edit')->middleware(CheckAdminOrPilote::class);
-
-    Route::put('/offres/{id}', [OffreController::class, 'update'])->name('offres.update');
-
-    // Modifier l'état d'une offre pour la marquer comme supprimée
-    Route::delete('/{id}', function ($id) {
-        $offre = Offre::findOrFail($id); 
-        $offre->Etat = 0; 
-        $offre->save(); 
-
-        return redirect()->route('offres.index')->with('success', 'Offre supprimée avec succès.');
-    })->name('offres.destroy')->middleware(CheckAdminOrPilote::class); // Middleware pour vérifier les autorisations
+Route::prefix('offres')->group(function () {
+    Route::get('/', [OffreController::class, 'index'])->name('offres.index');
+    Route::get('/create', [OffreController::class, 'create'])->name('offres.create')->middleware('auth');
+    Route::post('/store', [OffreController::class, 'store'])->name('offres.store')->middleware('auth');
+    Route::get('/{id}', [OffreController::class, 'show'])->name('offres.show');
+    Route::get('/{id}/edit', [OffreController::class, 'edit'])->name('offres.edit')->middleware('auth');
+    Route::post('/{id}/apply', [OffreController::class, 'apply'])->name('offres.apply.submit')->middleware('auth');
+    Route::put('/{id}', [OffreController::class, 'update'])->name('offres.update')->middleware('auth');
+    Route::delete('/{id}', [OffreController::class, 'destroy'])->name('offres.destroy')->middleware('auth');
 });
 
 Route::get('/villes/search', function (Request $request) {
     $query = $request->input('query');
     $villes = Ville::where('Nom', 'LIKE', "%{$query}%")->limit(10)->get(); // Limite à 10 résultats
     return response()->json($villes);
+});
+
+Route::get('/competences/search', function (Request $request) {
+    $query = $request->input('query');
+    $competences = App\Models\Competence::where('Libelle', 'LIKE', "%{$query}%")->get();
+    return response()->json($competences);
 });
