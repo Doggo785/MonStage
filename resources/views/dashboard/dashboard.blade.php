@@ -69,6 +69,23 @@
                 </div>
             </div>
         </div>
+    @elseif (Auth::user()->role->Libelle === 'Administrateur')
+        <center><h1>Espace Administrateur</h1></center>
+        <div class="container_compte">
+            <div class="compte">
+                <img src="{{ asset('assets/') }}" alt="Avatar" class="photo_compte">
+                <h3>{{ Auth::user()->name }}</h3>
+                <h4>{{ Auth::user()->email }}</h4>
+            </div>
+            <div class="admin-actions">
+                <h2>Actions Administrateur</h2>
+                <ul>
+                    <li><a href="{{ route('users.index') }}">Gérer les utilisateurs</a></li>
+                    <li><a href="{{ route('offres.index') }}">Gérer les offres</a></li>
+                    <li><a href="{{ route('logs.index') }}">Consulter les logs</a></li>
+                </ul>
+            </div>
+        </div>
     @else
         <center><h1>Accès refusé</h1></center>
         <p>Vous n'avez pas les permissions nécessaires pour accéder à cette page.</p>
