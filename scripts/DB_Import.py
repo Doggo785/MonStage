@@ -24,22 +24,67 @@ script_dir = os.path.dirname(__file__)
 csv_file_path = os.path.join(script_dir, 'cities.csv')
 
 # Connexion globale à la BDD
-conn = mysql.connector.connect(**DB_CONFIG)
+conn = mysql.connector.connect(
+    **DB_CONFIG
+)
 cursor = conn.cursor()
 
 def create_tables():
     """Crée les tables si elles n'existent pas"""
     queries = [
         """
+        CREATE TABLE IF NOT EXISTS Role (
+            ID_Role INT AUTO_INCREMENT PRIMARY KEY,
+            Libelle VARCHAR(25) UNIQUE
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Secteur (
+            ID_Secteur INT AUTO_INCREMENT PRIMARY KEY,
+            Nom VARCHAR(50) NOT NULL
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Competence (
+            ID_Competence INT AUTO_INCREMENT PRIMARY KEY,
+            Libelle VARCHAR(50) NOT NULL
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Statuts_Candidature (
+            ID_Statut INT AUTO_INCREMENT PRIMARY KEY,
+            Libelle VARCHAR(50) NOT NULL
+        )
+        """,
+        """
         CREATE TABLE IF NOT EXISTS Region (
             ID_Region INT AUTO_INCREMENT PRIMARY KEY,
-            Nom VARCHAR(255) UNIQUE
+            Nom VARCHAR(50) UNIQUE
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Utilisateur (
+            ID_User INT AUTO_INCREMENT PRIMARY KEY,
+            Password VARCHAR(255) NOT NULL,
+            Nom VARCHAR(50) NOT NULL,
+            Prenom VARCHAR(50) NOT NULL,
+            Telephone VARCHAR(20),
+            Email VARCHAR(50) UNIQUE NOT NULL,
+            ID_Role INT NOT NULL,
+            FOREIGN KEY(ID_Role) REFERENCES Role(ID_Role)
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Etudiant (
+            ID_User INT PRIMARY KEY,
+            Statut_recherche VARCHAR(50),
+            FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User)
         )
         """,
         """
         CREATE TABLE IF NOT EXISTS Ville (
             ID_Ville INT AUTO_INCREMENT PRIMARY KEY,
-            CP VARCHAR(5),
+            CP VARCHAR(10),
             Nom VARCHAR(50),
             ID_Region INT,
             FOREIGN KEY(ID_Region) REFERENCES Region(ID_Region)
@@ -58,21 +103,63 @@ def create_tables():
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS Secteur (
-            ID_Secteur INT AUTO_INCREMENT PRIMARY KEY,
-            Nom VARCHAR(50) NOT NULL
+        CREATE TABLE IF NOT EXISTS Avis (
+            ID_Avis INT AUTO_INCREMENT PRIMARY KEY,
+            Note DECIMAL(3,1),
+            ID_Entreprise INT NOT NULL,
+            ID_User INT NOT NULL,
+            FOREIGN KEY(ID_Entreprise) REFERENCES Entreprise(ID_Entreprise),
+            FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User)
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS Competence (
-            ID_Competence INT AUTO_INCREMENT PRIMARY KEY,
-            Libelle VARCHAR(50) NOT NULL
+        CREATE TABLE IF NOT EXISTS Offre (
+            ID_Offre INT AUTO_INCREMENT PRIMARY KEY,
+            Titre VARCHAR(50) NOT NULL,
+            Description VARCHAR(1000) NOT NULL,
+            Remuneration DECIMAL(7,2),
+            Etat BOOLEAN NOT NULL,
+            Date_publication DATE NOT NULL,
+            Date_expiration DATE NOT NULL,
+            ID_Secteur INT NOT NULL,
+            ID_Ville INT NOT NULL,
+            ID_Entreprise INT NOT NULL,
+            FOREIGN KEY(ID_Secteur) REFERENCES Secteur(ID_Secteur),
+            FOREIGN KEY(ID_Ville) REFERENCES Ville(ID_Ville),
+            FOREIGN KEY(ID_Entreprise) REFERENCES Entreprise(ID_Entreprise)
         )
         """,
         """
-        CREATE TABLE IF NOT EXISTS Role (
-            ID_Role INT AUTO_INCREMENT PRIMARY KEY,
-            Libelle VARCHAR(25) NOT NULL UNIQUE
+        CREATE TABLE IF NOT EXISTS Candidature (
+            ID_User INT NOT NULL,
+            ID_Offre INT NOT NULL,
+            ID_Statut INT NOT NULL,
+            Date_postule DATE NOT NULL,
+            LM_Path VARCHAR(255),
+            CV_Path VARCHAR(255),
+            PRIMARY KEY(ID_User, ID_Offre),
+            FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User),
+            FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre),
+            FOREIGN KEY(ID_Statut) REFERENCES Statuts_Candidature(ID_Statut)
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Offres_Competences (
+            ID_Offre INT NOT NULL,
+            ID_Competence INT NOT NULL,
+            PRIMARY KEY(ID_Offre, ID_Competence),
+            FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre),
+            FOREIGN KEY(ID_Competence) REFERENCES Competence(ID_Competence)
+        )
+        """,
+        """
+        CREATE TABLE IF NOT EXISTS Wishlist (
+            ID_User INT NOT NULL,
+            ID_Offre INT NOT NULL,
+            Date_ajout DATE NOT NULL,
+            PRIMARY KEY(ID_User, ID_Offre),
+            FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User),
+            FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre)
         )
         """
     ]
@@ -82,7 +169,7 @@ def create_tables():
             cursor.execute(query)
         conn.commit()
     except Error as e:
-        print(f"Erreur création tables: {e}")
+        console.print(f"Erreur création tables: {e}", style="bold red")
 
 def import_data(table):
     """Importe les données du CSV vers la BDD"""
@@ -287,505 +374,21 @@ def import_data(table):
                 )
             conn.commit()
             console.print(f"{count} rôles importés", style="bold green")
+        elif table == 'Statuts_Candidature':
+            statuts = ['En attente', 'Acceptée', 'Refusée']
+            insert_values = [(statut,) for statut in statuts]
+            cursor.executemany(
+                """INSERT INTO Statuts_Candidature (Libelle) VALUES (%s)""",
+                insert_values
+            )
+            conn.commit()
+            console.print(f"{len(statuts)} statuts de candidature importés", style="bold green")
         else:
             console.print(f"Table inconnue: {table}", style="bold red")
 
     except Error as e:
         conn.rollback()
         console.print(f"Erreur import: {e}", style="bold red")
-
-def delete_data(table):
-    """Supprime les données des tables"""
-    try:
-        if table == 'Region':
-            confirmation = input("La suppression de la table 'Region' nécessite également la suppression des tables 'Ville' et 'Entreprise'. Voulez-vous continuer ? (oui/non): ")
-            if confirmation.lower() == 'oui':
-                cursor.execute("DELETE FROM Entreprise")
-                cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Ville")
-                cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Region")
-                cursor.execute("ALTER TABLE Region AUTO_INCREMENT = 1;")
-                conn.commit()
-                console.print("Toutes les données des tables 'Entreprise', 'Ville' et 'Region' ont été supprimées", style="bold green")
-            else:
-                console.print("Suppression annulée", style="bold yellow")
-        elif table == 'Ville':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            cursor.execute("DELETE FROM Ville")
-            cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données des tables 'Entreprise' et 'Ville' ont été supprimées", style="bold green")
-        elif table == 'Entreprise':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Secteur':
-            cursor.execute("DELETE FROM Secteur")
-            cursor.execute("ALTER TABLE Secteur AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Competence':
-            cursor.execute("DELETE FROM Competence")
-            cursor.execute("ALTER TABLE Competence AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Role':
-            cursor.execute("DELETE FROM Role")
-            cursor.execute("ALTER TABLE Role AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        else:
-            console.print(f"Table inconnue: {table}", style="bold red")
-    except Error as e:
-        conn.rollback()
-        console.print(f"Erreur suppression: {e}", style="bold red")
-
-def count_elements():
-    """Compte le nombre d'éléments dans chaque table"""
-    try:
-        cursor.execute("SELECT COUNT(*) FROM Region")
-        region_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Ville")
-        ville_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Entreprise")
-        entreprise_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Secteur")
-        secteur_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Competence")
-        competence_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Role")
-        role_count = cursor.fetchone()[0]
-        return region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count
-    except Error as e:
-        print(f"Erreur comptage: {e}")
-        return 0, 0, 0, 0, 0, 0
-
-def menu():
-    """Affiche le menu et gère les choix de l'utilisateur"""
-    while True:
-        region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count = count_elements()
-        
-        table = Table(title="MENU")
-        table.add_column("Option", justify="center", style="cyan", no_wrap=True)
-        table.add_column("Description", justify="center", style="magenta")
-        
-        table.add_row("1", "Ajouter des éléments")
-        table.add_row("2", "Supprimer des éléments")
-        table.add_row("3", "Quitter")
-        
-        console.print(table)
-        
-        console.print(f"Nombre de régions: {region_count}", style="bold green")
-        console.print(f"Nombre de villes: {ville_count}", style="bold green")
-        console.print(f"Nombre d'entreprises: {entreprise_count}", style="bold green")
-        console.print(f"Nombre de secteurs: {secteur_count}", style="bold green")
-        console.print(f"Nombre de compétences: {competence_count}", style="bold green")
-        console.print(f"Nombre de rôles: {role_count}", style="bold green")
-        
-        choice = Prompt.ask("Choisissez une option (1-3)")
-        
-        if choice == '1':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à importer (séparées par des virgules)").split(',')
-            for table in tables:
-                table = table.strip()
-            if table == 'Toutes':
-                for t in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                    import_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                import_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '2':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à supprimer (séparées par des virgules)").split(',')
-            for table in tables:
-                table.strip()
-            if table == 'Toutes':
-                for t in ['Entreprise', 'Ville', 'Region', 'Secteur', 'Competence', 'Role']:
-                    delete_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                delete_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '3':
-            console.print("Au revoir!", style="bold yellow")
-            break
-        else:
-            console.print("Choix invalide, veuillez réessayer.", style="bold red")
-
-
-def delete_data(table):
-    """Supprime les données des tables"""
-    try:
-        if table == 'Region':
-            confirmation = input("La suppression de la table 'Region' nécessite également la suppression des tables 'Ville' et 'Entreprise'. Voulez-vous continuer ? (oui/non): ")
-            if confirmation.lower() == 'oui':
-                cursor.execute("DELETE FROM Entreprise")
-                cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Ville")
-                cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Region")
-                cursor.execute("ALTER TABLE Region AUTO_INCREMENT = 1;")
-                conn.commit()
-                console.print("Toutes les données des tables 'Entreprise', 'Ville' et 'Region' ont été supprimées", style="bold green")
-            else:
-                console.print("Suppression annulée", style="bold yellow")
-        elif table == 'Ville':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            cursor.execute("DELETE FROM Ville")
-            cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données des tables 'Entreprise' et 'Ville' ont été supprimées", style="bold green")
-        elif table == 'Entreprise':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Secteur':
-            cursor.execute("DELETE FROM Secteur")
-            cursor.execute("ALTER TABLE Secteur AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Competence':
-            cursor.execute("DELETE FROM Competence")
-            cursor.execute("ALTER TABLE Competence AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Role':
-            cursor.execute("DELETE FROM Role")
-            cursor.execute("ALTER TABLE Role AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        else:
-            console.print(f"Table inconnue: {table}", style="bold red")
-    except Error as e:
-        conn.rollback()
-        console.print(f"Erreur suppression: {e}", style="bold red")
-
-def count_elements():
-    """Compte le nombre d'éléments dans chaque table"""
-    try:
-        cursor.execute("SELECT COUNT(*) FROM Region")
-        region_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Ville")
-        ville_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Entreprise")
-        entreprise_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Secteur")
-        secteur_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Competence")
-        competence_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Role")
-        role_count = cursor.fetchone()[0]
-        return region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count
-    except Error as e:
-        print(f"Erreur comptage: {e}")
-        return 0, 0, 0, 0, 0, 0
-
-def menu():
-    """Affiche le menu et gère les choix de l'utilisateur"""
-    while True:
-        region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count = count_elements()
-        
-        table = Table(title="MENU")
-        table.add_column("Option", justify="center", style="cyan", no_wrap=True)
-        table.add_column("Description", justify="center", style="magenta")
-        
-        table.add_row("1", "Ajouter des éléments")
-        table.add_row("2", "Supprimer des éléments")
-        table.add_row("3", "Quitter")
-        
-        console.print(table)
-        
-        console.print(f"Nombre de régions: {region_count}", style="bold green")
-        console.print(f"Nombre de villes: {ville_count}", style="bold green")
-        console.print(f"Nombre d'entreprises: {entreprise_count}", style="bold green")
-        console.print(f"Nombre de secteurs: {secteur_count}", style="bold green")
-        console.print(f"Nombre de compétences: {competence_count}", style="bold green")
-        console.print(f"Nombre de rôles: {role_count}", style="bold green")
-        
-        choice = Prompt.ask("Choisissez une option (1-3)")
-        
-        if choice == '1':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à importer (séparées par des virgules)").split(',')
-            for table in tables:
-                table = table.strip()
-            if table == 'Toutes':
-                for t in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                    import_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                import_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '2':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à supprimer (séparées par des virgules)").split(',')
-            for table in tables:
-                table.strip()
-            if table == 'Toutes':
-                for t in ['Entreprise', 'Ville', 'Region', 'Secteur', 'Competence', 'Role']:
-                    delete_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                delete_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '3':
-            console.print("Au revoir!", style="bold yellow")
-            break
-        else:
-            console.print("Choix invalide, veuillez réessayer.", style="bold red")
-
-def delete_data(table):
-    """Supprime les données des tables"""
-    try:
-        if table == 'Region':
-            confirmation = input("La suppression de la table 'Region' nécessite également la suppression des tables 'Ville' et 'Entreprise'. Voulez-vous continuer ? (oui/non): ")
-            if confirmation.lower() == 'oui':
-                cursor.execute("DELETE FROM Entreprise")
-                cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Ville")
-                cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Region")
-                cursor.execute("ALTER TABLE Region AUTO_INCREMENT = 1;")
-                conn.commit()
-                console.print("Toutes les données des tables 'Entreprise', 'Ville' et 'Region' ont été supprimées", style="bold green")
-            else:
-                console.print("Suppression annulée", style="bold yellow")
-        elif table == 'Ville':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            cursor.execute("DELETE FROM Ville")
-            cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données des tables 'Entreprise' et 'Ville' ont été supprimées", style="bold green")
-        elif table == 'Entreprise':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Secteur':
-            cursor.execute("DELETE FROM Secteur")
-            cursor.execute("ALTER TABLE Secteur AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Competence':
-            cursor.execute("DELETE FROM Competence")
-            cursor.execute("ALTER TABLE Competence AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Role':
-            cursor.execute("DELETE FROM Role")
-            cursor.execute("ALTER TABLE Role AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        else:
-            console.print(f"Table inconnue: {table}", style="bold red")
-    except Error as e:
-        conn.rollback()
-        console.print(f"Erreur suppression: {e}", style="bold red")
-
-def count_elements():
-    """Compte le nombre d'éléments dans chaque table"""
-    try:
-        cursor.execute("SELECT COUNT(*) FROM Region")
-        region_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Ville")
-        ville_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Entreprise")
-        entreprise_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Secteur")
-        secteur_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Competence")
-        competence_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Role")
-        role_count = cursor.fetchone()[0]
-        return region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count
-    except Error as e:
-        print(f"Erreur comptage: {e}")
-        return 0, 0, 0, 0, 0, 0
-
-def menu():
-    """Affiche le menu et gère les choix de l'utilisateur"""
-    while True:
-        region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count = count_elements()
-        
-        table = Table(title="MENU")
-        table.add_column("Option", justify="center", style="cyan", no_wrap=True)
-        table.add_column("Description", justify="center", style="magenta")
-        
-        table.add_row("1", "Ajouter des éléments")
-        table.add_row("2", "Supprimer des éléments")
-        table.add_row("3", "Quitter")
-        
-        console.print(table)
-        
-        console.print(f"Nombre de régions: {region_count}", style="bold green")
-        console.print(f"Nombre de villes: {ville_count}", style="bold green")
-        console.print(f"Nombre d'entreprises: {entreprise_count}", style="bold green")
-        console.print(f"Nombre de secteurs: {secteur_count}", style="bold green")
-        console.print(f"Nombre de compétences: {competence_count}", style="bold green")
-        console.print(f"Nombre de rôles: {role_count}", style="bold green")
-        
-        choice = Prompt.ask("Choisissez une option (1-3)")
-        
-        if choice == '1':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à importer (séparées par des virgules)").split(',')
-            for table in tables:
-                table = table.strip()
-            if table == 'Toutes':
-                for t in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                    import_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                import_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '2':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à supprimer (séparées par des virgules)").split(',')
-            for table in tables:
-                table.strip()
-            if table == 'Toutes':
-                for t in ['Entreprise', 'Ville', 'Region', 'Secteur', 'Competence', 'Role']:
-                    delete_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                delete_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '3':
-            console.print("Au revoir!", style="bold yellow")
-            break
-        else:
-            console.print("Choix invalide, veuillez réessayer.", style="bold red")
-
-def delete_data(table):
-    """Supprime les données des tables"""
-    try:
-        if table == 'Region':
-            confirmation = input("La suppression de la table 'Region' nécessite également la suppression des tables 'Ville' et 'Entreprise'. Voulez-vous continuer ? (oui/non): ")
-            if confirmation.lower() == 'oui':
-                cursor.execute("DELETE FROM Entreprise")
-                cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Ville")
-                cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-                cursor.execute("DELETE FROM Region")
-                cursor.execute("ALTER TABLE Region AUTO_INCREMENT = 1;")
-                conn.commit()
-                console.print("Toutes les données des tables 'Entreprise', 'Ville' et 'Region' ont été supprimées", style="bold green")
-            else:
-                console.print("Suppression annulée", style="bold yellow")
-        elif table == 'Ville':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            cursor.execute("DELETE FROM Ville")
-            cursor.execute("ALTER TABLE Ville AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données des tables 'Entreprise' et 'Ville' ont été supprimées", style="bold green")
-        elif table == 'Entreprise':
-            cursor.execute("DELETE FROM Entreprise")
-            cursor.execute("ALTER TABLE Entreprise AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Secteur':
-            cursor.execute("DELETE FROM Secteur")
-            cursor.execute("ALTER TABLE Secteur AUTO_INCREMENT = 1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Competence':
-            cursor.execute("DELETE FROM Competence")
-            cursor.execute("ALTER TABLE Competence AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        elif table == 'Role':
-            cursor.execute("DELETE FROM Role")
-            cursor.execute("ALTER TABLE Role AUTO_INCREMENT=1;")
-            conn.commit()
-            console.print(f"Toutes les données de la table {table} ont été supprimées", style="bold green")
-        else:
-            console.print(f"Table inconnue: {table}", style="bold red")
-    except Error as e:
-        conn.rollback()
-        console.print(f"Erreur suppression: {e}", style="bold red")
-
-def count_elements():
-    """Compte le nombre d'éléments dans chaque table"""
-    try:
-        cursor.execute("SELECT COUNT(*) FROM Region")
-        region_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Ville")
-        ville_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Entreprise")
-        entreprise_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Secteur")
-        secteur_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Competence")
-        competence_count = cursor.fetchone()[0]
-        cursor.execute("SELECT COUNT(*) FROM Role")
-        role_count = cursor.fetchone()[0]
-        return region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count
-    except Error as e:
-        print(f"Erreur comptage: {e}")
-        return 0, 0, 0, 0, 0, 0
-
-def menu():
-    """Affiche le menu et gère les choix de l'utilisateur"""
-    while True:
-        region_count, ville_count, entreprise_count, secteur_count, competence_count, role_count = count_elements()
-        
-        table = Table(title="MENU")
-        table.add_column("Option", justify="center", style="cyan", no_wrap=True)
-        table.add_column("Description", justify="center", style="magenta")
-        
-        table.add_row("1", "Ajouter des éléments")
-        table.add_row("2", "Supprimer des éléments")
-        table.add_row("3", "Quitter")
-        
-        console.print(table)
-        
-        console.print(f"Nombre de régions: {region_count}", style="bold green")
-        console.print(f"Nombre de villes: {ville_count}", style="bold green")
-        console.print(f"Nombre d'entreprises: {entreprise_count}", style="bold green")
-        console.print(f"Nombre de secteurs: {secteur_count}", style="bold green")
-        console.print(f"Nombre de compétences: {competence_count}", style="bold green")
-        console.print(f"Nombre de rôles: {role_count}", style="bold green")
-        
-        choice = Prompt.ask("Choisissez une option (1-3)")
-        
-        if choice == '1':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à importer (séparées par des virgules)").split(',')
-            for table in tables:
-                table = table.strip()
-            if table == 'Toutes':
-                for t in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                    import_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                import_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '2':
-            console.print("\nTables disponibles: Region, Ville, Entreprise, Secteur, Competence, Role, Toutes", style="bold blue")
-            tables = Prompt.ask("Choisissez les tables à supprimer (séparées par des virgules)").split(',')
-            for table in tables:
-                table.strip()
-            if table == 'Toutes':
-                for t in ['Entreprise', 'Ville', 'Region', 'Secteur', 'Competence', 'Role']:
-                    delete_data(t)
-            elif table in ['Region', 'Ville', 'Entreprise', 'Secteur', 'Competence', 'Role']:
-                delete_data(table)
-            else:
-                console.print(f"Table invalide: {table}, veuillez réessayer.", style="bold red")
-        elif choice == '3':
-            console.print("Au revoir!", style="bold yellow")
-            break
-        else:
-            console.print("Choix invalide, veuillez réessayer.", style="bold red")
 
 def delete_data(table):
     """Supprime les données des tables"""
