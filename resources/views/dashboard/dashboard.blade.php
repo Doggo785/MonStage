@@ -8,9 +8,19 @@
         <center><h1>Espace Pilote</h1></center>
         <div class="container_compte">
             <div class="compte">
-                <img src="{{ asset('assets/') }}" alt="Avatar" class="photo_compte">
+                <!-- Display the profile picture -->
+                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
+
+                <!-- Form to upload a new profile picture -->
+                <form action="{{ route('profile.update_picture') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <label for="profile_picture">Changer la photo de profil :</label><br>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required><br><br>
+                    <button type="submit" class="btn1">Mettre à jour</button>
+                </form>
             </div>
             <div class="whishlist">
                 <h2>Élèves</h2>
@@ -35,10 +45,19 @@
         <center><h1>Espace Étudiant</h1></center>
         <div class="container_compte">
             <div class="compte">
-                <img src="{{ asset('assets/') }}" alt="Avatar" class="photo_compte">
+                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
                 <h4>Statut : En attente</h4>
+
+                <!-- Form to upload a new profile picture -->
+                <form action="{{ route('profile.update_picture') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <label for="profile_picture">Changer la photo de profil :</label><br>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required><br><br>
+                    <button type="submit" class="btn1">Mettre à jour</button>
+                </form>
             </div>
             <div class="whishlist">
                 <h2>Whishlist</h2>
@@ -73,9 +92,18 @@
         <center><h1>Espace Administrateur</h1></center>
         <div class="container_compte">
             <div class="compte">
-                <img src="{{ asset('assets/') }}" alt="Avatar" class="photo_compte">
+                <img src="{{ Auth::user()->profile_picture ? asset('storage/' . Auth::user()->profile_picture) : asset('assets/default-avatar.png') }}" 
+                     alt="Avatar" class="photo_compte">
                 <h3>{{ Auth::user()->name }}</h3>
                 <h4>{{ Auth::user()->email }}</h4>
+
+                <!-- Form to upload a new profile picture -->
+                <form action="{{ route('profile.update_picture') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <label for="profile_picture">Changer la photo de profil :</label><br>
+                    <input type="file" id="profile_picture" name="profile_picture" accept="image/*" required><br><br>
+                    <button type="submit" class="btn1">Mettre à jour</button>
+                </form>
             </div>
             <div class="admin-actions">
                 <h2>Actions Administrateur</h2>

@@ -12,6 +12,8 @@ use App\Models\Secteur;
 use App\Models\Region;
 use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
+use App\Http\Controllers\ProfileController;
+
 // Liste de toutes les offres avec tous leurs attributs
 Route::get('/', function (Request $request) {
     $query = Offre::query();
@@ -170,3 +172,5 @@ Route::get('/competences/search', function (Request $request) {
     $competences = App\Models\Competence::where('Libelle', 'LIKE', "%{$query}%")->get();
     return response()->json($competences);
 });
+
+Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture'])->name('profile.update_picture')->middleware('auth');

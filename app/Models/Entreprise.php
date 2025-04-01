@@ -40,6 +40,7 @@ class Entreprise extends Model
         'Site',
         'Description',
         'ID_Ville',
+        'pfp_path',
     ];
 
     // Relation avec le modèle Ville

@@ -44,6 +44,7 @@ class User extends Authenticatable
         'Telephone',
         'Password',
         'ID_Role',
+        'pfp_path',
     ];
 
     /**
