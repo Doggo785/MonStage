@@ -71,6 +71,7 @@
                 </div>
             </div>
         </div>
+
     @elseif (Auth::user()->role->Libelle === 'Etudiant')
         <center><h1>Espace Étudiant</h1></center>
         <div class="container_compte">
@@ -157,6 +158,7 @@
                 <br>
             </div>
         </div>
+        
     @elseif (Auth::user()->role->Libelle === 'Administrateur')
         <center><h1>Espace Administrateur</h1></center>
         <div class="container_compte">

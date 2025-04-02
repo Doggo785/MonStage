@@ -1014,7 +1014,7 @@ input[type=file]::file-selector-button:hover {
     background-color: orangered;
     padding: 12px 25px;
     border-radius: 30px;
-    border: none;
+    border: 2px solid orangered;
     font-size: 1em;
     text-decoration: none;
     color: white;
@@ -1326,4 +1326,32 @@ input[type=file]::file-selector-button:hover {
 /* Espacement entre les sections */
 .mentions-legales .section:last-child {
     margin-bottom: 0;
+}
+
+.card_compte {
+  position: relative; /* Nécessaire pour positionner le point vert ou d'autres éléments relatifs */
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  height: auto; /* Ajuste automatiquement la hauteur */
+  min-height: 50px; /* Définit une hauteur minimale */
+}
+
+/* Effet au survol */
+.card_compte:hover {
+  transform: scale(1.05); /* Agrandir légèrement la carte */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Accentuer l'ombre */
+}
+
+.icon_compte{
+  float : right;
+  margin-top: -40px;
+}
+
+.button_right{
+  float : right;
+  margin-top: -50px;
 }
