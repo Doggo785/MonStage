@@ -48,4 +48,10 @@ class Entreprise extends Model
     {
         return $this->belongsTo(Ville::class, 'ID_Ville', 'ID_Ville');
     }
+
+    // Relation avec le modèle Avis
+    public function avis()
+    {
+        return $this->hasMany(Avis::class, 'ID_Entreprise', 'ID_Entreprise');
+    }
 }
