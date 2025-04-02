@@ -126,4 +126,5 @@
         document.getElementById(`profile_picture_${entrepriseId}`).click();
     }
 </script>
+<script src={{ asset('js/cards.js') }}></script>
 @endsection

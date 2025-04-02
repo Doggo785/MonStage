@@ -1,22 +1,47 @@
 @extends('layout')
 
-@section('title', 'Accueil')
+@section('title', 'Liste des Offres')
 
 @section('content')
 <section>
-   <center>
-      <h1>Bienvenue sur Mon Stage</h1>
-      <p>Découvrez les dernières opportunités de stage sélectionnées pour vous. Pour explorer l'ensemble des offres, cliquez sur le bouton ci-dessous.</p>
-   </center>
+   <center><h1>Ton stage, à portée de main !</h1></center>
+   <div class="input-icons">
+      <form class="search-container" action="{{ route('offres.index') }}" method="GET">
+         <i class="fa-solid fa-magnifying-glass"></i>
+         <input type="text" name="search" class="search-input" placeholder="Rechercher par entreprise, ville ou titre..." value="{{ request('search') }}">
+         
+         <!-- Filtre par entreprise -->
+         <select name="entreprise" class="search-input filter-button">
+            <option value="">Toutes les entreprises</option>
+            @foreach ($entreprises as $entreprise)
+                <option value="{{ $entreprise->ID_Entreprise }}" {{ request('entreprise') == $entreprise->ID_Entreprise ? 'selected' : '' }}>
+                    {{ $entreprise->Nom }}
+                </option>
+            @endforeach
+         </select>
 
-   @php
-      // On suppose que $offres est une collection triée par date ascendante.
-      // On récupère les 4 dernières annonces tout en préservant leur ordre chronologique.
-      $lastOffres = $offres->reverse()->take(4)->reverse();
-   @endphp
+         <!-- Filtre par région -->
+         <select name="region" class="search-input filter-button">
+            <option value="">Toutes les régions</option>
+            @foreach ($regions as $region)
+                <option value="{{ $region->ID_Region }}" {{ request('region') == $region->ID_Region ? 'selected' : '' }}>
+                    {{ $region->Nom }}
+                </option>
+            @endforeach
+         </select>
+
+         <button type="submit" class="search-button">Rechercher</button>
+      </form>
+   </div>
+
+   @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
+      <div style="text-align: right; margin: 20px;">
+         <a href="{{ route('offres.create') }}" class="btn1 btn-primary">Créer une Offre</a>
+      </div>
+   @endif
 
    <div class="container_offre">
-      @foreach ($lastOffres as $offre)
+      @foreach ($offres as $offre)
          @if ($offre->Etat == 1 || (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
             <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">
                <div class="card {{ $offre->Etat == 0 ? 'expired' : '' }}">
@@ -46,10 +71,6 @@
             </a>
          @endif
       @endforeach
-   </div>
-
-   <div style="text-align: center; margin: 20px;">
-      <a href="{{ route('offres.index') }}" class="btn1 btn-primary">Voir toutes les offres</a>
    </div>
 </section>
 @endsection
