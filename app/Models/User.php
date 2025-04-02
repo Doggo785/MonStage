@@ -44,6 +44,7 @@ class User extends Authenticatable
         'Telephone',
         'Password',
         'ID_Role',
+        'pfp_path',
     ];
 
     /**
@@ -65,6 +66,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'pfp_path' => 'string',
         ];
     }
 
@@ -77,6 +79,16 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'ID_Role');
+    }
+
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'ID_User', 'ID_User');
+    }
+
+    public function avis()
+    {
+        return $this->hasMany(Avis::class, 'ID_User', 'ID_User');
     }
 
     public function getAuthPassword()

@@ -53,7 +53,7 @@ class OffreController extends Controller
         $entreprises = Entreprise::all();
         $regions = Region::all();
 
-        return view('index', compact('offres', 'entreprises', 'regions'));
+        return view('offres.index', compact('offres', 'entreprises', 'regions'));
     }
 
     // Créer une nouvelle offre (formulaire)

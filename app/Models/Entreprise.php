@@ -40,11 +40,18 @@ class Entreprise extends Model
         'Site',
         'Description',
         'ID_Ville',
+        'pfp_path',
     ];
 
     // Relation avec le modèle Ville
     public function ville()
     {
         return $this->belongsTo(Ville::class, 'ID_Ville', 'ID_Ville');
+    }
+
+    // Relation avec le modèle Avis
+    public function avis()
+    {
+        return $this->hasMany(Avis::class, 'ID_Entreprise', 'ID_Entreprise');
     }
 }

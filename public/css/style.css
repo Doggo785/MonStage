@@ -127,7 +127,7 @@ h1,h2,h3,h4{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     min-width: 150px;
-    padding: 10px 0;
+    padding: 5px 0;
     border-radius: 4px;
 }
 
@@ -168,6 +168,7 @@ h1,h2,h3,h4{
   font-size: 1em; /* Augmente la taille du texte */
   border-radius: 20px;
   border: 2px solid #ccc;
+  background-color: #ffffff;
   width: 400px;
   margin: auto;
   display: inline-block;
@@ -180,7 +181,7 @@ h1,h2,h3,h4{
   border-radius: 20px;
   font-size: 1em;
   border: 2px solid #ccc;
-  background-color: #F1F1F1;
+  background-color: #ffffff;
   color: #333;
   cursor: pointer;
   transition: background-color 0.3s;
@@ -228,7 +229,7 @@ h1,h2,h3,h4{
   color : #3b3b3b;
   cursor: pointer;
   transition-duration: 0.3s;
-  margin: auto;
+  margin-left: 5px;
   display: inline-block;
   font-size: 15px;
   font-family: "Century Gothic", sans-serif;
@@ -791,4 +792,334 @@ input[type=file]::file-selector-button:hover {
     cursor: pointer;
     font-size: 12px;
     line-height: 1;
+}
+
+.profile-container {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+
+.profile-picture-wrapper {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    margin: 0 auto;
+}
+
+.profile-picture {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: 0.3s ease-in-out;
+}
+
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+    opacity: 0;
+    transition: 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.profile-picture-wrapper:hover .profile-picture {
+    filter: grayscale(50%);
+}
+
+.profile-picture-wrapper:hover .edit-overlay {
+    opacity: 1;
+}
+
+.user-info {
+    text-align: center;
+    margin-top: 15px;
+    font-family: Arial, sans-serif;
+}
+
+/* Nom de l'utilisateur */
+.user-name h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Email de l'utilisateur */
+.user-email h4,
+.user-phone h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 5px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Icônes */
+.user-email h4 i,
+.user-phone h4 i {
+    margin-right: 8px;
+    color: #ff4500;
+}
+
+/* Espacement entre les sections */
+.user-info div {
+    margin-bottom: 10px;
+}
+
+.user-info h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.user-info h4 {
+    font-size: 16px;
+    color: #555;
+    margin: 3px 0;
+}
+
+.wishlist-added {
+    background-color: green; /* Couleur de fond verte */
+    color: white; /* Texte blanc */
+    border: 2px solid darkgreen; /* Bordure verte foncée */
+    cursor: not-allowed; /* Curseur désactivé */
+    position: absolute; /* Position absolue pour le placer dans la carte */
+    bottom: 10px; /* Distance du bas de la carte */
+    right: 10px; /* Distance du côté droit de la carte */
+    padding: 10px 15px; /* Taille du bouton */
+    border-radius: 20px; /* Coins arrondis */
+    font-size: 14px; /* Taille du texte */
+}
+
+.wishlist-added:hover {
+    background-color: darkgreen; /* Couleur plus foncée au survol */
+    border-color: green;
+}
+
+.btn-add-to-wishlist {
+    background-color: #ff4500; /* Couleur de fond orange */
+    color: white; /* Texte blanc */
+    border: 2px solid orangered; /* Bordure orange */
+    cursor: pointer; /* Curseur cliquable */
+    position: absolute; /* Position absolue pour le placer dans la carte */
+    bottom: 10px; /* Distance du bas de la carte */
+    right: 10px; /* Distance du côté droit de la carte */
+    padding: 10px 15px; /* Taille du bouton */
+    border-radius: 20px; /* Coins arrondis */
+    font-size: 14px; /* Taille du texte */
+    transition: background-color 0.3s, color 0.3s; /* Transition pour un effet fluide */
+}
+
+.btn-add-to-wishlist:hover {
+    background-color: white; /* Couleur de fond blanche au survol */
+    color: orangered; /* Texte orange au survol */
+    border-color: orangered; /* Bordure orange au survol */
+}
+
+.container_offre_show{
+  display: grid;
+  grid-template-areas:
+  "content_vide content_offre content_entreprise "
+  "content_vide content_offre content_postuler ";
+  grid-template-columns: 0.2fr 2.5fr 1fr 0.2fr;
+  grid-template-rows: 0.7fr 1fr;
+  gap: 20px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.container_offre_show > div.content_offre {
+  grid-area: content_offre;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.container_offre_show > div.content_entreprise {
+  grid-area: content_entreprise;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.container_offre_show > div.content_postuler {
+  grid-area: content_postuler;
+  justify-items: center;
+}
+.container_offre_show > div.content_vide {
+  grid-area: content_vide;
+}
+
+
+/* --- Hero Section --- */
+.hero {
+    position: relative;
+    display: flex;
+    height : 40vh;
+    width: 60%;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin-bottom: 40px;
+    z-index: 1; /* Assurez-vous que c'est inférieur au menu */
+    overflow: visible;
+}
+
+.hero-content {
+    position: absolute;
+    z-index: 1;
+    max-width: 800px;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    font-family: "Oswald", sans-serif;
+}
+
+.hero-content p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+/* Bouton principal */
+.btn-primary {
+    background-color: orangered;
+    padding: 12px 25px;
+    border-radius: 30px;
+    border: none;
+    font-size: 1em;
+    text-decoration: none;
+    color: white;
+    transition:0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #ffffff;
+    border: 2px solid orangered;
+    color : orangered
+}
+
+/* --- Recent Offers Section --- */
+.recent-offers {
+    padding: 20px;
+    padding-bottom: 80px;   
+    background-color: #fff;
+}
+
+.recent-offers h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2em;
+    color: #333;
+}
+
+/* --- About Section --- */
+.about {
+    background-color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.about h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.about-details {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.about-details .detail {
+    flex: 1 1 300px;
+    padding: 20px;
+    background-color: #f8f8f8;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+.about-details .detail i {
+    font-size: 2em;
+    margin-bottom: 10px;
+    color: orangered;
+}
+
+/* --- Grille responsive pour les offres sur la page d'accueil --- */
+.index_container_offre {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 0 20px;
+  color: black !important;
+
+}
+
+.index_container_offre, 
+.index_container_offre * {
+  color: black !important;
+}
+
+/* Désactiver le soulignement des liens dans les offres */
+.index_container_offre a {
+  text-decoration: none; /* Supprime le soulignement */
+}
+
+/* Empêcher le soulignement au survol */
+.index_container_offre a:hover {
+  text-decoration: none; /* Assure qu'il n'y a pas de soulignement au survol */
+}
+
+/* Style des cartes d'offre */
+.index_card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Effet de survol sur les cartes */
+.index_card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+/* Notification de succès */
+.notification-success {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745; /* Vert pour le succès */
+    color: white;
+    padding: 15px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+    z-index: 1000;
+    opacity: 0.85;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.notification-success.hide {
+    opacity: 0;
+    pointer-events: none;
 }
