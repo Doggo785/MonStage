@@ -97,4 +97,19 @@ class EntrepriseController extends Controller
         // Redirection avec un message de succès
         return redirect()->route('entreprises.index')->with('success', 'Entreprise ajoutée avec succès.');
     }
+
+    public function destroy($id)
+    {
+        $entreprise = Entreprise::findOrFail($id);
+
+        // Supprimer l'image associée si elle existe
+        if ($entreprise->pfp_path && Storage::disk('public')->exists($entreprise->pfp_path)) {
+            Storage::disk('public')->delete($entreprise->pfp_path);
+        }
+
+        // Supprimer l'entreprise
+        $entreprise->delete();
+
+        return redirect()->route('entreprises.index')->with('success', 'Entreprise supprimée avec succès.');
+    }
 }

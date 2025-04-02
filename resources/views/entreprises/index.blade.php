@@ -89,6 +89,14 @@
                             <a href="{{ route('offres.index', ['entreprise' => $entreprise->ID_Entreprise]) }}">
                                 <button class="modal__button">Voir leurs offres</button>
                             </a>
+                            <!-- Bouton de suppression -->
+                            <form action="{{ route('entreprises.destroy', $entreprise->ID_Entreprise) }}" method="POST" style="display: inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="modal__button modal__button--delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')">
+                                    Supprimer
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
