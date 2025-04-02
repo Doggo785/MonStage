@@ -53,23 +53,32 @@
                 </div>
             </div>
             <div class="whishlist">
-                <h2>Élèves</h2>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Lucas TOUJAS</div>
-                        <div class="subtitle">CPI A2 Info</div>
-                    </div>
-                    <div class="star"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Raphaël TOLANDAL</div>
-                        <div class="subtitle">CPI A2 Info</div>
-                    </div>
-                    <div class="star"><i class="fa-solid fa-check"></i></div>
-                </div>
+        <h2>Gestion des élèves</h2>
+            <div class="button_right">
+                <a class="btn1">Voir tous les élèves</a>
             </div>
+            <div class="card_compte">
+                    <div class="content">
+                        <div class="title">Un evèle au pif</div>
+                        <div class="subtitle">Statut : pauvre</div>
+                    </div>
+            </div>
+        </div>
+
+        
+        <div class="offre">
+        <h2>Gestion des offres</h2>
+            <div class="button_right">
+                <a href="{{ route('offres.index') }}" class="btn1">Voir toutes les offres</a>
+            </div>
+            <div class="card_compte">
+                    <div class="content">
+                        <div class="title">Stage de ouf</div>
+                        <div class="subtitle">en france j'espère</div>
+                    </div>
+            </div>
+        </div>
+
         </div>
 
     @elseif (Auth::user()->role->Libelle === 'Etudiant')
@@ -206,6 +215,8 @@
                     <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
                 </ul>
             </div>
+        </div>
+
         </div>
     @else
         <center><h1>Accès refusé</h1></center>
