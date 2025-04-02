@@ -15,6 +15,7 @@ use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\UserController;
 
 // Liste de toutes les offres avec tous leurs attributs
 Route::get('/', function (Request $request) {
@@ -159,3 +160,14 @@ Route::group(['prefix'=> 'wishlist', 'middleware' => [CheckStudent::class]], fun
     Route::post('/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
+
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+
+Route::middleware([CheckAdmin::class])->prefix('users')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
+    Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
+    Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
+});
+
