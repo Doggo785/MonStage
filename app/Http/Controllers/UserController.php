@@ -156,4 +156,22 @@ class UserController extends Controller
 
         return view('dashboard.users.show', compact('user'));
     }
+
+    public function showResetPasswordForm()
+    {
+        return view('auth.reset-password');
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user = auth()->user();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        return redirect()->route('home')->with('success', 'Votre mot de passe a été mis à jour avec succès.');
+    }
 }

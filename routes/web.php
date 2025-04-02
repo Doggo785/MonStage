@@ -69,6 +69,12 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
+
+        // Vérifie si le mot de passe est encore le mot de passe par défaut
+        if (Hash::check('DefaultPassword!', Auth::user()->Password)) {
+            return redirect()->route('password.reset.prompt');
+        }
+
         return redirect()->intended('/dashboard'); // Redirige vers le tableau de bord
     }
 
@@ -84,6 +90,9 @@ Route::post('/logout', function (Request $request) {
 
     return redirect('/login'); // Redirige vers la page de connexion
 })->name('logout');
+
+Route::get('/password/reset', [UserController::class, 'showResetPasswordForm'])->name('password.reset.prompt');
+Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.reset');
 
 Route::group(['prefix' => '/dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', function () {
