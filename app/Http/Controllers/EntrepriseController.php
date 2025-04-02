@@ -98,6 +98,46 @@ class EntrepriseController extends Controller
         return redirect()->route('entreprises.index')->with('success', 'Entreprise ajoutée avec succès.');
     }
 
+    public function update(Request $request, $id)
+    {
+        $entreprise = Entreprise::findOrFail($id);
+
+        // Validation des données
+        $validatedData = $request->validate([
+            'Nom' => 'required|string|max:255',
+            'Ville' => 'required|exists:Ville,ID_Ville',
+            'Telephone' => 'required|string|max:20',
+            'Email' => 'required|email|max:255',
+            'Site' => 'nullable|url|max:255',
+            'Description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Gestion de l'image
+        if ($request->hasFile('image')) {
+            // Supprimer l'ancienne image si elle existe
+            if ($entreprise->pfp_path && Storage::disk('public')->exists($entreprise->pfp_path)) {
+                Storage::disk('public')->delete($entreprise->pfp_path);
+            }
+
+            // Stocker la nouvelle image
+            $imagePath = $request->file('image')->store('entreprises', 'public');
+            $entreprise->pfp_path = $imagePath;
+        }
+
+        // Mise à jour des données (correction ici : utiliser "ID_Ville" au lieu de "Ville_id")
+        $entreprise->update([
+            'Nom' => $validatedData['Nom'],
+            'ID_Ville' => $validatedData['Ville'],
+            'Telephone' => $validatedData['Telephone'],
+            'Email' => $validatedData['Email'],
+            'Site' => $validatedData['Site'],
+            'Description' => $validatedData['Description'],
+        ]);
+
+        return redirect()->route('entreprises.index')->with('success', 'Entreprise mise à jour avec succès.');
+    }
+
     public function destroy($id)
     {
         $entreprise = Entreprise::findOrFail($id);

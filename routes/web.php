@@ -149,7 +149,8 @@ Route::group(['prefix'=> 'entreprises'], function () {
     Route::put('/{id}/update-picture', [EntrepriseController::class, 'updatePicture'])->name('entreprises.update_picture');
     Route::get('/search', [EntrepriseController::class, 'search'])->name('entreprises.search');
     Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store');
-    Route::delete('/entreprises/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy');
+    Route::delete('/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy');
+    Route::put('/{id}', [EntrepriseController::class, 'update'])->name('entreprises.update');
 });
 
 Route::middleware(['auth'])->group(function () {
