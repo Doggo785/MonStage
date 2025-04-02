@@ -3,15 +3,16 @@
 @section('title', 'Accueil')
 
 @section('content')
-<section class="hero">
+<section>
+<center><div class="hero">
    <div class="hero-content">
       <h1 class="animated-title">Bienvenue sur Mon Stage</h1>
       <p>Découvrez des opportunités de stage sélectionnées spécialement pour vous et rejoignez notre communauté pour booster votre carrière.</p>
-      <a href="{{ route('offres.index') }}" class="btn1 btn-primary">Voir toutes les offres</a>
+      <a href="{{ route('offres.index') }}" class="btn-primary">Voir toutes les offres</a>
    </div>
-</section>
+</div></center>
 
-<section class="recent-offers">
+<div class="recent-offers">
    <h2>Nos dernières offres</h2>
    @php
       // Filtrer et trier les offres valides par date décroissante
@@ -62,9 +63,9 @@
          </a>
       @endforeach
    </div>
-</section>
+</div>
 
-<section class="about">
+<div class="about">
    <h2>À propos de Mon Stage</h2>
    <p>Mon Stage est une plateforme dédiée à la recherche et à la gestion de stages pour étudiants et entreprises. Nous mettons en relation des talents avec des entreprises innovantes pour créer des opportunités de collaboration stimulantes.</p>
    <div class="about-details">
@@ -84,5 +85,6 @@
          <p>Nous collaborons avec des entreprises reconnues pour offrir des stages formateurs et enrichissants.</p>
       </div>
    </div>
+</div>
 </section>
 @endsection
