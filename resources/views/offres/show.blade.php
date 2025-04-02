@@ -60,7 +60,14 @@
             <div>
             <h3 class="card__name">{{ $offre->entreprise->Nom }}</h3>
                 <span class="card__price">{{ ucfirst($offre->entreprise->ville->Nom) }} | {{ $offre->entreprise->ville->CP }}</span><br>
-                <span class="card__price">{{ $offre->entreprise->Note ?? 'Non notée' }}</span>
+                <span class="card__price">
+                    @if ($offre->entreprise->avis->avg('Note'))
+                        {{ number_format($offre->entreprise->avis->avg('Note'), 1) }} / 5 
+                        <i class="fa-solid fa-star" style="color: gold;"></i>
+                    @else
+                        Non notée
+                    @endif
+                </span>
             </div>
         </div>
         <div class="vide"></div>
