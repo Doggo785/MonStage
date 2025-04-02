@@ -40,9 +40,9 @@ class Offre extends Model
 {
     use HasFactory;
 
-    protected $table = 'Offre'; // Nom correct de la table
-    protected $primaryKey = 'ID_Offre';
-    public $timestamps = false;
+    protected $table = 'Offre'; // Nom exact de la table
+    protected $primaryKey = 'ID_Offre'; // Clé primaire
+    public $timestamps = false; // Désactive les colonnes created_at et updated_at
 
     protected $fillable = [
         'Titre',

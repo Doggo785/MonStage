@@ -15,6 +15,7 @@
                 </button>
                 <div class="dropdown-menu">
                    <a href="{{ url('/dashboard') }}" class="dropdown-item">Dashboard</a>
+                   <a href="{{ route('wishlist.index') }}" class="dropdown-item">Ma Wishlist</a> <!-- Lien ajouté -->
                    <a href="{{ route('logout') }}" class="dropdown-item"
                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                       Déconnexion

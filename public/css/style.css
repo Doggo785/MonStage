@@ -888,3 +888,41 @@ input[type=file]::file-selector-button:hover {
     color: #555;
     margin: 3px 0;
 }
+
+.wishlist-added {
+    background-color: green; /* Couleur de fond verte */
+    color: white; /* Texte blanc */
+    border: 2px solid darkgreen; /* Bordure verte foncée */
+    cursor: not-allowed; /* Curseur désactivé */
+    position: absolute; /* Position absolue pour le placer dans la carte */
+    bottom: 10px; /* Distance du bas de la carte */
+    right: 10px; /* Distance du côté droit de la carte */
+    padding: 10px 15px; /* Taille du bouton */
+    border-radius: 20px; /* Coins arrondis */
+    font-size: 14px; /* Taille du texte */
+}
+
+.wishlist-added:hover {
+    background-color: darkgreen; /* Couleur plus foncée au survol */
+    border-color: green;
+}
+
+.btn-add-to-wishlist {
+    background-color: #ff4500; /* Couleur de fond orange */
+    color: white; /* Texte blanc */
+    border: 2px solid orangered; /* Bordure orange */
+    cursor: pointer; /* Curseur cliquable */
+    position: absolute; /* Position absolue pour le placer dans la carte */
+    bottom: 10px; /* Distance du bas de la carte */
+    right: 10px; /* Distance du côté droit de la carte */
+    padding: 10px 15px; /* Taille du bouton */
+    border-radius: 20px; /* Coins arrondis */
+    font-size: 14px; /* Taille du texte */
+    transition: background-color 0.3s, color 0.3s; /* Transition pour un effet fluide */
+}
+
+.btn-add-to-wishlist:hover {
+    background-color: white; /* Couleur de fond blanche au survol */
+    color: orangered; /* Texte orange au survol */
+    border-color: orangered; /* Bordure orange au survol */
+}

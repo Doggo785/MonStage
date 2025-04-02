@@ -43,6 +43,9 @@
    <div class="container_offre">
       @foreach ($offres as $offre)
          @if ($offre->Etat == 1 || (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
+            @php
+                $inWishlist = auth()->check() && \App\Models\Wishlist::where('ID_User', auth()->id())->where('ID_Offre', $offre->ID_Offre)->exists();
+            @endphp
             <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">
                <div class="card {{ $offre->Etat == 0 ? 'expired' : '' }}">
                   @if ($offre->Etat == 0)
@@ -67,6 +70,15 @@
                         <p>Aucune compétence spécifiée.</p>
                      @endif
                   </div>
+                  @if ($inWishlist)
+                     <button class="btn1 wishlist-added" disabled><i class="fa-solid fa-circle-check"></i></button>
+                  @else
+                     <form action="{{ route('wishlist.add') }}" method="POST" style="display:inline;">
+                        @csrf
+                        <input type="hidden" name="offre_id" value="{{ $offre->ID_Offre }}">
+                        <button type="submit" class="btn1 btn-add-to-wishlist">+</button>
+                     </form>
+                  @endif
                </div>
             </a>
          @endif
