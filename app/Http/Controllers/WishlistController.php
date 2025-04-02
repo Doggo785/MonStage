@@ -10,7 +10,7 @@ class WishlistController extends Controller
     public function index()
     {
         $wishlists = Wishlist::where('ID_User', auth()->id())->with('offre')->get();
-        return view('dashboard.wishlist.index', compact('index.wishlists'));
+        return view('dashboard.wishlist.index', compact('wishlists'));
     }
 
     public function add(Request $request)

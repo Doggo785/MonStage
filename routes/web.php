@@ -85,24 +85,24 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login'); // Redirige vers la page de connexion
 })->name('logout');
 
-Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
+Route::group(['prefix' => '/dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('dashboard.dashboard');
     });
 
+    // Routes pour la wishlist
     Route::get('/wishlist', [WishlistController::class, 'index'])->name('dashboard.wishlist.index')->middleware(CheckStudent::class);
+    Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+    // Routes pour les utilisateurs
+    Route::group(['prefix' => 'users', 'middleware' => [CheckAdminOrPilote::class]], function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
+        Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
+        Route::post('/store', [UserController::class, 'store'])->name('users.store'); // Ajouter un utilisateur
+    });
 });
-
-
-Route::group(['prefix' => 'dashboard/users', 'middleware' => [CheckAdminOrPilote::class]], function () {
-    Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
-    Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
-    Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
-});
-
-
 
 // Routes pour les offres
 Route::prefix('offres')->group(function () {
