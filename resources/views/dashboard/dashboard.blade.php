@@ -64,6 +64,7 @@
                 </div>
             </div>
         </div>
+
     @elseif (Auth::user()->role->Libelle === 'Etudiant')
         <center><h1>Espace Étudiant</h1></center>
         <div class="container_compte">
@@ -107,33 +108,40 @@
             </div>
             <div class="whishlist">
                 <h2>Whishlist</h2>
-                <div class="card">
+                <div class="button_right">
+                    <a class="btn1">Voir la Wishlist</a>
+                </div>
+                <div class="card_compte">
                     <div class="content">
                         <div class="title">Stage - Developer</div>
                         <div class="subtitle">TOTAL | PAU 64000</div>
+                        <div class="icon_compte"><i class="fa-regular fa-star"></i></div>
                     </div>
-                    <div class="star"><i class="fa-regular fa-star"></i></div>
                 </div>
                 <br>
-                <div class="card">
+                <div class="card_compte">
                     <div class="content">
                         <div class="title">Stage - Data Management</div>
                         <div class="subtitle">LIDL | PAU 64000</div>
                     </div>
-                    <div class="star"><i class="fa-regular fa-star"></i></div>
+                    <div class="icon_compte"><i class="fa-regular fa-star"></i></div>
                 </div>
             </div>
             <div class="offre">
                 <h2>Candidature</h2>
-                <div class="card">
+                <div div class="button_right">
+                    <a class="btn1">Voir les candidatures</a>
+                </div>
+                <div class="card_compte">
                     <div class="content">
                         <div class="title">Stage - Administrateur Système</div>
                         <div class="subtitle">SAFRAN | BORDES 64510</div>
                     </div>
-                    <div class="icon_bloc"><i class="fa-solid fa-xmark"></i></div>
+                    <div class="icon_compte"><i class="fa-solid fa-xmark"></i></div>
                 </div>
             </div>
         </div>
+        
     @elseif (Auth::user()->role->Libelle === 'Administrateur')
         <center><h1>Espace Administrateur</h1></center>
         <div class="container_compte">
