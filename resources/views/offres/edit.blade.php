@@ -4,8 +4,12 @@
 
 @section('content')
 <main>
-    <div class="background_image"></div>
-    <section style="margin-left: 20px; margin-right: 20px;">
+<section>
+    <div class="container_offre_show">
+    <div class="vide"></div>
+    
+    <div class="content_offre">
+    
         <h1>Modifier une Offre de Stage</h1>
         <p class="ptit-texte">
             Modifiez les informations ci-dessous pour mettre à jour l'offre de stage.
@@ -82,11 +86,12 @@
                 <br><br>
 
                 <div class="submit-button">
-                    <button type="submit" class="btn2">Mettre à jour l'Offre</button>
+                    <button type="submit" class="btn2" style="float: right;">Mettre à jour l'Offre</button>
                 </div>
             </form>
         </article>
         <br>
+</div> </div>
     </section>
     <script src="//cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
     <script>
