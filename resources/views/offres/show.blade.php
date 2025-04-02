@@ -3,9 +3,12 @@
 @section('title', 'MonStage - ' . $offre->Titre)
 
 @section('content')
-<main>
-    <div class="background_image"></div>
-    <section style="margin-left: 20px; margin-right: 20px;">
+
+<section >
+<div class="container_offre_show">
+    <div class="vide"></div>
+    
+    <div class="content_offre">
         <h1>{{ $offre->Titre }}</h1>
         <p class="ptit-texte">
             {{ $offre->entreprise->Nom ?? 'Entreprise inconnue' }} | 
@@ -45,6 +48,24 @@
             <p>
                 - {{ $offre->entreprise->Description ?? 'Aucun avantage spécifié.' }}
             </p>
+        </article>
+    </div>	
+
+        <div class="content_entreprise">
+            <div class="profile-picture-wrapper">
+                    <img id="profile-picture-{{ $offre->entreprise->ID_Entreprise }}" 
+                    src="{{ $offre->entreprise->pfp_path ? asset('storage/' . $offre->entreprise->pfp_path) : asset('assets/default-company.png') }}" 
+                    alt="Logo de {{ $offre->entreprise->Nom }}" class="card__img profile-picture">
+                </div>
+            <div>
+            <h3 class="card__name">{{ $offre->entreprise->Nom }}</h3>
+                <span class="card__price">{{ ucfirst($offre->entreprise->ville->Nom) }} | {{ $offre->entreprise->ville->CP }}</span><br>
+                <span class="card__price">{{ $offre->entreprise->Note ?? 'Non notée' }}</span>
+            </div>
+        </div>
+        <div class="vide"></div>
+        <div class="vide"></div>
+        <div class="content_postuler">
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
                 @if (Auth::check() && Auth::user()->role->Libelle === 'Etudiant')
@@ -62,18 +83,19 @@
 
                 <!-- Boutons Éditer et Supprimer (affichés uniquement pour les administrateurs ou pilotes) -->
                 @if (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur'))
-                    <a href="{{ route('offres.edit', ['id' => $offre->ID_Offre]) }}" class="btn2" style="background-color: #007bff; color: white; margin-left: 10px;">Éditer</a>
+                    <a href="{{ route('offres.edit', ['id' => $offre->ID_Offre]) }}" class="btn2">Éditer</a>
                     <form action="{{ route('offres.destroy', ['id' => $offre->ID_Offre]) }}" method="POST" style="display: inline;">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn2" style="background-color: #dc3545; color: white; margin-left: 10px;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')">Supprimer</button>
+                        <button type="submit" class="btn2" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?')">Supprimer</button>
                     </form>
                 @endif
             </div>
-        </article>					
-        <br>
-    </section>
-</main>
+        </div>
+</div>				
+    <br>
+</section>
+
 
 <!-- Modale pour postuler -->
 <div id="postulerModal" class="modal">

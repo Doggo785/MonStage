@@ -228,7 +228,7 @@ h1,h2,h3,h4{
   color : #3b3b3b;
   cursor: pointer;
   transition-duration: 0.3s;
-  margin: auto;
+  margin-left: 5px;
   display: inline-block;
   font-size: 15px;
   font-family: "Century Gothic", sans-serif;
@@ -887,4 +887,39 @@ input[type=file]::file-selector-button:hover {
     font-size: 16px;
     color: #555;
     margin: 3px 0;
+}
+
+.container_offre_show{
+  display: grid;
+  grid-template-areas:
+  "content_vide content_offre content_entreprise "
+  "content_vide content_offre content_postuler ";
+  grid-template-columns: 0.2fr 2.5fr 1fr 0.2fr;
+  grid-template-rows: 0.7fr 1fr;
+  gap: 20px;
+  padding: 5px;
+  margin: 10px;
+}
+
+.container_offre_show > div.content_offre {
+  grid-area: content_offre;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.container_offre_show > div.content_entreprise {
+  grid-area: content_entreprise;
+  text-align: center;
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.container_offre_show > div.content_postuler {
+  grid-area: content_postuler;
+  justify-items: center;
+}
+.container_offre_show > div.content_vide {
+  grid-area: content_vide;
 }
