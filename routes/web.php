@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EntrepriseController;
+use App\Http\Controllers\WishlistController;
 
 // Liste de toutes les offres avec tous leurs attributs
 Route::get('/', function (Request $request) {
@@ -150,4 +151,12 @@ Route::group(['prefix'=> 'entreprises'], function () {
     Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store');
     Route::delete('/entreprises/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy');
 });
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+});
+
+Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
 
