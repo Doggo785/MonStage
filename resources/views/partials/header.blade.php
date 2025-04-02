@@ -5,6 +5,7 @@
        </div>
        <div class="nav-center">
           <a href="{{ url('/') }}" class="nav-link">Accueil</a>
+          <a href="{{ url('offres') }}" class="nav-link">Offres</a>
           <a href="{{ url('entreprises') }}" class="nav-link">Entreprises</a>
        </div>
        <div class="nav-right">
