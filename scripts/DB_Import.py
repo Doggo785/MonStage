@@ -30,39 +30,39 @@ conn = mysql.connector.connect(
 cursor = conn.cursor()
 
 def create_tables():
-    """Crée les tables si elles n'existent pas"""
+    """Crée les tables si elles n'existent pas et insère des données par défaut."""
     queries = [
-        """
+        ("Role", """
         CREATE TABLE IF NOT EXISTS Role (
             ID_Role INT AUTO_INCREMENT PRIMARY KEY,
             Libelle VARCHAR(25) UNIQUE
         )
-        """,
-        """
+        """),
+        ("Secteur", """
         CREATE TABLE IF NOT EXISTS Secteur (
             ID_Secteur INT AUTO_INCREMENT PRIMARY KEY,
             Nom VARCHAR(50) NOT NULL
         )
-        """,
-        """
+        """),
+        ("Competence", """
         CREATE TABLE IF NOT EXISTS Competence (
             ID_Competence INT AUTO_INCREMENT PRIMARY KEY,
             Libelle VARCHAR(50) NOT NULL
         )
-        """,
-        """
+        """),
+        ("Statuts_Candidature", """
         CREATE TABLE IF NOT EXISTS Statuts_Candidature (
             ID_Statut INT AUTO_INCREMENT PRIMARY KEY,
             Libelle VARCHAR(50) NOT NULL
         )
-        """,
-        """
+        """),
+        ("Region", """
         CREATE TABLE IF NOT EXISTS Region (
             ID_Region INT AUTO_INCREMENT PRIMARY KEY,
             Nom VARCHAR(50) UNIQUE
         )
-        """,
-        """
+        """),
+        ("Utilisateur", """
         CREATE TABLE IF NOT EXISTS Utilisateur (
             ID_User INT AUTO_INCREMENT PRIMARY KEY,
             Password VARCHAR(255) NOT NULL,
@@ -73,15 +73,15 @@ def create_tables():
             ID_Role INT NOT NULL,
             FOREIGN KEY(ID_Role) REFERENCES Role(ID_Role)
         )
-        """,
-        """
+        """),
+        ("Etudiant", """
         CREATE TABLE IF NOT EXISTS Etudiant (
             ID_User INT PRIMARY KEY,
             Statut_recherche VARCHAR(50),
             FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User)
         )
-        """,
-        """
+        """),
+        ("Ville", """
         CREATE TABLE IF NOT EXISTS Ville (
             ID_Ville INT AUTO_INCREMENT PRIMARY KEY,
             CP VARCHAR(10),
@@ -89,8 +89,8 @@ def create_tables():
             ID_Region INT,
             FOREIGN KEY(ID_Region) REFERENCES Region(ID_Region)
         )
-        """,
-        """
+        """),
+        ("Entreprise", """
         CREATE TABLE IF NOT EXISTS Entreprise (
             ID_Entreprise INT AUTO_INCREMENT PRIMARY KEY,
             Nom VARCHAR(50) NOT NULL,
@@ -101,8 +101,8 @@ def create_tables():
             ID_Ville INT NOT NULL,
             FOREIGN KEY(ID_Ville) REFERENCES Ville(ID_Ville)
         )
-        """,
-        """
+        """),
+        ("Avis", """
         CREATE TABLE IF NOT EXISTS Avis (
             ID_Avis INT AUTO_INCREMENT PRIMARY KEY,
             Note DECIMAL(3,1),
@@ -111,8 +111,8 @@ def create_tables():
             FOREIGN KEY(ID_Entreprise) REFERENCES Entreprise(ID_Entreprise),
             FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User)
         )
-        """,
-        """
+        """),
+        ("Offre", """
         CREATE TABLE IF NOT EXISTS Offre (
             ID_Offre INT AUTO_INCREMENT PRIMARY KEY,
             Titre VARCHAR(50) NOT NULL,
@@ -128,8 +128,8 @@ def create_tables():
             FOREIGN KEY(ID_Ville) REFERENCES Ville(ID_Ville),
             FOREIGN KEY(ID_Entreprise) REFERENCES Entreprise(ID_Entreprise)
         )
-        """,
-        """
+        """),
+        ("Candidature", """
         CREATE TABLE IF NOT EXISTS Candidature (
             ID_User INT NOT NULL,
             ID_Offre INT NOT NULL,
@@ -142,8 +142,8 @@ def create_tables():
             FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre),
             FOREIGN KEY(ID_Statut) REFERENCES Statuts_Candidature(ID_Statut)
         )
-        """,
-        """
+        """),
+        ("Offres_Competences", """
         CREATE TABLE IF NOT EXISTS Offres_Competences (
             ID_Offre INT NOT NULL,
             ID_Competence INT NOT NULL,
@@ -151,8 +151,8 @@ def create_tables():
             FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre),
             FOREIGN KEY(ID_Competence) REFERENCES Competence(ID_Competence)
         )
-        """,
-        """
+        """),
+        ("Wishlist", """
         CREATE TABLE IF NOT EXISTS Wishlist (
             ID_User INT NOT NULL,
             ID_Offre INT NOT NULL,
@@ -161,15 +161,50 @@ def create_tables():
             FOREIGN KEY(ID_User) REFERENCES Utilisateur(ID_User),
             FOREIGN KEY(ID_Offre) REFERENCES Offre(ID_Offre)
         )
-        """
+        """)
     ]
     
     try:
-        for query in queries:
+        # Création des tables
+        for table_name, query in queries:
             cursor.execute(query)
+            console.print(f"Table '{table_name}' vérifiée ou créée avec succès.", style="bold green")
+        conn.commit()
+
+        # Insertion des offres par défaut
+        offres_query = """
+        INSERT IGNORE INTO Offre (
+            Titre, Description, Remuneration, Etat, Date_publication, Date_expiration, ID_Entreprise, ID_Secteur, ID_Ville
+        ) VALUES 
+        ('Développeur Backend', '<h3>📌 Mission</h3><p>Développement d\\'API sécurisées</p><h3>🔧 Technologies</h3><ul><li>Python, Django, PostgreSQL</li></ul><h3>🎯 Profil</h3><ul><li>Connaissance en bases de données</li></ul><h3>📩 Contact</h3><p><a href="mailto:recrutement@devtech.com">recrutement@devtech.com</a></p>', 800.00, 1, '2025-03-31', '2025-07-31', 5, 2, 1200),
+        ('Analyste Cybersécurité', '<h3>📌 Mission</h3><p>Audit et sécurisation des systèmes</p><h3>🔧 Technologies</h3><ul><li>SIEM, IDS/IPS, Firewall</li></ul><h3>🎯 Profil</h3><ul><li>Connaissances en pentesting</li></ul><h3>📩 Contact</h3><p><a href="mailto:jobs@securecorp.com">jobs@securecorp.com</a></p>', 950.00, 1, '2025-03-31', '2025-08-20', 6, 4, 9876),
+        ('Technicien Réseau', '<h3>📌 Mission</h3><p>Maintenance et configuration des réseaux</p><h3>🔧 Technologies</h3><ul><li>Cisco, VLAN, VPN</li></ul><h3>🎯 Profil</h3><ul><li>Compétences en routage et switching</li></ul><h3>📩 Contact</h3><p><a href="mailto:tech@networking.com">tech@networking.com</a></p>', 700.00, 1, '2025-03-31', '2025-06-30', 3, 3, 25678),
+        ('Développeur Front-End', '<h3>:pushpin: Mission</h3><p>Développement d\\'interfaces web modernes</p><h3>:wrench: Technologies</h3><ul><li>React, Tailwind CSS</li></ul><h3>:dart: Profil</h3><ul><li>Bonne maîtrise du JavaScript</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:contact@webcorp.com">contact@webcorp.com</a><br />Tél : 01 45 78 90 12</p>', 750.00, 1, '2025-03-31', '2025-06-30', 2, 1, 4),
+        ('Administrateur Systèmes & Réseaux', '<h3>:pushpin: Mission</h3><p>Gestion des infrastructures réseau et serveurs</p><h3>:wrench: Technologies</h3><ul><li>Linux, Docker, Ansible</li></ul><h3>:dart: Profil</h3><ul><li>Compétences en administration système</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:jobs@infra-tech.com">jobs@infra-tech.com</a><br />Tél : 02 98 76 54 32</p>', 850.00, 1, '2025-03-31', '2025-08-01', 3, 3, 5),
+        ('Développeur Full-Stack', '<h3>:pushpin: Mission</h3><p>Conception et développement d\\'applications web</p><h3>:wrench: Technologies</h3><ul><li>Node.js, Vue.js, PostgreSQL</li></ul><h3>:dart: Profil</h3><ul><li>Expérience en développement backend et frontend</li></ul><h3>:envelope_with_arrow: Contact</h3><p><a href="mailto:recrutement@startup-dev.com">recrutement@startup-dev.com</a><br />Tél : 03 21 65 87 45</p>', 900.00, 1, '2025-03-31', '2025-09-15', 4, 2, 2)
+        """
+        cursor.execute(offres_query)
+        console.print("Toutes les offres par défaut ont été insérées avec succès.", style="bold green")
+
+        # Insertion des compétences associées
+        competences_query = """
+        INSERT IGNORE INTO Offres_Competences (ID_Offre, ID_Competence) VALUES 
+        (1, 2), (1, 5), (1, 12), 
+        (2, 1), (2, 4), (2, 18), 
+        (3, 6), (3, 9), (3, 22), 
+        (4, 7), (4, 10), (4, 15), 
+        (5, 8), (5, 11), (5, 20), 
+        (6, 3), (6, 14), (6, 19), 
+        (4, 7), (4, 10), (4, 15), 
+        (5, 8), (5, 11), (5, 20), 
+        (6, 3), (6, 14), (6, 19)
+        """
+        cursor.execute(competences_query)
+        console.print("Compétences associées aux offres insérées avec succès.", style="bold green")
+
         conn.commit()
     except Error as e:
-        console.print(f"Erreur création tables: {e}", style="bold red")
+        console.print(f"Erreur lors de la création des tables ou de l'insertion des données : {e}", style="bold red")
 
 def import_data(table):
     """Importe les données du CSV vers la BDD"""
