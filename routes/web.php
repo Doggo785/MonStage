@@ -90,34 +90,19 @@ Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
         return view('dashboard.dashboard');
     });
 
-    Route::get('applications', function () {
-        return view('applications');
-    })->middleware(CheckStudent::class);
-
-    Route::get('create-company', function () {
-        return view('create-company');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('create-account', function () {
-        return view('create-account');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts', function () {
-        return view('accounts');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts/{id}', function ($id) {
-        return view('account-details', ['id' => $id]);
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts/{id}/edit', function ($id) {
-        return view('edit-account', ['id' => $id]);
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('wishlist', function () {
-        return view('wishlist');
-    })->middleware(CheckStudent::class);
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('dashboard.wishlist.index')->middleware(CheckStudent::class);
 });
+
+
+Route::group(['prefix' => 'dashboard/users', 'middleware' => [CheckAdminOrPilote::class]], function () {
+    Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
+    Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
+    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
+    Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
+    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
+});
+
+
 
 // Routes pour les offres
 Route::prefix('offres')->group(function () {
@@ -160,14 +145,3 @@ Route::group(['prefix'=> 'wishlist', 'middleware' => [CheckStudent::class]], fun
     Route::post('/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
-
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-
-Route::middleware([CheckAdmin::class])->prefix('users')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
-    Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
-    Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
-    Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
-    Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
-});
-
