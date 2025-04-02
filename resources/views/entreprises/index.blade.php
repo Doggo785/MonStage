@@ -129,8 +129,10 @@
                             <input type="text" id="Nom" name="Nom" required>
                         </div>
                         <div class="form-group">
-                            <label for="Ville">Ville</label>
-                            <input type="text" id="Ville" name="Ville" required>
+                            <label for="ville-search">Ville</label>
+                            <input type="text" id="ville-search" class="search-input" placeholder="Recherchez une ville..." autocomplete="off" required>
+                            <ul id="ville-results" class="dropdown-menu" style="display: none;"></ul>
+                            <input type="hidden" id="ville" name="Ville">
                         </div>
                         <div class="form-group">
                             <label for="Telephone">Téléphone</label>
@@ -170,8 +172,11 @@
                             <label for="edit-Nom">Nom de l'entreprise :</label><br>
                             <input type="text" id="edit-Nom" name="Nom" class="search-input" required><br><br>
                             
-                            <label for="edit-Ville">Ville :</label><br>
-                            <input type="text" id="edit-Ville" name="Ville" class="search-input" required><br><br>
+                            <!-- On remplace le champ ville par un champ avec autocomplétion -->
+                            <label for="ville-search-edit">Ville :</label><br>
+                            <input type="text" id="ville-search-edit" class="search-input" placeholder="Recherchez une ville..." autocomplete="off" required><br>
+                            <ul id="ville-results-edit" class="dropdown-menu" style="display: none;"></ul>
+                            <input type="hidden" id="ville-edit" name="Ville"><br><br>
                             
                             <label for="edit-Telephone">Téléphone :</label><br>
                             <input type="text" id="edit-Telephone" name="Telephone" class="search-input" required><br><br>
@@ -248,31 +253,41 @@
     function openEditEntrepriseModal(entreprise) {
         console.log("openEditEntrepriseModal appelé pour :", entreprise);
         
-        // Fermer tous les modals ouverts en retirant la classe active-modal
+        // Fermer tous les modals actifs
         document.querySelectorAll('.modal').forEach(modal => {
             modal.classList.remove('active-modal');
         });
         
-        // Remplir les champs du formulaire avec les données de l'entreprise
+        // Remplir les champs du formulaire
         document.getElementById('edit-Nom').value = entreprise.Nom;
-        document.getElementById('edit-Ville').value = entreprise.ville.Nom;
+        document.getElementById('ville-search-edit').value = entreprise.ville.Nom;
+        if (entreprise.ville.ID_Ville) {
+            document.getElementById('ville-edit').value = entreprise.ville.ID_Ville;
+        } else {
+            document.getElementById('ville-edit').value = '';
+        }
         document.getElementById('edit-Telephone').value = entreprise.Telephone;
         document.getElementById('edit-Email').value = entreprise.Email;
         document.getElementById('edit-Site').value = entreprise.Site || '';
         document.getElementById('edit-Description').value = entreprise.Description || '';
         
-        // Mettre à jour l'action du formulaire
         document.getElementById('edit-entreprise-form').action = `/entreprises/${entreprise.ID_Entreprise}`;
         
-        // Afficher le modal en modifiant le style et en ajoutant la classe active-modal
+        // Afficher le modal
         const modal = document.getElementById('edit-entreprise-modal');
         modal.style.display = 'block';
         modal.classList.add('active-modal');
-    }
 
+        // Réinitialiser l'autocomplétion sur le champ de modification
+        if (typeof setupVilleSearch === 'function') {
+            setupVilleSearch('ville-search-edit', 'ville-results-edit', 'ville-edit');
+        }
+    }
+    
     function closeEditEntrepriseModal() {
         document.getElementById('edit-entreprise-modal').style.display = 'none';
     }
 </script>
 <script src="{{ asset('js/cards.js') }}"></script>
+<script src="{{ asset('js/ville-search.js') }}"></script>
 @endsection
