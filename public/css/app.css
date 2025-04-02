@@ -1,0 +1,17 @@
+.animated-title {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    color: #383838; /* Texte noir */
+    position: relative;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px #9b9b9b, 0 0 10px #b3b3b3, 0 0 15px #d1d1d1;
+    }
+    to {
+        text-shadow: 0 0 10px #9b9b9b, 0 0 20px #b3b3b3, 0 0 30px #d1d1d1;
+    }
+}

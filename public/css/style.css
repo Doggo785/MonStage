@@ -127,7 +127,7 @@ h1,h2,h3,h4{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     min-width: 150px;
-    padding: 10px 0;
+    padding: 5px 0;
     border-radius: 4px;
 }
 
@@ -893,7 +893,7 @@ input[type=file]::file-selector-button:hover {
 .hero {
     position: relative;
     background: url('../assets/hero_stage.jpg') center/cover no-repeat;
-    height: 60vh;
+    height: 40vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -944,12 +944,13 @@ input[type=file]::file-selector-button:hover {
 }
 
 .btn-primary:hover {
-    background-color: #e63e00;
+    background-color: #ffffff;
 }
 
 /* --- Recent Offers Section --- */
 .recent-offers {
     padding: 20px;
+    padding-bottom: 80px;   
     background-color: #fff;
 }
 

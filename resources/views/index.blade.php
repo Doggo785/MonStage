@@ -5,13 +5,10 @@
 @section('content')
 <section class="hero">
    <div class="hero-content">
-      <h1>Bienvenue sur Mon Stage</h1>
+      <h1 class="animated-title">Bienvenue sur Mon Stage</h1>
       <p>Découvrez des opportunités de stage sélectionnées spécialement pour vous et rejoignez notre communauté pour booster votre carrière.</p>
       <a href="{{ route('offres.index') }}" class="btn1 btn-primary">Voir toutes les offres</a>
    </div>
-   {{-- <div class="hero-image">
-      <img src="{{ asset('assets/hero_stage.jpg') }}" alt="Stage en action">
-   </div> --}}
 </section>
 
 <section class="recent-offers">
