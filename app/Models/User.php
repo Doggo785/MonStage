@@ -81,6 +81,16 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class, 'ID_Role');
     }
 
+    public function wishlists()
+    {
+        return $this->hasMany(Wishlist::class, 'ID_User', 'ID_User');
+    }
+
+    public function avis()
+    {
+        return $this->hasMany(Avis::class, 'ID_User', 'ID_User');
+    }
+
     public function getAuthPassword()
     {
         return $this->attributes['Password'];

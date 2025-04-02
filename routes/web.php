@@ -137,7 +137,7 @@ Route::group(['prefix'=> 'entreprises'], function () {
     Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store')->middleware(CheckAdminOrPilote::class);
     Route::delete('/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy')->middleware(CheckAdminOrPilote::class);
     Route::put('/{id}', [EntrepriseController::class, 'update'])->name('entreprises.update')->middleware(CheckAdminOrPilote::class);
-    Route::post('/{id}/rate', [EntrepriseController::class, 'rate'])->name('entreprises.rate')->middleware(CheckAdminOrPilote::class); // uniquement Student normalement
+    Route::post('/{id}/rate', [EntrepriseController::class, 'rate'])->name('entreprises.rate')->middleware(CheckStudent::class); // uniquement Student normalement
 });
 
 Route::group(['prefix'=> 'wishlist', 'middleware' => [CheckStudent::class]], function () {

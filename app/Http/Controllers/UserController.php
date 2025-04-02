@@ -18,22 +18,46 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'Nom' => 'required|string|max:255',
-            'Prenom' => 'required|string|max:255',
-            'Email' => 'required|email|max:255',
-            'Telephone' => 'nullable|string|max:20',
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'telephone' => 'nullable|string|max:20',
+            'role' => 'required|exists:Role,ID_Role',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
         $user = User::findOrFail($id);
-        $user->update($request->only(['Nom', 'Prenom', 'Email', 'Telephone']));
 
-        return redirect()->route('users.index')->with('success', 'Utilisateur mis à jour avec succès.');
+        // Mise à jour des données utilisateur
+        $user->Nom = $validated['name'];
+        $user->Prenom = $validated['prenom'];
+        $user->Email = $validated['email'];
+        $user->Telephone = $validated['telephone'];
+        $user->ID_Role = $validated['role'];
+
+        // Gestion de la photo de profil
+        if ($request->hasFile('profile_picture')) {
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->pfp_path = $path;
+        }
+
+        $user->save();
+
+        return redirect()->route('users.index')->with('success', 'Utilisateur modifié avec succès.');
     }
 
     public function destroy($id)
     {
         $user = User::findOrFail($id);
+
+        // Supprimer les enregistrements associés dans la table Wishlist
+        $user->wishlists()->delete();
+
+        // Supprimer les enregistrements associés dans la table Avis
+        $user->avis()->delete();
+
+        // Supprimer l'utilisateur
         $user->delete();
 
         return redirect()->route('users.index')->with('success', 'Utilisateur supprimé avec succès.');

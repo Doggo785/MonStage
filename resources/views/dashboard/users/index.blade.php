@@ -164,7 +164,7 @@
                             <label for="edit-role">Rôle :</label><br>
                             <select id="edit-role" name="role" class="search-input" required>
                                 @foreach ($roles as $role)
-                                    <option value="{{ $role->id }}">{{ $role->Libelle }}</option>
+                                    <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
                                 @endforeach
                             </select><br><br>
                             
@@ -193,19 +193,26 @@
 
     function openEditUserModal(user) {
         console.log("openEditUserModal appelé pour :", user);
-        
+
+        // Fermer tous les modals actifs
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.remove('active-modal');
+        });
+
         // Remplir les champs du formulaire
-        document.getElementById('edit-name').value = user.name;
-        document.getElementById('edit-prenom').value = user.prenom;
-        document.getElementById('edit-email').value = user.email;
-        document.getElementById('edit-telephone').value = user.telephone || '';
-        document.getElementById('edit-role').value = user.role_id;
-        
-        document.getElementById('edit-user-form').action = `/users/${user.id}`;
-        
+        document.getElementById('edit-name').value = user.Nom;
+        document.getElementById('edit-prenom').value = user.Prenom;
+        document.getElementById('edit-email').value = user.Email;
+        document.getElementById('edit-telephone').value = user.Telephone || '';
+        document.getElementById('edit-role').value = user.ID_Role;
+
+        // Mettre à jour l'action du formulaire
+        document.getElementById('edit-user-form').action = `/dashboard/users/${user.ID_User}`;
+
         // Afficher le modal
         const modal = document.getElementById('edit-user-modal');
         modal.style.display = 'block';
+        modal.classList.add('active-modal');
     }
 
     function closeEditUserModal() {
