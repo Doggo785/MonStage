@@ -9,19 +9,19 @@ class UserController extends Controller
     public function index()
     {
         $users = User::with('role')->get(); // Récupère tous les utilisateurs avec leurs rôles
-        return view('users.index', compact('users'));
+        return view('dashboard.users.index', compact('users'));
     }
 
     public function show($id)
     {
         $user = User::with('role')->findOrFail($id); // Récupère un utilisateur spécifique
-        return view('users.show', compact('user'));
+        return view('dashboard.users.show', compact('user'));
     }
 
     public function edit($id)
     {
         $user = User::findOrFail($id); // Récupère un utilisateur spécifique
-        return view('users.edit', compact('user'));
+        return view('dashboard.users.edit', compact('user'));
     }
 
     public function update(Request $request, $id)
