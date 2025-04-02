@@ -146,4 +146,7 @@ Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture
 Route::group(['prefix'=> 'entreprises'], function () {
     Route::get('/', [EntrepriseController::class, 'index'])->name('entreprises.index');
     Route::put('/{id}/update-picture', [EntrepriseController::class, 'updatePicture'])->name('entreprises.update_picture');
+    Route::get('/search', [EntrepriseController::class, 'search'])->name('entreprises.search');
+    Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store');
 });
+

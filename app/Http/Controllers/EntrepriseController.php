@@ -5,16 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Entreprise;
+use App\Models\Ville;
 
 class EntrepriseController extends Controller
 {
 
     public function index()
     {
-        $entreprises = Entreprise::with('ville')->paginate(6);
-        return view('entreprises.index', compact('entreprises'));
+        $entreprises = Entreprise::with('ville')->get();
+        $villes = Ville::all(); // Récupère toutes les villes pour le formulaire
+        return view('entreprises.index', compact('entreprises', 'villes'));
     }
 
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        // Rechercher les entreprises par nom, ville ou titre
+        $entreprises = Entreprise::where('Nom', 'like', "%$search%")
+            ->orWhereHas('ville', function ($query) use ($search) {
+                $query->where('Nom', 'like', "%$search%");
+            })
+            ->orWhere('Description', 'like', "%$search%")
+            ->get();
+
+        return view('entreprises.index', compact('entreprises'));
+    }
 
     public function updatePicture(Request $request, $id)
     {
@@ -46,5 +62,39 @@ class EntrepriseController extends Controller
         $entreprise->save();
 
         return redirect()->back()->with('success', 'Photo de l\'entreprise mise à jour avec succès.');
+    }
+
+    public function store(Request $request)
+    {
+        // Validation des données
+        $validatedData = $request->validate([
+            'Nom' => 'required|string|max:255',
+            'Ville' => 'required|exists:Ville,ID_Ville', // Vérifie que l'ID de la ville existe
+            'Telephone' => 'required|string|max:20',
+            'Email' => 'required|email|max:255',
+            'Site' => 'nullable|url|max:255',
+            'Description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        // Gestion de l'image
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            // Stocke l'image dans le dossier 'entreprises' du disque 'public'
+            $imagePath = $request->file('image')->store('entreprises', 'public');
+        }
+
+        // Création de l'entreprise
+        Entreprise::create([
+            'Nom' => $validatedData['Nom'],
+            'ID_Ville' =>$validatedData['Ville'], 
+            'Email' => $validatedData['Email'],
+            'Site' => $validatedData['Site'],
+            'Description' => $validatedData['Description'],
+            'pfp_path' => $imagePath, // Stocke uniquement le chemin relatif
+        ]);
+
+        // Redirection avec un message de succès
+        return redirect()->route('entreprises.index')->with('success', 'Entreprise ajoutée avec succès.');
     }
 }
