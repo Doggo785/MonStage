@@ -10,7 +10,18 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $users = User::with('role')->get(); // Récupère les utilisateurs avec leurs rôles
+        $currentUser = auth()->user(); // Récupère l'utilisateur connecté
+
+        if ($currentUser->role->Libelle === 'Pilote') {
+            // Si l'utilisateur est un pilote, afficher uniquement les étudiants
+            $users = User::with('role')->whereHas('role', function ($query) {
+                $query->where('Libelle', 'Étudiant');
+            })->get();
+        } else {
+            // Sinon, afficher tous les utilisateurs
+            $users = User::with('role')->get();
+        }
+
         $roles = Role::all(); // Récupère tous les rôles
 
         return view('dashboard.users.index', compact('users', 'roles'));
@@ -18,6 +29,13 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $currentUser = auth()->user();
+
+        // Vérifie si l'utilisateur connecté est un administrateur ou un pilote
+        if (!in_array($currentUser->role->Libelle, ['Administrateur', 'Pilote'])) {
+            return redirect()->route('users.index')->with('error', 'Vous n\'avez pas la permission de modifier cet utilisateur.');
+        }
+
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -28,6 +46,11 @@ class UserController extends Controller
         ]);
 
         $user = User::findOrFail($id);
+
+        // Si l'utilisateur connecté est un pilote, empêcher la modification du rôle
+        if ($currentUser->role->Libelle === 'Pilote') {
+            $validated['role'] = $user->ID_Role; // Forcer le rôle actuel
+        }
 
         // Mise à jour des données utilisateur
         $user->Nom = $validated['name'];
@@ -49,6 +72,13 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $currentUser = auth()->user();
+
+        // Vérifie si l'utilisateur connecté est un administrateur ou un pilote
+        if (!in_array($currentUser->role->Libelle, ['Administrateur', 'Pilote'])) {
+            return redirect()->route('users.index')->with('error', 'Vous n\'avez pas la permission de supprimer cet utilisateur.');
+        }
+
         $user = User::findOrFail($id);
 
         // Supprimer les enregistrements associés dans la table Wishlist
@@ -84,32 +114,40 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $currentUser = auth()->user();
+
+        // Vérifie si l'utilisateur connecté est un pilote
+        if ($currentUser->role->Libelle === 'Pilote') {
+            // Forcer le rôle à "Étudiant" pour les pilotes
+            $request->merge(['role' => Role::where('Libelle', 'Étudiant')->first()->ID_Role]);
+        }
+
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
-            'email' => 'required|email|unique:Utilisateur,email',
+            'email' => 'required|email|unique:Utilisateur,Email',
             'telephone' => 'nullable|string|max:20',
             'role' => 'required|exists:Role,ID_Role',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $profilePicturePath = null;
+        $user = new User();
+        $user->Nom = $validatedData['name'];
+        $user->Prenom = $validatedData['prenom'];
+        $user->Email = $validatedData['email'];
+        $user->Telephone = $validatedData['telephone'];
+        $user->ID_Role = $validatedData['role'];
+        $user->password = Hash::make('DefaultPassword!'); // Mot de passe par défaut
+
+        // Gestion de la photo de profil
         if ($request->hasFile('profile_picture')) {
-            $profilePicturePath = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+            $user->pfp_path = $path;
         }
 
-        User::create([
-            'Nom' => strtoupper($request->input('name')),
-            'Prenom' => ucfirst(strtolower($request->input('prenom'))),
-            'Email' => $request->input('email'),
-            'Telephone' => $request->input('telephone'),
-            'ID_Role' => $request->input('role'),
-            'pfp_path' => $profilePicturePath,
-            'Password' => Hash::make('DefaultPassword!'), // Mot de passe par défaut
-        ]);
+        $user->save();
 
-// Redirection avec un message de succès
-        return redirect()->route('users.index')->with('success', 'Utilisateur ajouté avec succès.');
+        return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
 
     public function show($id)

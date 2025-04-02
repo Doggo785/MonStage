@@ -44,6 +44,13 @@
                         <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
                     </div>
                 </div>
+                <div class="admin-actions">
+                    <h2>Actions Administrateur</h2>
+                    <ul>
+                        <li><a href="{{ route('users.index') }}" class="btn1 btn-primary">Gérer les utilisateurs</a></li>
+                        <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="whishlist">
                 <h2>Élèves</h2>

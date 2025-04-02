@@ -68,7 +68,7 @@
                             </p>
                         </div>
                         <div class="modal__buttons">
-                            @if (auth()->check() && Auth::user()->role->Libelle === 'Administrateur')
+                            @if (auth()->check() && (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote'))
                                 <!-- Bouton de suppression -->
                                 <form action="{{ route('users.destroy', $user->ID_User) }}" method="POST" style="display: inline;">
                                     @csrf
@@ -84,8 +84,7 @@
                 </div>
             @endforeach
 
-            @if (auth()->check() && Auth::user()->role->Libelle === 'Administrateur')
-                <!-- Carte vide pour ajouter un nouvel utilisateur -->
+            @if (auth()->check() && (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote'))
                 <div class="card__box add-new-card">
                     <div class="card__product" onclick="openAddUserModal()">
                         <div class="add-new-icon">
@@ -119,10 +118,14 @@
                             
                             <label for="role">Rôle :</label><br>
                             <select id="role" name="role" class="search-input" required>
-                                <option value="">Sélectionnez un rôle</option>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
-                                @endforeach
+                                @if (auth()->check() && Auth::user()->role->Libelle === 'Pilote')
+                                    <option value="{{ $roles->where('Libelle', 'Etudiant')->first()->ID_Role }}">Étudiant</option>
+                                @else
+                                    <option value="">Sélectionnez un rôle</option>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
+                                    @endforeach
+                                @endif
                             </select><br><br>
                             
                             <label for="profile_picture">Photo de profil :</label><br>
@@ -162,11 +165,23 @@
                             <input type="text" id="edit-telephone" name="telephone" class="search-input"><br><br>
                             
                             <label for="edit-role">Rôle :</label><br>
-                            <select id="edit-role" name="role" class="search-input" required>
-                                @foreach ($roles as $role)
-                                    <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
-                                @endforeach
-                            </select><br><br>
+                            @if (auth()->check() && Auth::user()->role->Libelle === 'Pilote')
+                                <!-- Champ désactivé pour les pilotes -->
+                                <select id="edit-role" name="role" class="search-input" disabled>
+                                    <option value="{{ $user->role->ID_Role }}">{{ $user->role->Libelle }}</option>
+                                </select>
+                                <input type="hidden" name="role" value="{{ $user->role->ID_Role }}">
+                            @else
+                                <!-- Champ modifiable pour les administrateurs -->
+                                <select id="edit-role" name="role" class="search-input" required>
+                                    @foreach ($roles as $role)
+                                        <option value="{{ $role->ID_Role }}" {{ $role->ID_Role == $user->role->ID_Role ? 'selected' : '' }}>
+                                            {{ $role->Libelle }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            @endif
+                            <br><br>
                             
                             <label for="edit-profile_picture">Photo de profil :</label><br>
                             <input type="file" id="edit-profile_picture" name="profile_picture" accept="image/*"><br><br>
