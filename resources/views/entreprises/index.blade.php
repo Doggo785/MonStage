@@ -28,7 +28,7 @@
                                      alt="Logo de {{ $entreprise->Nom }}" class="card__img profile-picture">
                                 
                                 <!-- Logo de modification (visible uniquement pour Admin et Pilote) -->
-                                @if (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote')
+                                @if ((auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
                                     <div class="edit-overlay">
                                         <i class="fa-solid fa-pen"></i>
                                     </div>
@@ -36,7 +36,7 @@
                             </div>
 
                             <!-- Formulaire pour uploader une nouvelle photo -->
-                            @if (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote')
+                            @if ((auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
                                 <form id="profile-picture-form-{{ $entreprise->ID_Entreprise }}" 
                                       action="{{ route('entreprises.update_picture', $entreprise->ID_Entreprise) }}" 
                                       method="POST" enctype="multipart/form-data" style="display: none;">
@@ -89,28 +89,33 @@
                             <a href="{{ route('offres.index', ['entreprise' => $entreprise->ID_Entreprise]) }}">
                                 <button class="modal__button">Voir leurs offres</button>
                             </a>
-                            <!-- Bouton de suppression -->
-                            <form action="{{ route('entreprises.destroy', $entreprise->ID_Entreprise) }}" method="POST" style="display: inline;">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="modal__button modal__button--delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')">
-                                    Supprimer
-                                </button>
-                            </form>
+                            @if ((auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
+                                <!-- Bouton de suppression -->
+                                <form action="{{ route('entreprises.destroy', $entreprise->ID_Entreprise) }}" method="POST" style="display: inline;">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="modal__button modal__button--delete" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette entreprise ?')">
+                                        Supprimer
+                                    </button>
+                                </form>
+                                <button class="modal__button" onclick='openEditEntrepriseModal(@json($entreprise))'>Éditer</button>
+                            @endif
                         </div>
                     </div>
                 </div>
             @endforeach
 
-            <!-- Carte vide pour ajouter une nouvelle entreprise -->
-            <div class="card__box add-new-card">
-                <div class="card__product" onclick="openAddEntrepriseModal()">
-                    <div class="add-new-icon">
-                        <i class="fa-solid fa-plus"></i>
+            @if ((auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
+                <!-- Carte vide pour ajouter une nouvelle entreprise -->
+                <div class="card__box add-new-card">
+                    <div class="card__product" onclick="openAddEntrepriseModal()">
+                        <div class="add-new-icon">
+                            <i class="fa-solid fa-plus"></i>
+                        </div>
+                        <h3 class="add-new-text">Ajouter une entreprise</h3>
                     </div>
-                    <h3 class="add-new-text">Ajouter une entreprise</h3>
                 </div>
-            </div>
+            @endif
 
             <!-- Modal pour ajouter une nouvelle entreprise -->
             <div id="add-entreprise-modal" class="modal" style="display: none;">
@@ -149,6 +154,45 @@
                         </div>
                         <button type="submit" class="btn1">Ajouter</button>
                     </form>
+                </div>
+            </div>
+
+            <!-- Modal pour modifier une entreprise -->
+            <div id="edit-entreprise-modal" class="modal" style="display: none;">
+                <div class="modal__card" style="margin: 20px;">
+                    <center><h1>Modifier l'Entreprise</h1></center>
+                    <i class="fa-solid fa-xmark modal__close" onclick="closeEditEntrepriseModal()"></i>
+                    <article>
+                        <form id="edit-entreprise-form" action="" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            @method('PUT')
+                            <h3>Informations Générales</h3>
+                            <label for="edit-Nom">Nom de l'entreprise :</label><br>
+                            <input type="text" id="edit-Nom" name="Nom" class="search-input" required><br><br>
+                            
+                            <label for="edit-Ville">Ville :</label><br>
+                            <input type="text" id="edit-Ville" name="Ville" class="search-input" required><br><br>
+                            
+                            <label for="edit-Telephone">Téléphone :</label><br>
+                            <input type="text" id="edit-Telephone" name="Telephone" class="search-input" required><br><br>
+                            
+                            <label for="edit-Email">Email :</label><br>
+                            <input type="email" id="edit-Email" name="Email" class="search-input" required><br><br>
+                            
+                            <label for="edit-Site">Site Web :</label><br>
+                            <input type="url" id="edit-Site" name="Site" class="search-input"><br><br>
+                            
+                            <label for="edit-Description">Description :</label><br>
+                            <textarea id="edit-Description" name="Description" rows="4" class="search-input"></textarea><br><br>
+                            
+                            <label for="edit-image">Logo de l'entreprise :</label><br>
+                            <input type="file" id="edit-image" name="image" accept="image/*"><br><br>
+                            
+                            <div class="submit-button">
+                                <button type="submit" class="btn2">Modifier</button>
+                            </div>
+                        </form>
+                    </article>
                 </div>
             </div>
         </div>
@@ -200,6 +244,35 @@
     function closeAddEntrepriseModal() {
         document.getElementById('add-entreprise-modal').style.display = 'none';
     }
+
+    function openEditEntrepriseModal(entreprise) {
+        console.log("openEditEntrepriseModal appelé pour :", entreprise);
+        
+        // Fermer tous les modals ouverts en retirant la classe active-modal
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.classList.remove('active-modal');
+        });
+        
+        // Remplir les champs du formulaire avec les données de l'entreprise
+        document.getElementById('edit-Nom').value = entreprise.Nom;
+        document.getElementById('edit-Ville').value = entreprise.ville.Nom;
+        document.getElementById('edit-Telephone').value = entreprise.Telephone;
+        document.getElementById('edit-Email').value = entreprise.Email;
+        document.getElementById('edit-Site').value = entreprise.Site || '';
+        document.getElementById('edit-Description').value = entreprise.Description || '';
+        
+        // Mettre à jour l'action du formulaire
+        document.getElementById('edit-entreprise-form').action = `/entreprises/${entreprise.ID_Entreprise}`;
+        
+        // Afficher le modal en modifiant le style et en ajoutant la classe active-modal
+        const modal = document.getElementById('edit-entreprise-modal');
+        modal.style.display = 'block';
+        modal.classList.add('active-modal');
+    }
+
+    function closeEditEntrepriseModal() {
+        document.getElementById('edit-entreprise-modal').style.display = 'none';
+    }
 </script>
-<script src={{ asset('js/cards.js') }}></script>
+<script src="{{ asset('js/cards.js') }}"></script>
 @endsection
