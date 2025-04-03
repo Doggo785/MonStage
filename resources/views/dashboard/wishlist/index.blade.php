@@ -36,7 +36,7 @@
                                 <p>Aucune compétence spécifiée.</p>
                             @endif
                         </div>
-                        <form action="{{ route('wishlist.remove', $wishlist->offre->ID_Offre) }}" method="POST" style="display:inline;">
+                        <form action="{{ route('wishlist.remove', $wishlist->offre->ID_Offre) }}" method="POST" class="button_right">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn1">-</button>

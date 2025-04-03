@@ -16,6 +16,10 @@ h1,h2,h3,h4{
   font-weight: bold;
 }
 
+section{
+  margin-top : 60px;
+}
+
 .text-center
 {
     text-align: center;
@@ -32,6 +36,7 @@ h1,h2,h3,h4{
     justify-content: space-between;
     align-items: center;  
     letter-spacing: 1px;
+    z-index: 9999;
 }
 
 /* Centrer les liens dans la barre de navigation */
@@ -62,11 +67,6 @@ h1,h2,h3,h4{
     background-color: orangered;
     color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.nav-link a {
-  border-radius: 20px;
-  border: 2px solid #ccc;
 }
 
 .btn1 {
@@ -134,7 +134,7 @@ h1,h2,h3,h4{
     right: 0; /* Aligne le menu sur le côté droit du bouton */
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 9999;
     min-width: 150px;
     padding: 5px 0;
     border-radius: 4px;
@@ -386,6 +386,7 @@ input[type=file]::file-selector-button:hover {
   gap: 10px;
   padding: 5px;
   margin: 10px;
+  text-decoration: none;
 }
 
 .container_compte > div {
@@ -465,6 +466,10 @@ input[type=file]::file-selector-button:hover {
   left: 10px;
 }
 
+.card a{
+  text-decoration: none;
+}
+
 /* Empêche le point vert d'apparaître ailleurs */
 .container_offre .status-indicator {
   position: absolute;
@@ -482,6 +487,10 @@ input[type=file]::file-selector-button:hover {
   font-size: 16px; /* Augmenter légèrement la taille du sous-titre */
   color: #4f4f4f;
   margin-bottom: 10px;
+}
+
+.document {
+  font-size: 10px; /* Augmenter légèrement la taille du sous-titre */
 }
 
 .container_offre a{
@@ -504,7 +513,8 @@ input[type=file]::file-selector-button:hover {
   width:100%;
   display:inline-block;
   vertical-align:top;
-  font-size:13px;}
+  font-size:13px;
+  z-index:10000;}
 
 /* Style pour les liens dans le footer */
 .footer_fixe a.footer-link {
@@ -530,7 +540,7 @@ input[type=file]::file-selector-button:hover {
     position: absolute;
     background-color: white;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
+    z-index: 1000px;
     min-width: 150px;
     padding: 10px 0;
     border-radius: 4px;
@@ -990,18 +1000,23 @@ input[type=file]::file-selector-button:hover {
     color: rgb(0, 0, 0);
     text-align: center;
     margin-bottom: 40px;
+    margin-top: 40px;
     z-index: 1; /* Assurez-vous que c'est inférieur au menu */
     overflow: visible;
 }
 
 .hero-content {
-    position: absolute;
+    position: relative;
     z-index: 1;
     max-width: 800px;
     padding: 0 20px;
+    margin-bottom: 40px;
+    margin-top: 40px;
 }
 
 .hero-content h1 {
+    position: relative;
+    z-index: 1;
     font-size: 3em;
     margin-bottom: 20px;
     font-family: "Oswald", sans-serif;
@@ -1282,12 +1297,18 @@ input[type=file]::file-selector-button:hover {
   transition: transform 0.3s, box-shadow 0.3s;
   height: auto; /* Ajuste automatiquement la hauteur */
   min-height: 50px; /* Définit une hauteur minimale */
+  text-decoration: none;
 }
 
 /* Effet au survol */
 .card_compte:hover {
   transform: scale(1.05); /* Agrandir légèrement la carte */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Accentuer l'ombre */
+}
+
+.card_compte a {
+  text-decoration: none;
+  color: rgb(0, 0, 0);
 }
 
 .icon_compte{
@@ -1314,12 +1335,25 @@ input[type=file]::file-selector-button:hover {
               "content_entreprise ";
     grid-template-columns: 1fr ;
     grid-template-rows: 1fr 0.1fr 0.5fr;
-}
-.container_offre {
+  }
+  .container_offre {
   display: grid;
   grid-template-columns: 1fr;
-}}
+  }
+  .nav-center{
+    display: none;
+  }
 
+  .drop-menu{
+    display:flex
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .drop-menu{
+    display: none;
+  }
+}
 
 /* Section principale des mentions légales */
 .mentions-legales {
@@ -1379,3 +1413,23 @@ input[type=file]::file-selector-button:hover {
 .mentions-legales .section:last-child {
     margin-bottom: 0;
 }
+
+.drop-menu{
+  float: left;
+  position: relative;
+  z-index : 9999;
+}
+
+.btn_dropdown_menu{
+  background-color:  #F1F1F1; 
+  color: #333;  
+  border: 2px solid #F1F1F1;
+  padding: 10px 15px;
+  text-decoration: none;
+  margin-top: 5px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 16px;
+  z-index : 9999;
+}
+
