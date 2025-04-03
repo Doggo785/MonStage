@@ -44,41 +44,27 @@
                         <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
                     </div>
                 </div>
-                <div class="admin-actions">
-                    <h2>Actions Administrateur</h2>
-                    <ul>
-                        <li><a href="{{ route('users.index') }}" class="btn1 btn-primary">Gérer les utilisateurs</a></li>
-                        <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
-                    </ul>
+            </div>   
+
+            <div class="whishlist">
+                <h2>Actions Pilote</h2>
+                <div class="card_compte">
+                    <a href="{{ route('users.index') }}">
+                    <div class="content">
+                        <div class="title">Gérer les étudiants</div>
+                        <div class="subtitle">Affiche la liste des étudiants</div>
+                    </div>
+                    </a>
+                </div>
+                <div class="card_compte">
+                    <a href="{{ route('offres.index') }}">
+                    <div class="content">
+                        <div class="title">Gérer les offres</div>
+                        <div class="subtitle">Affiche la liste des offres</div>
+                    </div>
+                    </a>
                 </div>
             </div>
-            <div class="whishlist">
-        <h2>Gestion des élèves</h2>
-            <div class="button_right">
-                <a class="btn1">Voir tous les élèves</a>
-            </div>
-            <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Un evèle au pif</div>
-                        <div class="subtitle">Statut : pauvre</div>
-                    </div>
-            </div>
-        </div>
-
-        
-        <div class="offre">
-        <h2>Gestion des offres</h2>
-            <div class="button_right">
-                <a href="{{ route('offres.index') }}" class="btn1">Voir toutes les offres</a>
-            </div>
-            <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Stage de ouf</div>
-                        <div class="subtitle">en france j'espère</div>
-                    </div>
-            </div>
-        </div>
-
         </div>
 
     @elseif (Auth::user()->role->Libelle === 'Etudiant')
@@ -153,14 +139,14 @@
                 </div>
                 @if ($candidatures = Auth::user()->candidatures()->orderBy('Date_postule', 'desc')->take(3)->get())
                     @foreach ($candidatures as $candidature)
-                        <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}" class="card-link">
                             <div class="card_compte">
-                                <div class="content">
+                            <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}">
+                                <div class="content" style="text-decoration: none;">
                                     <div class="title">{{ $candidature->offre->Titre }}</div>
                                     <div class="subtitle">{{ $candidature->offre->entreprise->Nom }} | {{ $candidature->offre->ville->Nom }}</div>
                                 </div>
+                                </a>
                             </div>
-                        </a>
                     @endforeach
                 @else
                     <p>Aucune candidature récente.</p>
@@ -209,15 +195,25 @@
                     </div>
                 </div>
             </div>
-            <div class="admin-actions">
+            <div class="whishlist">
                 <h2>Actions Administrateur</h2>
-                <ul>
-                    <li><a href="{{ route('users.index') }}" class="btn1 btn-primary">Gérer les utilisateurs</a></li>
-                    <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
-                </ul>
+                <div class="card_compte">
+                    <a href="{{ route('users.index') }}">
+                    <div class="content">
+                        <div class="title">Gérer les utilisateurs</div>
+                        <div class="subtitle">Affiche la liste des utilisateurs</div>
+                    </div>
+                    </a>
+                </div>
+                <div class="card_compte">
+                    <a href="{{ route('offres.index') }}">
+                    <div class="content">
+                        <div class="title">Gérer les offres</div>
+                        <div class="subtitle">Affiche la liste des offres</div>
+                    </div>
+                    </a>
+                </div>
             </div>
-        </div>
-
         </div>
     @else
         <center><h1>Accès refusé</h1></center>

@@ -4,12 +4,29 @@
           <img alt="Logo" src="{{ asset('assets/logo.png') }}" style="width: auto; height: 50px; margin-right: 10px;">
           <span style="font-size: 20px; font-weight: bold; color: #333;">MonStage.fr</span>
        </div>
+      
+
        <div class="nav-center">
           <a href="{{ url('/') }}" class="nav-link">Accueil</a>
           <a href="{{ url('offres') }}" class="nav-link">Offres</a>
           <a href="{{ url('entreprises') }}" class="nav-link">Entreprises</a>
        </div>
-       <div class="nav-right">
+
+      <div class="nav-right">
+
+         <div class="drop-menu">
+            <div class="dropdown">
+               <button type="button" class="btn_dropdown_menu dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa-solid fa-bars"></i>
+               </button>
+               <div class="dropdown-menu dropdown-menu-right">
+                  <a href="{{ url('/') }}" class="dropdown-item">Accueil</a>
+                  <a href="{{ url('offres') }}" class="dropdown-item">Offres</a>
+                  <a href="{{ url('entreprises') }}" class="dropdown-item">Entreprises</a>
+               </div>
+            </div>
+         </div>
+
           @auth
              <div class="dropdown">
                 <button class="btn dropdown-toggle">

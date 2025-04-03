@@ -99,37 +99,4 @@ document.addEventListener("DOMContentLoaded", () => {
 		
 	};
 	
-	
-	//5. Fonction permettant de revenir en haut de la page
-	function go_top()
-	{
-		document.body.scrollTop = 0;
-		document.documentElement.scrollTop = 0;
-	}
-
-	window.onscroll = function()
-	{ 
-		// Afficher le bouton lorsque l'utilisateur scroll à plus de 150px en partant du haut de la page
-		top_button.style.display = (document.body.scrollTop > 150 || document.documentElement.scrollTop > 150) ? 'block' : 'none';
-	}
-	
-	//6. Affichage du menu mobile lors du click sur le burger
-	var sidenav = document.getElementById("sideNav");
-	var burgerNav = document.getElementById("burgerNav");
-	var closeBtn = document.getElementById("closeBtn");
-
-	burgerNav.onclick = openNav;
-	closeBtn.onclick = closeNav;
-
-	/* Affichage du menu latéral */
-	function openNav() {
-	  sidenav.classList.add("active");
-	}
-
-	/* Fermeture du menu latéral */
-	function closeNav() {
-	  sidenav.classList.remove("active");
-	}
-		
-	
 });

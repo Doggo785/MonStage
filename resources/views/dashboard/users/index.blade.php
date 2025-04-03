@@ -3,7 +3,7 @@
 @section('title', 'Utilisateurs')
 
 @section('content')
-<main>
+<section>
     <center><h1>Gestion des utilisateurs</h1></center>
 
     <div class="input-icons">
@@ -211,7 +211,7 @@
     {{ $users->links('pagination::bootstrap-4') }}
  </div>
     </section>
-</main>
+</section>
 
 <script>
     function openAddUserModal() {

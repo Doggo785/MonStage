@@ -3,7 +3,6 @@
 @section('title', 'Modifier une Offre de Stage')
 
 @section('content')
-<main>
 <section>
     <div class="container_offre_show">
     <div class="vide"></div>
@@ -240,7 +239,7 @@
             });
         });
     </script>
-</main>
+
 
 @include('partials.footer')
 @endsection

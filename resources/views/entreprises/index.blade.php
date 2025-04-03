@@ -3,7 +3,7 @@
 @section('title', 'Entreprises')
 
 @section('content')
-<main>
+<section>
     <center><h1>Tu cherches une entreprise en particulier ?</h1></center>
 
     <div class="input-icons">
@@ -249,7 +249,7 @@
             {{ $entreprises->links('pagination::bootstrap-4') }}
          </div>
     </section>
-</main>
+</section>
 
 <script>
     function previewProfilePicture(event, entrepriseId) {
