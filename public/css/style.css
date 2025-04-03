@@ -36,7 +36,7 @@ section{
     justify-content: space-between;
     align-items: center;  
     letter-spacing: 1px;
-    z-index: 9999;
+    z-index: 1050;
 }
 
 /* Centrer les liens dans la barre de navigation */
@@ -1183,7 +1183,7 @@ input[type=file]::file-selector-button:hover {
     border-radius: 5px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     font-size: 16px;
-    z-index: 1000;
+    z-index: 2000;
     opacity: 0.85;
     transition: opacity 0.5s ease-in-out;
 }
