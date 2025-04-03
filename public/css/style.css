@@ -1165,3 +1165,55 @@ input[type=file]::file-selector-button:hover {
     color: white;
     border-color: #ffffff;
 }
+
+/* Conteneur des fichiers envoyés */
+.sent-files-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Titre des fichiers envoyés */
+.sent-files-container h3 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+/* Liste des fichiers */
+.sent-files-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sent-files-container ul li {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fff;
+    transition: box-shadow 0.3s ease;
+}
+
+.sent-files-container ul li:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Lien pour voir le fichier */
+.sent-files-container ul li a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.sent-files-container ul li a:hover {
+    text-decoration: underline;
+}

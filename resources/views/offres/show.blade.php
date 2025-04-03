@@ -76,7 +76,11 @@
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
                 @if (Auth::check() && Auth::user()->role->Libelle === 'Etudiant')
-                    <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                    @if ($offre->candidatures->where('ID_User', auth()->id())->isNotEmpty())
+                        <button type="button" class="btn2" style="cursor: not-allowed; opacity: 0.6;" disabled>Vous avez déjà postulé</button>
+                    @else
+                        <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                    @endif
                 @elseif (Auth::check() && (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote'))
                     <div style="position: relative; display: inline-block;">
                         <button type="button" class="btn2" style="cursor: not-allowed; opacity: 0.6;" disabled>Je postule</button>
@@ -117,35 +121,27 @@
             <label for="motivation">Lettre de motivation :</label><br>
             <input type="file" id="motivation" name="motivation" accept=".pdf" required><br><br>
 
-            <button type="submit" class="btn2">Envoyer ma candidature</button>
+            <button type="submit" class="btn1">Envoyer ma candidature</button>
         </form>
     </div>
 </div>
 
 @if ($candidature = $offre->candidatures->where('ID_User', auth()->id())->first())
-    <h3>Vos fichiers envoyés</h3>
-    <ul>
-        @if ($candidature->CV_path)
-            <li>
-                <a href="{{ asset('storage/' . $candidature->CV_path) }}" target="_blank">Voir le CV</a>
-                <form action="{{ route('offres.deleteFile', ['id' => $offre->ID_Offre, 'type' => 'cv']) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn2">Supprimer</button>
-                </form>
-            </li>
-        @endif
-        @if ($candidature->LM_Path)
-            <li>
-                <a href="{{ asset('storage/' . $candidature->LM_Path) }}" target="_blank">Voir la lettre de motivation</a>
-                <form action="{{ route('offres.deleteFile', ['id' => $offre->ID_Offre, 'type' => 'motivation']) }}" method="POST" style="display:inline;">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn2">Supprimer</button>
-                </form>
-            </li>
-        @endif
-    </ul>
+    <div class="sent-files-container">
+        <h3>Vos fichiers envoyés</h3>
+        <ul>
+            @if ($candidature->CV_path)
+                <li>
+                    <a href="{{ asset('storage/' . $candidature->CV_path) }}" target="_blank">Voir le CV</a>
+                </li>
+            @endif
+            @if ($candidature->LM_Path)
+                <li>
+                    <a href="{{ asset('storage/' . $candidature->LM_Path) }}" target="_blank">Voir la lettre de motivation</a>
+                </li>
+            @endif
+        </ul>
+    </div>
 @endif
 
 @include('partials.footer')
