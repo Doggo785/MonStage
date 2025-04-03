@@ -38,6 +38,12 @@ def create_tables():
             Libelle VARCHAR(25) UNIQUE
         )
         """),
+        ("Statuts_Candidature", """
+        CREATE TABLE IF NOT EXISTS Statuts_Candidature (
+            ID_Statut INT AUTO_INCREMENT PRIMARY KEY,
+            Libelle VARCHAR(50) NOT NULL
+        )
+        """),
         ("Secteur", """
         CREATE TABLE IF NOT EXISTS Secteur (
             ID_Secteur INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,12 +53,6 @@ def create_tables():
         ("Competence", """
         CREATE TABLE IF NOT EXISTS Competence (
             ID_Competence INT AUTO_INCREMENT PRIMARY KEY,
-            Libelle VARCHAR(50) NOT NULL
-        )
-        """),
-        ("Statuts_Candidature", """
-        CREATE TABLE IF NOT EXISTS Statuts_Candidature (
-            ID_Statut INT AUTO_INCREMENT PRIMARY KEY,
             Libelle VARCHAR(50) NOT NULL
         )
         """),
@@ -170,6 +170,17 @@ def create_tables():
             cursor.execute(query)
             console.print(f"Table '{table_name}' vérifiée ou créée avec succès.", style="bold green")
         conn.commit()
+
+        # Peuplement de la table Statuts_Candidature
+        statuts_query = """
+        INSERT IGNORE INTO Statuts_Candidature (ID_Statut, Libelle) VALUES
+        (1, 'Déposée'),
+        (2, 'Refusée'),
+        (3, 'Acceptée')
+        """
+        cursor.execute(statuts_query)
+        conn.commit()
+        console.print("Table 'Statuts_Candidature' peuplée avec succès.", style="bold green")
 
         # Insertion des offres par défaut
         offres_query = """
