@@ -158,3 +158,7 @@ Route::group(['prefix'=> 'wishlist', 'middleware' => [CheckStudent::class]], fun
     Route::post('/add', [WishlistController::class, 'add'])->name('wishlist.add');
     Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
+
+Route::get('/mentions-legales', function () {
+    return view('legal.mentions');
+})->name('legal.mentions');
