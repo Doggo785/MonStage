@@ -417,11 +417,13 @@ input[type=file]::file-selector-button:hover {
 /* Ajuster la grille pour des box plus larges */
 .container_offre {
   display: grid;
+  position: relative;
   grid-template-columns: 1fr 1fr; /* Réduire à 2 colonnes pour des box plus larges */
   gap: 20px; /* Augmenter l'espace entre les box */
   padding: 10px;
   margin-left: 40px;
   margin-right: 40px;
+  z-index: 1;
 }
 
 /* Style des cartes */
@@ -435,6 +437,7 @@ input[type=file]::file-selector-button:hover {
   transition: transform 0.3s, box-shadow 0.3s;
   height: auto; /* Ajuste automatiquement la hauteur */
   min-height: 150px; /* Définit une hauteur minimale */
+  z-index: 1;
 }
 
 /* Effet au survol */
@@ -518,6 +521,7 @@ input[type=file]::file-selector-button:hover {
 /* Style pour le menu déroulant */
 .dropdown {
     position: relative;
+    z-index: 1000;
     display: inline-block;
 }
 
@@ -556,7 +560,6 @@ input[type=file]::file-selector-button:hover {
     border: 1px solid #ddd;
     border-radius: 5px;
     max-height: 200px;
-    overflow-y: auto;
     position: absolute;
     z-index: 1000;
     width: 100%;

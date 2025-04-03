@@ -145,15 +145,16 @@
             </div>
 
             <!-- Dernières candidatures -->
-            <div class="dashboard_container_offre">
-                <div class="header">
-                    <h2 style="display: inline-block;">Dernières candidatures</h2>
-                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1 btn-primary" style="float: right;">Voir toutes mes candidatures</a>
+            
+            <div class="whishlist">
+            <h2>Dernières candidatures</h2>
+                <div class="button_right">
+                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1">Voir toutes mes candidatures</a>
                 </div>
                 @if ($candidatures = Auth::user()->candidatures()->orderBy('Date_postule', 'desc')->take(3)->get())
                     @foreach ($candidatures as $candidature)
                         <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}" class="card-link">
-                            <div class="dashboard_card">
+                            <div class="card_compte">
                                 <div class="content">
                                     <div class="title">{{ $candidature->offre->Titre }}</div>
                                     <div class="subtitle">{{ $candidature->offre->entreprise->Nom }} | {{ $candidature->offre->ville->Nom }}</div>
