@@ -70,14 +70,16 @@
                   @php
                      $inWishlist = auth()->check() && \App\Models\Wishlist::where('ID_User', auth()->id())->where('ID_Offre', $offre->ID_Offre)->exists();
                   @endphp
-                  @if ($inWishlist)
-                     <button class="btn1 wishlist-added" disabled><i class="fa-solid fa-circle-check"></i></button>
-                  @else
-                     <form action="{{ route('wishlist.add') }}" method="POST" style="display:inline;">
-                        @csrf
-                        <input type="hidden" name="offre_id" value="{{ $offre->ID_Offre }}">
-                        <button type="submit" class="btn1 btn-add-to-wishlist">+</button>
-                     </form>
+                  @if (auth()->check() && Auth::user()->role->Libelle !== 'Administrateur' && Auth::user()->role->Libelle !== 'Pilote')
+                     @if ($inWishlist)
+                        <button class="btn1 wishlist-added" disabled><i class="fa-solid fa-circle-check"></i></button>
+                     @else
+                        <form action="{{ route('wishlist.add') }}" method="POST" style="display:inline;">
+                           @csrf
+                           <input type="hidden" name="offre_id" value="{{ $offre->ID_Offre }}">
+                           <button type="submit" class="btn1 btn-add-to-wishlist">+</button>
+                        </form>
+                     @endif
                   @endif
                </div>
             </a>
