@@ -1123,3 +1123,45 @@ input[type=file]::file-selector-button:hover {
     opacity: 0;
     pointer-events: none;
 }
+
+/* Pagination Links */
+.pagination-links nav {
+    display: inline-block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.pagination-links .pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination-links .pagination li {
+    margin: 0 5px;
+}
+
+.pagination-links .pagination a,
+.pagination-links .pagination span {
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 14px;
+    text-decoration: none;
+    color: #ff4500;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination-links .pagination a:hover {
+    background-color: #f0f0f0;
+    color: #ff4500;
+}
+
+.pagination-links .pagination .active span {
+    background-color: #ff4500;
+    color: white;
+    border-color: #ffffff;
+}

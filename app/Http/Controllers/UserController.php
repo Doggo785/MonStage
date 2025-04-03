@@ -16,10 +16,10 @@ class UserController extends Controller
             // Si l'utilisateur est un pilote, afficher uniquement les étudiants
             $users = User::with('role')->whereHas('role', function ($query) {
                 $query->where('Libelle', 'Étudiant');
-            })->get();
+            })->paginate(6); // Pagination à 6 utilisateurs par page
         } else {
             // Sinon, afficher tous les utilisateurs
-            $users = User::with('role')->get();
+            $users = User::with('role')->paginate(6);
         }
 
         $roles = Role::all(); // Récupère tous les rôles

@@ -245,6 +245,9 @@
                 </div>
             </div>
         </div>
+        <div class="pagination-links" style="text-align: center; margin-top: 20px;">
+            {{ $entreprises->links('pagination::bootstrap-4') }}
+         </div>
     </section>
 </main>
 

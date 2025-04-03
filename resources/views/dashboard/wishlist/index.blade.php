@@ -44,7 +44,12 @@
                     </div>
                 </a>
             @endforeach
+               <!-- Liens de pagination -->
+
         @endif
     </div>
+    <div class="pagination-links" style="text-align: center; margin-top: 20px;">
+        {{ $wishlists->links('pagination::bootstrap-4') }}
+     </div>
 </section>
 @endsection

@@ -9,7 +9,9 @@ class WishlistController extends Controller
 {
     public function index()
     {
-        $wishlists = Wishlist::where('ID_User', auth()->id())->with('offre')->get();
+        $wishlists = Wishlist::where('ID_User', auth()->id())
+            ->with('offre')
+            ->paginate(6);
         return view('dashboard.wishlist.index', compact('wishlists'));
     }
 
