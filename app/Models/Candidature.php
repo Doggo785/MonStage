@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -28,9 +29,25 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  */
 class Candidature extends Model {
+    use HasFactory;
+
     protected $table = 'Candidature';
     public $timestamps = false;
     public $incrementing = false; // Désactive l'auto-incrément
+
+    /**
+     * Les attributs qui peuvent être assignés en masse.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'ID_User',
+        'ID_Offre',
+        'CV_path',
+        'LM_Path',
+        'Date_postule',
+        'ID_Statut',
+    ];
 
     // Relations
     public function user() {

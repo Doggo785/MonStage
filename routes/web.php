@@ -123,6 +123,7 @@ Route::prefix('offres')->group(function () {
     Route::post('/{id}/apply', [OffreController::class, 'apply'])->name('offres.apply.submit')->middleware(CheckStudent::class);
     Route::put('/{id}', [OffreController::class, 'update'])->name('offres.update')->middleware(CheckAdminOrPilote::class);
     Route::delete('/{id}', [OffreController::class, 'destroy'])->name('offres.destroy')->middleware(CheckAdminOrPilote::class);
+    Route::delete('/{id}/delete-file/{type}', [OffreController::class, 'deleteFile'])->name('offres.deleteFile');
 });
 
 Route::get('/villes/search', function (Request $request) {

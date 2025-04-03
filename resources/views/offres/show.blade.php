@@ -112,10 +112,10 @@
         <form action="{{ route('offres.apply.submit', ['id' => $offre->ID_Offre]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <label for="cv">Déposer votre CV :</label><br>
-            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required><br><br>
+            <input type="file" id="cv" name="cv" accept=".pdf" required><br><br>
 
             <label for="motivation">Lettre de motivation :</label><br>
-            <textarea id="motivation" name="motivation" rows="5" required></textarea><br><br>
+            <input type="file" id="motivation" name="motivation" accept=".pdf" required><br><br>
 
             <button type="submit" class="btn2">Envoyer ma candidature</button>
         </form>
@@ -150,31 +150,6 @@
 
 @include('partials.footer')
 
-<!-- Scripts pour gérer la modale -->
-<style>
-    .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 9999;
-    }
-
-    .modal.active-modal {
-        display: block !important;
-    }
-
-    .modal-content {
-        background-color: #fff;
-        margin: 15% auto;
-        padding: 20px;
-        width: 80%;
-    }
-</style>
 
 <script>
     function openModal() {
@@ -189,29 +164,19 @@
         modal.classList.remove('active-modal');
     }
 
-    // Empêche la fermeture du modal lorsqu'on clique à l'intérieur de la carte
-    document.querySelectorAll('.modal__card').forEach(modalCard => {
-        modalCard.addEventListener('click', (e) => {
+    // Empêche la fermeture du modal lorsqu'on clique à l'intérieur de son contenu
+    document.addEventListener('DOMContentLoaded', () => {
+        const modalContent = document.querySelector('.modal-content');
+        const modal = document.getElementById('postulerModal');
+
+        // Empêche la propagation de l'événement click à l'intérieur du contenu du modal
+        modalContent.addEventListener('click', (e) => {
             e.stopPropagation();
         });
-    });
 
-    // Ferme le modal lorsqu'on clique en dehors de la carte
-    document.querySelectorAll('.modal').forEach(modal => {
+        // Ferme le modal lorsqu'on clique en dehors de son contenu
         modal.addEventListener('click', () => {
             closeModal();
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.btn2[disabled]').forEach(button => {
-            const tooltip = button.nextElementSibling;
-            button.addEventListener('mouseenter', () => {
-                tooltip.style.display = 'block';
-            });
-            button.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-            });
         });
     });
 </script>
