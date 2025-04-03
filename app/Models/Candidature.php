@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 
@@ -50,13 +51,20 @@ class Candidature extends Model {
         'ID_Statut',
     ];
 
-    // Relations
-    public function user() {
-        return $this->belongsTo(User::class, 'ID_User');
+    /**
+     * Relation avec l'utilisateur.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'ID_User', 'ID_User');
     }
 
-    public function offre() {
-        return $this->belongsTo(Offre::class, 'ID_Offre');
+    /**
+     * Relation avec l'offre.
+     */
+    public function offre(): BelongsTo
+    {
+        return $this->belongsTo(Offre::class, 'ID_Offre', 'ID_Offre');
     }
 
     public function statut() {

@@ -112,33 +112,29 @@
                 </div>
                 <h4>Statut : En attente</h4>
             </div>
-            <div class="whishlist">
-                <h2>Whishlist</h2>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Stage - Developer</div>
-                        <div class="subtitle">TOTAL | PAU 64000</div>
-                    </div>
-                    <div class="star"><i class="fa-regular fa-star"></i></div>
+
+            <!-- Dernières candidatures -->
+            
+            <div class="dashboard_container_offre">
+                <div class="header">
+                    <h2 style="display: inline-block;">Dernières candidatures</h2>
+                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1 btn-primary" style="float: right;">Voir toutes mes candidatures</a>
                 </div>
+                @if ($candidatures = Auth::user()->candidatures()->orderBy('Date_postule', 'desc')->take(3)->get())
+                    @foreach ($candidatures as $candidature)
+                        <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}" class="card-link">
+                            <div class="dashboard_card">
+                                <div class="content">
+                                    <div class="title">{{ $candidature->offre->Titre }}</div>
+                                    <div class="subtitle">{{ $candidature->offre->entreprise->Nom }} | {{ $candidature->offre->ville->Nom }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                @else
+                    <p>Aucune candidature récente.</p>
+                @endif
                 <br>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Stage - Data Management</div>
-                        <div class="subtitle">LIDL | PAU 64000</div>
-                    </div>
-                    <div class="star"><i class="fa-regular fa-star"></i></div>
-                </div>
-            </div>
-            <div class="offre">
-                <h2>Candidature</h2>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Stage - Administrateur Système</div>
-                        <div class="subtitle">SAFRAN | BORDES 64510</div>
-                    </div>
-                    <div class="icon_bloc"><i class="fa-solid fa-xmark"></i></div>
-                </div>
             </div>
         </div>
     @elseif (Auth::user()->role->Libelle === 'Administrateur')
