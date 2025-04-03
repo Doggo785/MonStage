@@ -105,7 +105,7 @@ class UserController extends Controller
                 $query->where('Libelle', 'LIKE', "%{$search}%");
             })
             ->with('role') // Charge les relations pour éviter les requêtes supplémentaires
-            ->get();
+            ->paginate(6); // Ajoute la pagination
 
         $roles = Role::all(); // Récupère tous les rôles pour les formulaires
 
