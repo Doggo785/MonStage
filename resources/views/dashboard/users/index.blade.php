@@ -63,7 +63,23 @@
                             <p class="modal__info">
                                 Email : {{ $user->Email }}<br>
                                 Téléphone : {{ $user->Telephone ?? 'Non renseigné' }}<br>
-                                Rôle : {{ $user->role->Libelle }}
+                                Rôle : {{ $user->role->Libelle }}<br>
+
+                                @if ($user->role->Libelle === 'Etudiant')
+                                    <!-- Affichage du statut de recherche -->
+                                    Statut : 
+                                    @if ($user->etudiant && $user->etudiant->Statut_recherche == 1)
+                                        En recherche de stage
+                                    @elseif ($user->etudiant && $user->etudiant->Statut_recherche == 2)
+                                        A trouvé un stage
+                                    @else
+                                        Non renseigné
+                                    @endif
+                                    <br>
+
+                                    <!-- Affichage du nombre de candidatures -->
+                                    Nombre de candidatures : {{ $user->candidatures->count() }}
+                                @endif
                             </p>
                         </div>
                         <div class="modal__buttons">
@@ -176,8 +192,7 @@
                                     @foreach ($roles as $role)
                                         <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
                                     @endforeach
-                                </select>
-                            @endif
+                                @endif
                             <br><br>
                             
                             <label for="edit-profile_picture">Photo de profil :</label><br>
