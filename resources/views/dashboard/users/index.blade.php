@@ -174,9 +174,7 @@
                                 <!-- Champ modifiable pour les administrateurs -->
                                 <select id="edit-role" name="role" class="search-input" required>
                                     @foreach ($roles as $role)
-                                        <option value="{{ $role->ID_Role }}" {{ $role->ID_Role == $user->role->ID_Role ? 'selected' : '' }}>
-                                            {{ $role->Libelle }}
-                                        </option>
+                                        <option value="{{ $role->ID_Role }}">{{ $role->Libelle }}</option>
                                     @endforeach
                                 </select>
                             @endif
