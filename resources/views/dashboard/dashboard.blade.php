@@ -44,6 +44,13 @@
                         <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
                     </div>
                 </div>
+                <div class="admin-actions">
+                    <h2>Actions Administrateur</h2>
+                    <ul>
+                        <li><a href="{{ route('users.index') }}" class="btn1 btn-primary">Gérer les utilisateurs</a></li>
+                        <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
+                    </ul>
+                </div>
             </div>
             <div class="whishlist">
         <h2>Gestion des élèves</h2>
@@ -115,39 +122,29 @@
                 </div>
                 <h4>Statut : En attente</h4>
             </div>
-            <div class="whishlist">
-                <h2>Whishlist</h2>
-                <div class="button_right">
-                    <a class="btn1">Voir la Wishlist</a>
+
+            <!-- Dernières candidatures -->
+            
+            <div class="dashboard_container_offre">
+                <div class="header">
+                    <h2 style="display: inline-block;">Dernières candidatures</h2>
+                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1 btn-primary" style="float: right;">Voir toutes mes candidatures</a>
                 </div>
-                <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Stage - Developer</div>
-                        <div class="subtitle">TOTAL | PAU 64000</div>
-                        <div class="icon_compte"><i class="fa-regular fa-star"></i></div>
-                    </div>
-                </div>
+                @if ($candidatures = Auth::user()->candidatures()->orderBy('Date_postule', 'desc')->take(3)->get())
+                    @foreach ($candidatures as $candidature)
+                        <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}" class="card-link">
+                            <div class="dashboard_card">
+                                <div class="content">
+                                    <div class="title">{{ $candidature->offre->Titre }}</div>
+                                    <div class="subtitle">{{ $candidature->offre->entreprise->Nom }} | {{ $candidature->offre->ville->Nom }}</div>
+                                </div>
+                            </div>
+                        </a>
+                    @endforeach
+                @else
+                    <p>Aucune candidature récente.</p>
+                @endif
                 <br>
-                <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Stage - Data Management</div>
-                        <div class="subtitle">LIDL | PAU 64000</div>
-                    </div>
-                    <div class="icon_compte"><i class="fa-regular fa-star"></i></div>
-                </div>
-            </div>
-            <div class="offre">
-                <h2>Candidature</h2>
-                <div div class="button_right">
-                    <a class="btn1">Voir les candidatures</a>
-                </div>
-                <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Stage - Administrateur Système</div>
-                        <div class="subtitle">SAFRAN | BORDES 64510</div>
-                    </div>
-                    <div class="icon_compte"><i class="fa-solid fa-xmark"></i></div>
-                </div>
             </div>
         </div>
         
@@ -191,32 +188,12 @@
                     </div>
                 </div>
             </div>
-
-           
-        <div class="whishlist">
-        <h2>Gestion des utilisateurs</h2>
-            <div class="button_right">
-                <a class="btn1">Voir tous les utilisateurs</a>
-            </div>
-            <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Un pilote au pif</div>
-                        <div class="subtitle">PILOTE</div>
-                    </div>
-            </div>
-        </div>
-
-        
-        <div class="offre">
-        <h2>Gestion des offres</h2>
-            <div class="button_right">
-                <a href="{{ route('offres.index') }}" class="btn1">Voir toutes les offres</a>
-            </div>
-            <div class="card_compte">
-                    <div class="content">
-                        <div class="title">Stage de ouf</div>
-                        <div class="subtitle">en france j'espère</div>
-                    </div>
+            <div class="admin-actions">
+                <h2>Actions Administrateur</h2>
+                <ul>
+                    <li><a href="{{ route('users.index') }}" class="btn1 btn-primary">Gérer les utilisateurs</a></li>
+                    <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
+                </ul>
             </div>
         </div>
 

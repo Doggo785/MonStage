@@ -84,5 +84,10 @@
          @endif
       @endforeach
    </div>
+
+   <!-- Liens de pagination -->
+   <div class="pagination-links" style="text-align: center; margin-top: 20px;">
+      {{ $offres->links('pagination::bootstrap-4') }}
+   </div>
 </section>
 @endsection

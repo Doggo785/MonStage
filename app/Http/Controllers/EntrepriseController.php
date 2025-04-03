@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Avis;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Entreprise;
@@ -12,7 +13,7 @@ class EntrepriseController extends Controller
 
     public function index()
     {
-        $entreprises = Entreprise::with('ville')->get();
+        $entreprises = Entreprise::with(['ville', 'avis'])->paginate(6); // Pagination à 6 entreprises par page
         $villes = Ville::all(); // Récupère toutes les villes pour le formulaire
         return view('entreprises.index', compact('entreprises', 'villes'));
     }
@@ -151,5 +152,34 @@ class EntrepriseController extends Controller
         $entreprise->delete();
 
         return redirect()->route('entreprises.index')->with('success', 'Entreprise supprimée avec succès.');
+    }
+
+    public function rate(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'rating' => 'required|numeric|min:1|max:5', // Note en décimal
+        ]);
+
+        $entreprise = Entreprise::findOrFail($id);
+
+        // Vérifier si l'utilisateur a déjà noté cette entreprise
+        $existingAvis = Avis::where('ID_Entreprise', $entreprise->ID_Entreprise)
+                            ->where('ID_User', auth()->id())
+                            ->first();
+
+        if ($existingAvis) {
+            // Mettre à jour la note existante
+            $existingAvis->Note = $validated['rating'];
+            $existingAvis->save();
+        } else {
+            // Créer un nouvel avis
+            $avis = new Avis();
+            $avis->Note = $validated['rating'];
+            $avis->ID_Entreprise = $entreprise->ID_Entreprise;
+            $avis->ID_User = auth()->id();
+            $avis->save();
+        }
+
+        return redirect()->back()->with('success', 'Votre note a été enregistrée avec succès.');
     }
 }

@@ -60,7 +60,14 @@
                         <div>
                             <h3 class="card__name">{{ $entreprise->Nom }}</h3>
                             <span class="card__price">{{ ucfirst($entreprise->ville->Nom) }} | {{ $entreprise->ville->CP }}</span><br>
-                            <span class="card__price">{{ $entreprise->Note ?? 'Non notée' }}</span>
+                            <span class="card__price">
+                                @if ($entreprise->avis->avg('Note'))
+                                    {{ number_format($entreprise->avis->avg('Note'), 1) }} / 5 
+                                    <i class="fa-solid fa-star" style="color: gold;"></i>
+                                @else
+                                    Non notée
+                                @endif
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -69,6 +76,24 @@
                 <div class="modal">
                     <div class="modal__card">
                         <i class="fa-solid fa-xmark modal__close"></i>
+                        
+                        <!-- Affichage de la moyenne des notes et du nombre d'avis -->
+                        <div class="modal__header">
+                            @php
+                                $averageRating = $entreprise->avis->avg('Note'); // Calcul de la moyenne des notes
+                                $totalReviews = $entreprise->avis->count(); // Nombre total d'avis
+                            @endphp
+                            <div class="modal__rating-info" style="text-align: right;">
+                                @if ($averageRating)
+                                    <strong>Moyenne :</strong> {{ number_format($averageRating, 1) }} / 5 
+                                    <i class="fa-solid fa-star" style="color: gold;"></i><br>
+                                @else
+                                    <strong>Moyenne :</strong> Non notée<br>
+                                @endif
+                                <strong>Nombre d'avis :</strong> {{ $totalReviews }}
+                            </div>
+                        </div>
+
                         <img src="{{ asset('storage/' . $entreprise->pfp_path) }}" alt="Logo de {{ $entreprise->Nom }}" class="modal__img">
                         <div>
                             <h3 class="modal__name">{{ $entreprise->Nom }}</h3>
@@ -101,6 +126,27 @@
                                 <button class="modal__button" onclick='openEditEntrepriseModal(@json($entreprise))'>Éditer</button>
                             @endif
                         </div>
+
+                        <!-- Formulaire de notation -->
+                        @if (auth()->check())
+                            @php
+                                // Récupérer la note existante pour l'utilisateur connecté
+                                $userNote = $entreprise->avis->where('ID_User', auth()->id())->first();
+                            @endphp
+                            <form action="{{ route('entreprises.rate', $entreprise->ID_Entreprise) }}" method="POST" class="rating-form">
+                                @csrf
+                                <label for="rating-{{ $entreprise->ID_Entreprise }}">Votre note :</label>
+                                <select name="rating" id="rating-{{ $entreprise->ID_Entreprise }}" required>
+                                    <option value="">Sélectionnez une note</option>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <option value="{{ $i }}" {{ $userNote && $userNote->Note == $i ? 'selected' : '' }}>
+                                            {{ $i }} étoile{{ $i > 1 ? 's' : '' }}
+                                        </option>
+                                    @endfor
+                                </select>
+                                <button type="submit" class="modal__button">Noter</button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             @endforeach
@@ -119,43 +165,42 @@
 
             <!-- Modal pour ajouter une nouvelle entreprise -->
             <div id="add-entreprise-modal" class="modal" style="display: none;">
-                <div class="modal__card">
+                <div class="modal__card" style="margin: 20px;">
+                    <center><h1>Ajouter une nouvelle entreprise</h1></center>
                     <i class="fa-solid fa-xmark modal__close" onclick="closeAddEntrepriseModal()"></i>
-                    <h3 class="modal__name">Ajouter une nouvelle entreprise</h3>
-                    <form action="{{ route('entreprises.store') }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="form-group">
-                            <label for="Nom">Nom de l'entreprise</label>
-                            <input type="text" id="Nom" name="Nom" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="ville-search">Ville</label>
-                            <input type="text" id="ville-search" class="search-input" placeholder="Recherchez une ville..." autocomplete="off" required>
+                    <article>
+                        <form action="{{ route('entreprises.store') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <h3>Informations Générales</h3>
+                            <label for="Nom">Nom de l'entreprise :</label><br>
+                            <input type="text" id="Nom" name="Nom" class="search-input" required><br><br>
+                            
+                            <!-- On remplace le champ ville par un champ avec autocomplétion -->
+                            <label for="ville-search">Ville :</label><br>
+                            <input type="text" id="ville-search" class="search-input" placeholder="Recherchez une ville..." autocomplete="off" required><br>
                             <ul id="ville-results" class="dropdown-menu" style="display: none;"></ul>
-                            <input type="hidden" id="ville" name="Ville">
-                        </div>
-                        <div class="form-group">
-                            <label for="Telephone">Téléphone</label>
-                            <input type="text" id="Telephone" name="Telephone" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="Email">Email</label>
-                            <input type="email" id="Email" name="Email" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="Site">Site Web</label>
-                            <input type="url" id="Site" name="Site">
-                        </div>
-                        <div class="form-group">
-                            <label for="Description">Description</label>
-                            <textarea id="Description" name="Description" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="image">Logo de l'entreprise</label>
-                            <input type="file" id="image" name="image" accept="image/*">
-                        </div>
-                        <button type="submit" class="btn1">Ajouter</button>
-                    </form>
+                            <input type="hidden" id="ville" name="Ville"><br><br>
+                            
+                            <label for="Telephone">Téléphone :</label><br>
+                            <input type="text" id="Telephone" name="Telephone" class="search-input" required><br><br>
+                            
+                            <label for="Email">Email :</label><br>
+                            <input type="email" id="Email" name="Email" class="search-input" required><br><br>
+                            
+                            <label for="Site">Site Web :</label><br>
+                            <input type="url" id="Site" name="Site" class="search-input"><br><br>
+                            
+                            <label for="Description">Description :</label><br>
+                            <textarea id="Description" name="Description" rows="4" class="search-input"></textarea><br><br>
+                            
+                            <label for="image">Logo de l'entreprise :</label><br>
+                            <input type="file" id="image" name="image" accept="image/*"><br><br>
+                            
+                            <div class="submit-button">
+                                <button type="submit" class="btn2">Ajouter</button>
+                            </div>
+                        </form>
+                    </article>
                 </div>
             </div>
 
@@ -172,7 +217,6 @@
                             <label for="edit-Nom">Nom de l'entreprise :</label><br>
                             <input type="text" id="edit-Nom" name="Nom" class="search-input" required><br><br>
                             
-                            <!-- On remplace le champ ville par un champ avec autocomplétion -->
                             <label for="ville-search-edit">Ville :</label><br>
                             <input type="text" id="ville-search-edit" class="search-input" placeholder="Recherchez une ville..." autocomplete="off" required><br>
                             <ul id="ville-results-edit" class="dropdown-menu" style="display: none;"></ul>
@@ -201,13 +245,11 @@
                 </div>
             </div>
         </div>
+        <div class="pagination-links" style="text-align: center; margin-top: 20px;">
+            {{ $entreprises->links('pagination::bootstrap-4') }}
+         </div>
     </section>
 </main>
-
-<footer>
-    <br>
-    <div class="footer_fixe">&copy;2025 - Tous droits réservés - JGT</div>
-</footer>
 
 <script>
     function previewProfilePicture(event, entrepriseId) {

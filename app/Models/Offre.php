@@ -81,4 +81,9 @@ class Offre extends Model
             'ID_Competence'
         );
     }
+
+    public function candidatures()
+    {
+        return $this->hasMany(Candidature::class, 'ID_Offre');
+    }
 }

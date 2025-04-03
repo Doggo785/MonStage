@@ -60,7 +60,14 @@
             <div>
             <h3 class="card__name">{{ $offre->entreprise->Nom }}</h3>
                 <span class="card__price">{{ ucfirst($offre->entreprise->ville->Nom) }} | {{ $offre->entreprise->ville->CP }}</span><br>
-                <span class="card__price">{{ $offre->entreprise->Note ?? 'Non notée' }}</span>
+                <span class="card__price">
+                    @if ($offre->entreprise->avis->avg('Note'))
+                        {{ number_format($offre->entreprise->avis->avg('Note'), 1) }} / 5 
+                        <i class="fa-solid fa-star" style="color: gold;"></i>
+                    @else
+                        Non notée
+                    @endif
+                </span>
             </div>
         </div>
         <div class="vide"></div>
@@ -69,7 +76,11 @@
             <div class="submit-button">
                 <!-- Bouton pour ouvrir la modale -->
                 @if (Auth::check() && Auth::user()->role->Libelle === 'Etudiant')
-                    <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                    @if ($offre->candidatures->where('ID_User', auth()->id())->isNotEmpty())
+                        <button type="button" class="btn2" style="cursor: not-allowed; opacity: 0.6;" disabled>Vous avez déjà postulé</button>
+                    @else
+                        <button type="button" class="btn2" onclick="openModal()">Je postule</button>
+                    @endif
                 @elseif (Auth::check() && (Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote'))
                     <div style="position: relative; display: inline-block;">
                         <button type="button" class="btn2" style="cursor: not-allowed; opacity: 0.6;" disabled>Je postule</button>
@@ -105,38 +116,63 @@
         <form action="{{ route('offres.apply.submit', ['id' => $offre->ID_Offre]) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <label for="cv">Déposer votre CV :</label><br>
-            <input type="file" id="cv" name="cv" accept=".pdf,.doc,.docx" required><br><br>
+            <input type="file" id="cv" name="cv" accept=".pdf" required><br><br>
 
             <label for="motivation">Lettre de motivation :</label><br>
-            <textarea id="motivation" name="motivation" rows="5" required></textarea><br><br>
+            <input type="file" id="motivation" name="motivation" accept=".pdf" required><br><br>
 
-            <button type="submit" class="btn2">Envoyer ma candidature</button>
+            <button type="submit" class="btn1">Envoyer ma candidature</button>
         </form>
     </div>
 </div>
 
+@if ($candidature = $offre->candidatures->where('ID_User', auth()->id())->first())
+    <div class="sent-files-container">
+        <h3>Vos fichiers envoyés</h3>
+        <ul>
+            @if ($candidature->CV_path)
+                <li>
+                    <a href="{{ asset('storage/' . $candidature->CV_path) }}" target="_blank">Voir le CV</a>
+                </li>
+            @endif
+            @if ($candidature->LM_Path)
+                <li>
+                    <a href="{{ asset('storage/' . $candidature->LM_Path) }}" target="_blank">Voir la lettre de motivation</a>
+                </li>
+            @endif
+        </ul>
+    </div>
+@endif
+
 @include('partials.footer')
 
-<!-- Scripts pour gérer la modale -->
+
 <script>
     function openModal() {
-        document.getElementById('postulerModal').style.display = 'block';
+        const modal = document.getElementById('postulerModal');
+        modal.style.display = 'block';
+        modal.classList.add('active-modal');
     }
 
     function closeModal() {
-        document.getElementById('postulerModal').style.display = 'none';
+        const modal = document.getElementById('postulerModal');
+        modal.style.display = 'none';
+        modal.classList.remove('active-modal');
     }
 
-    // Afficher/Masquer la fenêtre rouge au survol du bouton désactivé
+    // Empêche la fermeture du modal lorsqu'on clique à l'intérieur de son contenu
     document.addEventListener('DOMContentLoaded', () => {
-        document.querySelectorAll('.btn2[disabled]').forEach(button => {
-            const tooltip = button.nextElementSibling;
-            button.addEventListener('mouseenter', () => {
-                tooltip.style.display = 'block';
-            });
-            button.addEventListener('mouseleave', () => {
-                tooltip.style.display = 'none';
-            });
+        const modalContent = document.querySelector('.modal-content');
+        const modal = document.getElementById('postulerModal');
+
+        // Empêche la propagation de l'événement click à l'intérieur du contenu du modal
+        modalContent.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // Ferme le modal lorsqu'on clique en dehors de son contenu
+        modal.addEventListener('click', () => {
+            closeModal();
         });
     });
 </script>

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidatureController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckAdminOrPilote;
 use App\Http\Middleware\CheckPilote;
@@ -15,6 +16,7 @@ use App\Http\Controllers\OffreController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EntrepriseController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\UserController;
 
 // Liste de toutes les offres avec tous leurs attributs
 Route::get('/', function (Request $request) {
@@ -68,6 +70,12 @@ Route::post('/login', function (Request $request) {
 
     if (Auth::attempt($credentials)) {
         $request->session()->regenerate();
+
+        // Vérifie si le mot de passe est encore le mot de passe par défaut
+        if (Hash::check('DefaultPassword!', Auth::user()->Password)) {
+            return redirect()->route('password.reset.prompt');
+        }
+
         return redirect()->intended('/dashboard'); // Redirige vers le tableau de bord
     }
 
@@ -84,50 +92,41 @@ Route::post('/logout', function (Request $request) {
     return redirect('/login'); // Redirige vers la page de connexion
 })->name('logout');
 
-Route::group(['prefix'=>'/dashboard', 'middleware'=> ['auth']], function () {
+Route::get('/password/reset', [UserController::class, 'showResetPasswordForm'])->name('password.reset.prompt');
+Route::post('/password/reset', [UserController::class, 'resetPassword'])->name('password.reset');
+
+Route::group(['prefix' => '/dashboard', 'middleware' => ['auth']], function () {
     Route::get('/', function () {
         return view('dashboard.dashboard');
     });
 
-    Route::get('applications', function () {
-        return view('applications');
-    })->middleware(CheckStudent::class);
+    // Routes pour la wishlist
+    Route::get('/wishlist', [WishlistController::class, 'index'])->name('dashboard.wishlist.index')->middleware(CheckStudent::class);
+    Route::get('/users/search', [UserController::class, 'search'])->name('users.search');
+    // Routes pour les utilisateurs
+    Route::group(['prefix' => 'users', 'middleware' => [CheckAdminOrPilote::class]], function () {
+        Route::get('/', [UserController::class, 'index'])->name('users.index'); // Liste des utilisateurs
+        Route::get('/{id}', [UserController::class, 'show'])->name('users.show'); // Voir les détails d'un utilisateur
+        Route::get('/{id}/edit', [UserController::class, 'edit'])->name('users.edit'); // Modifier un utilisateur
+        Route::put('/{id}', [UserController::class, 'update'])->name('users.update'); // Mettre à jour un utilisateur
+        Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
+        Route::post('/store', [UserController::class, 'store'])->name('users.store'); // Ajouter un utilisateur
+    });
 
-    Route::get('create-company', function () {
-        return view('create-company');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('create-account', function () {
-        return view('create-account');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts', function () {
-        return view('accounts');
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts/{id}', function ($id) {
-        return view('account-details', ['id' => $id]);
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('accounts/{id}/edit', function ($id) {
-        return view('edit-account', ['id' => $id]);
-    })->middleware(CheckAdminOrPilote::class);
-
-    Route::get('wishlist', function () {
-        return view('wishlist');
-    })->middleware(CheckStudent::class);
+    Route::get('/candidatures', [CandidatureController::class, 'index'])->name('dashboard.candidatures.index')->middleware('auth');
 });
 
 // Routes pour les offres
 Route::prefix('offres')->group(function () {
     Route::get('/', [OffreController::class, 'index'])->name('offres.index');
-    Route::get('/create', [OffreController::class, 'create'])->name('offres.create')->middleware('auth');
-    Route::post('/store', [OffreController::class, 'store'])->name('offres.store')->middleware('auth');
+    Route::get('/create', [OffreController::class, 'create'])->name('offres.create')->middleware(CheckAdminOrPilote::class);
+    Route::post('/store', [OffreController::class, 'store'])->name('offres.store')->middleware(CheckAdminOrPilote::class);
     Route::get('/{id}', [OffreController::class, 'show'])->name('offres.show');
-    Route::get('/{id}/edit', [OffreController::class, 'edit'])->name('offres.edit')->middleware('auth');
-    Route::post('/{id}/apply', [OffreController::class, 'apply'])->name('offres.apply.submit')->middleware('auth');
-    Route::put('/{id}', [OffreController::class, 'update'])->name('offres.update')->middleware('auth');
-    Route::delete('/{id}', [OffreController::class, 'destroy'])->name('offres.destroy')->middleware('auth');
+    Route::get('/{id}/edit', [OffreController::class, 'edit'])->name('offres.edit')->middleware(CheckAdminOrPilote::class);
+    Route::post('/{id}/apply', [OffreController::class, 'apply'])->name('offres.apply.submit')->middleware(CheckStudent::class);
+    Route::put('/{id}', [OffreController::class, 'update'])->name('offres.update')->middleware(CheckAdminOrPilote::class);
+    Route::delete('/{id}', [OffreController::class, 'destroy'])->name('offres.destroy')->middleware(CheckAdminOrPilote::class);
+    Route::delete('/{id}/delete-file/{type}', [OffreController::class, 'deleteFile'])->name('offres.deleteFile');
 });
 
 Route::get('/villes/search', function (Request $request) {
@@ -146,18 +145,16 @@ Route::post('/profile/update-picture', [ProfileController::class, 'updatePicture
 
 Route::group(['prefix'=> 'entreprises'], function () {
     Route::get('/', [EntrepriseController::class, 'index'])->name('entreprises.index');
-    Route::put('/{id}/update-picture', [EntrepriseController::class, 'updatePicture'])->name('entreprises.update_picture');
+    Route::put('/{id}/update-picture', [EntrepriseController::class, 'updatePicture'])->name('entreprises.update_picture')->middleware(CheckAdminOrPilote::class);
     Route::get('/search', [EntrepriseController::class, 'search'])->name('entreprises.search');
-    Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store');
-    Route::delete('/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy');
-    Route::put('/{id}', [EntrepriseController::class, 'update'])->name('entreprises.update');
+    Route::post('/store', [EntrepriseController::class, 'store'])->name('entreprises.store')->middleware(CheckAdminOrPilote::class);
+    Route::delete('/{id}', [EntrepriseController::class, 'destroy'])->name('entreprises.destroy')->middleware(CheckAdminOrPilote::class);
+    Route::put('/{id}', [EntrepriseController::class, 'update'])->name('entreprises.update')->middleware(CheckAdminOrPilote::class);
+    Route::post('/{id}/rate', [EntrepriseController::class, 'rate'])->name('entreprises.rate')->middleware(CheckStudent::class); // uniquement Student normalement
 });
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-    Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
-    Route::delete('/wishlist/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
+Route::group(['prefix'=> 'wishlist', 'middleware' => [CheckStudent::class]], function () {
+    Route::get('/', [WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/add', [WishlistController::class, 'add'])->name('wishlist.add');
+    Route::delete('/remove/{id}', [WishlistController::class, 'remove'])->name('wishlist.remove');
 });
-
-Route::get('/wishlist', [WishlistController::class, 'index'])->name('wishlist.index');
-

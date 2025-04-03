@@ -21,6 +21,13 @@ function setupVilleSearch(inputId, resultsId, hiddenId) {
                     return response.json();
                 })
                 .then(data => {
+                    // Filtrer les villes qui commencent par ce que l'utilisateur tape
+                    data = data.filter(ville => 
+                        ville.Nom.toLowerCase().startsWith(query.toLowerCase())
+                    );
+                    // Tout de même trier alphabétiquement
+                    data.sort((a, b) => a.Nom.localeCompare(b.Nom));
+
                     resultsEl.innerHTML = '';
                     resultsEl.style.display = 'block';
                     if (data.length === 0) {

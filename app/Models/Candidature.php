@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * 
@@ -28,17 +30,41 @@ use Illuminate\Database\Eloquent\Model;
  * @mixin \Eloquent
  */
 class Candidature extends Model {
-    protected $table = 'Candidature';
-    public $timestamps = false;
+    use HasFactory;
+
+    protected $table = 'Candidature'; // Nom de la table
+    public $timestamps = false; // Désactiver les colonnes created_at et updated_at
+    protected $primaryKey = null; // Indiquer que la table n'a pas de clé primaire auto-incrémentée
     public $incrementing = false; // Désactive l'auto-incrément
 
-    // Relations
-    public function user() {
-        return $this->belongsTo(User::class, 'ID_User');
+    /**
+     * Les attributs qui peuvent être assignés en masse.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'ID_User',
+        'ID_Offre',
+        'CV_path',
+        'LM_Path',
+        'Date_postule',
+        'ID_Statut',
+    ];
+
+    /**
+     * Relation avec l'utilisateur.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'ID_User', 'ID_User');
     }
 
-    public function offre() {
-        return $this->belongsTo(Offre::class, 'ID_Offre');
+    /**
+     * Relation avec l'offre.
+     */
+    public function offre(): BelongsTo
+    {
+        return $this->belongsTo(Offre::class, 'ID_Offre', 'ID_Offre');
     }
 
     public function statut() {
