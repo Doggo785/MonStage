@@ -122,19 +122,87 @@
     </div>
 </div>
 
+@if ($candidature = $offre->candidatures->where('ID_User', auth()->id())->first())
+    <h3>Vos fichiers envoyés</h3>
+    <ul>
+        @if ($candidature->CV_path)
+            <li>
+                <a href="{{ asset('storage/' . $candidature->CV_path) }}" target="_blank">Voir le CV</a>
+                <form action="{{ route('offres.deleteFile', ['id' => $offre->ID_Offre, 'type' => 'cv']) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn2">Supprimer</button>
+                </form>
+            </li>
+        @endif
+        @if ($candidature->LM_Path)
+            <li>
+                <a href="{{ asset('storage/' . $candidature->LM_Path) }}" target="_blank">Voir la lettre de motivation</a>
+                <form action="{{ route('offres.deleteFile', ['id' => $offre->ID_Offre, 'type' => 'motivation']) }}" method="POST" style="display:inline;">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn2">Supprimer</button>
+                </form>
+            </li>
+        @endif
+    </ul>
+@endif
+
 @include('partials.footer')
 
 <!-- Scripts pour gérer la modale -->
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 9999;
+    }
+
+    .modal.active-modal {
+        display: block !important;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        width: 80%;
+    }
+</style>
+
 <script>
     function openModal() {
-        document.getElementById('postulerModal').style.display = 'block';
+        const modal = document.getElementById('postulerModal');
+        modal.style.display = 'block';
+        modal.classList.add('active-modal');
     }
 
     function closeModal() {
-        document.getElementById('postulerModal').style.display = 'none';
+        const modal = document.getElementById('postulerModal');
+        modal.style.display = 'none';
+        modal.classList.remove('active-modal');
     }
 
-    // Afficher/Masquer la fenêtre rouge au survol du bouton désactivé
+    // Empêche la fermeture du modal lorsqu'on clique à l'intérieur de la carte
+    document.querySelectorAll('.modal__card').forEach(modalCard => {
+        modalCard.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    });
+
+    // Ferme le modal lorsqu'on clique en dehors de la carte
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', () => {
+            closeModal();
+        });
+    });
+
     document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.btn2[disabled]').forEach(button => {
             const tooltip = button.nextElementSibling;
