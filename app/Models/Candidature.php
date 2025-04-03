@@ -31,8 +31,9 @@ use Illuminate\Database\Eloquent\Model;
 class Candidature extends Model {
     use HasFactory;
 
-    protected $table = 'Candidature';
-    public $timestamps = false;
+    protected $table = 'Candidature'; // Nom de la table
+    public $timestamps = false; // Désactiver les colonnes created_at et updated_at
+    protected $primaryKey = null; // Indiquer que la table n'a pas de clé primaire auto-incrémentée
     public $incrementing = false; // Désactive l'auto-incrément
 
     /**
