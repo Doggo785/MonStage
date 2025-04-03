@@ -49,7 +49,7 @@ class OffreController extends Controller
             });
         }
 
-        $offres = $query->with(['competences', 'entreprise', 'ville'])->get();
+        $offres = $query->with(['competences', 'entreprise', 'ville'])->paginate(6);
         $entreprises = Entreprise::all();
         $regions = Region::all();
 

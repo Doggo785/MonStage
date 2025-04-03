@@ -19,7 +19,7 @@
             @foreach ($users as $user)
                 <div class="card__box">
                     <!-- CARD USER -->
-                    <div class="card__product">
+                    <div class="card__product {{ $user->role->Libelle === 'Administrateur' ? 'border-admin' : ($user->role->Libelle === 'Pilote' ? 'border-pilot' : '') }}">
                         <div class="profile-container">
                             <!-- Conteneur de la photo de profil -->
                             <div class="profile-picture-wrapper">
@@ -35,7 +35,6 @@
                                 @endif
                             </div>
                         </div>
-
                         <!-- Informations de l'utilisateur -->
                         <div>
                             <h3 class="card__name">{{ strtoupper($user->Nom) }} {{ ucfirst(strtolower($user->Prenom)) }}</h3>
@@ -194,6 +193,10 @@
                 </div>
             </div>
         </div>
+           <!-- Liens de pagination -->
+   <div class="pagination-links" style="text-align: center; margin-top: 20px;">
+    {{ $users->links('pagination::bootstrap-4') }}
+ </div>
     </section>
 </main>
 

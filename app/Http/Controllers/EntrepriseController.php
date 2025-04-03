@@ -13,7 +13,7 @@ class EntrepriseController extends Controller
 
     public function index()
     {
-        $entreprises = Entreprise::with(['ville', 'avis'])->get(); // Charge les villes et les avis
+        $entreprises = Entreprise::with(['ville', 'avis'])->paginate(6); // Pagination à 6 entreprises par page
         $villes = Ville::all(); // Récupère toutes les villes pour le formulaire
         return view('entreprises.index', compact('entreprises', 'villes'));
     }
