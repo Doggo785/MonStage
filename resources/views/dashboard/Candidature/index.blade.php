@@ -3,7 +3,7 @@
 @section('title', 'Mes Candidatures')
 
 @section('content')
-<section>
+<section style="margin-top : 50px">
     <center><h1>Mes Candidatures</h1></center>
     <div class="container_offre">
         @if ($candidatures->isEmpty())

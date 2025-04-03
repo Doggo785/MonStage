@@ -53,24 +53,34 @@
                 </div>
             </div>
             <div class="whishlist">
-                <h2>Élèves</h2>
-                <div class="card">
+        <h2>Gestion des élèves</h2>
+            <div class="button_right">
+                <a class="btn1">Voir tous les élèves</a>
+            </div>
+            <div class="card_compte">
                     <div class="content">
-                        <div class="title">Lucas TOUJAS</div>
-                        <div class="subtitle">CPI A2 Info</div>
+                        <div class="title">Un evèle au pif</div>
+                        <div class="subtitle">Statut : pauvre</div>
                     </div>
-                    <div class="star"><i class="fa-solid fa-clock-rotate-left"></i></div>
-                </div>
-                <br>
-                <div class="card">
-                    <div class="content">
-                        <div class="title">Raphaël TOLANDAL</div>
-                        <div class="subtitle">CPI A2 Info</div>
-                    </div>
-                    <div class="star"><i class="fa-solid fa-check"></i></div>
-                </div>
             </div>
         </div>
+
+        
+        <div class="offre">
+        <h2>Gestion des offres</h2>
+            <div class="button_right">
+                <a href="{{ route('offres.index') }}" class="btn1">Voir toutes les offres</a>
+            </div>
+            <div class="card_compte">
+                    <div class="content">
+                        <div class="title">Stage de ouf</div>
+                        <div class="subtitle">en france j'espère</div>
+                    </div>
+            </div>
+        </div>
+
+        </div>
+
     @elseif (Auth::user()->role->Libelle === 'Etudiant')
         <center><h1>Espace Étudiant</h1></center>
         <div class="container_compte">
@@ -135,15 +145,16 @@
             </div>
 
             <!-- Dernières candidatures -->
-            <div class="dashboard_container_offre">
-                <div class="header">
-                    <h2 style="display: inline-block;">Dernières candidatures</h2>
-                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1 btn-primary" style="float: right;">Voir toutes mes candidatures</a>
+            
+            <div class="whishlist">
+            <h2>Dernières candidatures</h2>
+                <div class="button_right">
+                    <a href="{{ route('dashboard.candidatures.index') }}" class="btn1">Voir toutes mes candidatures</a>
                 </div>
                 @if ($candidatures = Auth::user()->candidatures()->orderBy('Date_postule', 'desc')->take(3)->get())
                     @foreach ($candidatures as $candidature)
                         <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}" class="card-link">
-                            <div class="dashboard_card">
+                            <div class="card_compte">
                                 <div class="content">
                                     <div class="title">{{ $candidature->offre->Titre }}</div>
                                     <div class="subtitle">{{ $candidature->offre->entreprise->Nom }} | {{ $candidature->offre->ville->Nom }}</div>
@@ -157,6 +168,7 @@
                 <br>
             </div>
         </div>
+        
     @elseif (Auth::user()->role->Libelle === 'Administrateur')
         <center><h1>Espace Administrateur</h1></center>
         <div class="container_compte">
@@ -204,6 +216,8 @@
                     <li><a href="{{ route('offres.index') }}" class="btn1 btn-primary">Gérer les offres</a></li>
                 </ul>
             </div>
+        </div>
+
         </div>
     @else
         <center><h1>Accès refusé</h1></center>
