@@ -110,11 +110,31 @@
                         <h4><i class="fa-solid fa-phone"></i> {{ Auth::user()->Telephone ?? 'Numéro non renseigné' }}</h4>
                     </div>
                 </div>
-                <h4>Statut : En attente</h4>
+
+                <!-- Affichage du nombre de candidatures -->
+                <div class="candidature-stats">
+                    <?php
+                    $statutRecherche = Auth::user()->etudiant->Statut_recherche ?? null;
+                    ?>
+                    <h4>
+                        Vous avez postulé à <strong>{{ Auth::user()->candidatures->count() }}</strong> offre(s).
+                    </h4>
+                    <h4>
+                        Statut : 
+                        <strong>
+                            @if ($statutRecherche == 1)
+                                En recherche de stage
+                            @elseif ($statutRecherche == 2)
+                                A trouvé un stage
+                            @else
+                                Statut inconnu
+                            @endif
+                        </strong>
+                    </h4>
+                </div>
             </div>
 
             <!-- Dernières candidatures -->
-            
             <div class="dashboard_container_offre">
                 <div class="header">
                     <h2 style="display: inline-block;">Dernières candidatures</h2>

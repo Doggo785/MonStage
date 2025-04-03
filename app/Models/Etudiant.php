@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -17,12 +18,16 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Etudiant whereStatutRecherche($value)
  * @mixin \Eloquent
  */
-class Etudiant extends Model {
-    protected $table = 'Etudiant';
-    protected $primaryKey = 'ID_User';
-    public $timestamps = false;
+class Etudiant extends Model
+{
+    use HasFactory;
 
-    public function user() {
-        return $this->belongsTo(User::class, 'ID_User');
-    }
+    protected $table = 'Etudiant'; // Nom de la table
+    protected $primaryKey = 'ID_User'; // Clé primaire
+    public $timestamps = false; // Désactiver les timestamps automatiques
+
+    protected $fillable = [
+        'ID_User',
+        'Statut_recherche',
+    ];
 }

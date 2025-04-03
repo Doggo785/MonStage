@@ -74,7 +74,7 @@ class User extends Authenticatable
     // Relations
     public function etudiant()
     {
-        return $this->hasOne(Etudiant::class, 'ID_User');
+        return $this->hasOne(Etudiant::class, 'ID_User', 'ID_User');
     }
 
     public function role()
