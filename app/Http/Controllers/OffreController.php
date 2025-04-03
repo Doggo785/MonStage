@@ -7,7 +7,9 @@ use App\Models\Entreprise;
 use App\Models\Region;
 use App\Models\Secteur;
 use App\Models\Ville;
+use App\Models\Candidature;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class OffreController extends Controller
 {
@@ -181,12 +183,39 @@ class OffreController extends Controller
         $offre = Offre::findOrFail($id);
 
         $validated = $request->validate([
-            'cv' => 'required|file|mimes:pdf,doc,docx|max:2048',
-            'motivation' => 'required|string|max:1000',
+            'cv' => 'required|file|mimes:pdf|max:2048',
+            'motivation' => 'required|file|mimes:pdf|max:2048',
         ]);
 
-        // Logique pour enregistrer la candidature ou envoyer un email
+        $cvPath = $request->file('cv')->store('cvs', 'public');
+        $motivationPath = $request->file('motivation')->store('motivations', 'public');
+
+        Candidature::create([
+            'ID_User' => auth()->id(),
+            'ID_Offre' => $id,
+            'CV_path' => $cvPath,
+            'LM_Path' => $motivationPath,
+            'Date_postule' => now(),
+            'ID_Statut' => 1, // Replace 1 with the appropriate default status ID
+        ]);
 
         return redirect()->route('offres.show', ['id' => $id])->with('success', 'Votre candidature a été envoyée avec succès.');
+    }
+
+    public function deleteFile($id, $type)
+    {
+        $candidature = Candidature::where('ID_User', auth()->id())->where('ID_Offre', $id)->firstOrFail();
+
+        if ($type === 'cv' && $candidature->CV_path) {
+            Storage::disk('public')->delete($candidature->CV_path);
+            $candidature->CV_path = null;
+        } elseif ($type === 'motivation' && $candidature->LM_Path) {
+            Storage::disk('public')->delete($candidature->LM_Path);
+            $candidature->LM_Path = null;
+        }
+
+        $candidature->save();
+
+        return redirect()->route('offres.show', ['id' => $id])->with('success', ucfirst($type) . ' supprimé avec succès.');
     }
 }
