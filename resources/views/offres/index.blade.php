@@ -45,10 +45,17 @@
          @if ($offre->Etat == 1 || (auth()->check() && (Auth::user()->role->Libelle === 'Pilote' || Auth::user()->role->Libelle === 'Administrateur')))
             <a href="{{ route('offres.show', ['id' => $offre->ID_Offre]) }}">
                <div class="card {{ $offre->Etat == 0 ? 'expired' : '' }}">
+                  @php
+                     $hasApplied = auth()->check() && $offre->candidatures->where('ID_User', auth()->id())->isNotEmpty();
+                  @endphp
                   @if ($offre->Etat == 0)
                      <div title="Offre désactivée"></div>
                   @else
-                     <div class="status-indicator" style="background-color: green;" title="Offre active"></div>
+                     <div 
+                        class="status-indicator" 
+                        style="background-color: {{ $hasApplied ? 'orangered' : 'green' }};" 
+                        title="{{ $hasApplied ? 'Vous avez postulé à cette offre' : 'Offre active' }}">
+                     </div>
                   @endif
                   <div class="title">{{ $offre->Titre }}</div>
                   <div class="subtitle">
