@@ -102,11 +102,23 @@
                     </form>
                 @endif
             </div>
+
+            <!-- Section des statistiques -->
+            <div class="statistics" style="margin-top: 10px;">
+                @if ($offre->candidatures->count() > 0)
+                    <p>
+                        Nombre de personnes ayant postulé : <strong>{{ $offre->candidatures->count() }}</strong>
+                    </p>
+                @else
+                    <p>
+                        <strong>Soyez le premier à postuler à cette offre !</strong>
+                    </p>
+                @endif
+            </div>
         </div>
 </div>				
     <br>
 </section>
-
 
 <!-- Modale pour postuler -->
 <div id="postulerModal" class="modal">
