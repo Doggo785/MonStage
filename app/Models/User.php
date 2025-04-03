@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * 
@@ -89,6 +90,14 @@ class User extends Authenticatable
     public function avis()
     {
         return $this->hasMany(Avis::class, 'ID_User', 'ID_User');
+    }
+
+    /**
+     * Relation avec les candidatures.
+     */
+    public function candidatures(): HasMany
+    {
+        return $this->hasMany(Candidature::class, 'ID_User', 'ID_User');
     }
 
     public function getAuthPassword()

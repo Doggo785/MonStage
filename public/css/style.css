@@ -1103,6 +1103,45 @@ input[type=file]::file-selector-button:hover {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
+/* Style pour les offres dans le tableau de bord */
+.dashboard_container_offre {
+  grid-area: offre;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Ajuste la largeur minimale à 300px */
+  gap: 25px; /* Augmente l'espacement entre les cartes */
+  padding: 20px; /* Ajoute un padding autour */
+  color: black !important;
+}
+
+.dashboard_container_offre, 
+.dashboard_container_offre * {
+  color: black !important;
+}
+
+/* Désactiver le soulignement des liens dans les offres */
+.dashboard_container_offre a {
+  text-decoration: none; /* Supprime le soulignement */
+}
+
+/* Empêcher le soulignement au survol */
+.dashboard_container_offre a:hover {
+  text-decoration: none; /* Assure qu'il n'y a pas de soulignement au survol */
+}
+
+/* Style des cartes d'offre */
+.dashboard_card {
+  background-color: #fff;
+  border-radius: 10px; /* Coins légèrement plus arrondis */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15); /* Ombre légèrement plus marquée */
+  padding: 25px; /* Augmente le padding interne */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Effet de survol sur les cartes */
+.dashboard_card:hover {
+  transform: scale(1.01); /* Agrandit légèrement plus au survol */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Accentue l'ombre au survol */
+}
+
 /* Notification de succès */
 .notification-success {
     position: fixed;

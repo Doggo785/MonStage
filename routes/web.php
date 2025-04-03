@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CandidatureController;
 use App\Http\Middleware\CheckAdmin;
 use App\Http\Middleware\CheckAdminOrPilote;
 use App\Http\Middleware\CheckPilote;
@@ -111,6 +112,8 @@ Route::group(['prefix' => '/dashboard', 'middleware' => ['auth']], function () {
         Route::delete('/{id}', [UserController::class, 'destroy'])->name('users.destroy'); // Supprimer un utilisateur
         Route::post('/store', [UserController::class, 'store'])->name('users.store'); // Ajouter un utilisateur
     });
+
+    Route::get('/candidatures', [CandidatureController::class, 'index'])->name('dashboard.candidatures.index')->middleware('auth');
 });
 
 // Routes pour les offres
