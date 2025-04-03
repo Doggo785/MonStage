@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Etudiant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -81,6 +82,11 @@ class UserController extends Controller
 
         $user = User::findOrFail($id);
 
+        // Supprimer l'entrée associée dans la table Etudiant si l'utilisateur est un étudiant
+        if ($user->role->Libelle === 'Etudiant') {
+            Etudiant::where('ID_User', $user->ID_User)->delete();
+        }
+
         // Supprimer les enregistrements associés dans la table Wishlist
         $user->wishlists()->delete();
 
@@ -121,7 +127,7 @@ class UserController extends Controller
             // Forcer le rôle à "Étudiant" pour les pilotes
             $request->merge(['role' => Role::where('Libelle', 'Étudiant')->first()->ID_Role]);
         }
-
+        // Validation des données
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
@@ -131,6 +137,7 @@ class UserController extends Controller
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Création de l'utilisateur
         $user = new User();
         $user->Nom = $validatedData['name'];
         $user->Prenom = $validatedData['prenom'];
@@ -146,6 +153,15 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        // Si le rôle est "Étudiant", créer une entrée dans la table Etudiant
+        $roleEtudiant = $user->role->Libelle === 'Etudiant';
+        if ($roleEtudiant) {
+            Etudiant::create([
+                'ID_User' => $user->ID_User,
+                'Statut_recherche' => 1, // Par défaut, "En recherche de stage"
+            ]);
+        }
 
         return redirect()->route('users.index')->with('success', 'Utilisateur créé avec succès.');
     }
