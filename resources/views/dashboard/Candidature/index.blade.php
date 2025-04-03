@@ -3,7 +3,7 @@
 @section('title', 'Mes Candidatures')
 
 @section('content')
-<section style="margin-top : 50px">
+<section>
     <center><h1>Mes Candidatures</h1></center>
     <div class="container_offre">
         @if ($candidatures->isEmpty())
@@ -12,8 +12,8 @@
             </p>
         @else
             @foreach ($candidatures as $candidature)
-                <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}">
                     <div class="card {{ $candidature->offre->Etat == 0 ? 'expired' : '' }}">
+                    <a href="{{ route('offres.show', ['id' => $candidature->offre->ID_Offre]) }}">
                         @if ($candidature->offre->Etat == 0)
                             <div title="Offre désactivée"></div>
                         @else
@@ -29,7 +29,7 @@
                             <strong>Date de candidature :</strong> {{ \Carbon\Carbon::parse($candidature->Date_postule)->format('d/m/Y') }}
                         </div>
                         @if ($candidature->CV_path || $candidature->LM_Path)
-                            <div class="documents">
+                            <div class="button_right">
                                 @if ($candidature->CV_path)
                                     <a href="{{ asset('storage/' . $candidature->CV_path) }}" target="_blank" class="btn1">Voir CV</a>
                                 @endif
@@ -38,11 +38,11 @@
                                 @endif
                             </div>
                         @endif
-                    </div>
-                </a>
+                        </a></div>
             @endforeach
         @endif
     </div>
+
     <div class="pagination-links" style="text-align: center; margin-top: 20px;">
         {{ $candidatures->links('pagination::bootstrap-4') }}
     </div>

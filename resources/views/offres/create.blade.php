@@ -3,7 +3,7 @@
 @section('title', 'Créer une Offre de Stage')
 
 @section('content')
-<main>
+<section>
     <div class="background_image"></div>
     <section style="margin-left: 20px; margin-right: 20px;">
         <h1>Créer une Offre de Stage</h1>
@@ -185,7 +185,7 @@
         });
     </script>
     <script src="{{ asset('js/form-validation.js') }}"></script>
-</main>
+</section>
 
 @include('partials.footer')
 @endsection
