@@ -28,7 +28,7 @@
                                      alt="Photo de {{ strtoupper($user->Nom) }} {{ ucfirst(strtolower($user->Prenom)) }}" class="card__img profile-picture">
                                 
                                 <!-- Logo de modification (visible uniquement pour Admin) -->
-                                @if (auth()->check() && Auth::user()->role->Libelle === 'Administrateur')
+                                @if (auth()->check() && Auth::user()->role->Libelle === 'Administrateur' || Auth::user()->role->Libelle === 'Pilote')
                                     <div class="edit-overlay">
                                         <i class="fa-solid fa-pen"></i>
                                     </div>
